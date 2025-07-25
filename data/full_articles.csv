@@ -1,0 +1,51 @@
+title,source,content,author
+Trump Calls for New Program to Boost AI Tech Exports,Export Complaince Daily,"The Trump administration is launching a new program to increase U.S. exports of AI technologies and services as part of an effort to spread the adoption of American AI systems around the world.
+
+An executive order signed this week calls on the Commerce Department -- together with the State Department and White House Office of Science and Technology Policy -- to create an “American AI Exports Program” that will boost the “development and deployment of United States full-stack AI export packages.” Commerce will call for proposals from “industry-led consortia” to participate in the program, and those proposals must include:
+
+a full-stack AI technology package, which encompasses AI computer hardware (such as chips and servers), data center storage, cloud services, and networking, along with a description of whether those items are made in America
+data pipelines and labeling systems
+AI models and systems
+measures to ensure the security and cybersecurity of AI models and systems
+AI applications for specific use cases -- such as education or healthcare -- that identify specific target countries for export and include “a business and operational model” to explain the entities that will build, own, and operate the data centers and infrastructure.
+The proposals must also ensure any exports comply with all U.S. export controls, outbound investment regulations and end-user policies, the executive order said, along with “relevant guidance” from the Bureau of Industry and Security.
+
+Proposals will be due 90 days after Commerce solicits them, but the agency also will consider other proposals on a rolling basis. Selected proposals “will be designated as priority AI export packages and will be supported through priority access” to certain federal support and financing.
+
+The order added that the State Department will be responsible for “coordinating United States participation in multilateral initiatives and country-specific partnerships for AI deployment and export promotion.” The agency also will analyze foreign market access, including any “technical barriers to trade and regulatory measures that may impede the competitiveness of United States offerings.”
+
+The order was issued hours after the White House released its AI Action Plan on July 23, which called on U.S. agencies to impose new export controls on the subsystems of semiconductor manufacturing equipment, double down on enforcement for exports of advanced AI chips, and consider mandating that chip exporters use location-tracking features (see 2507230028).",Ian Cohen
+"US Should Be Cautious With New Chip Equipment Controls, Work With Allies, Researchers Say",Export Compliance Daily,"The Trump administration should carefully study any new export controls on the subsystems of semiconductor manufacturing equipment so it doesn’t unintentionally undercut U.S. chip tooling firms, wrote Ruby Scanlon, a research assistant with the Center for a New American Security.
+
+The White House, in its AI Action Plan released this week, called on U.S. agencies to plug loopholes in existing chip controls by restricting the component sub-systems of chip manufacturing equipment (see 2507230028). Scanlon, in commentary published by CNAS on the new action plan, said the U.S. should “absolutely close genuine loopholes” in those controls, calling that a “logical next step” to limit China’s advanced chip production.
+
+But she also said it “must be done carefully, precisely, and multilaterally.” The Commerce Department can do that by beginning a “detailed study” to identify the component subsystems in which the U.S. and its allies hold a large advantage, and she said that China needs to develop its own extreme ultraviolet lithography systems.
+
+“But further controls must be implemented cautiously,” Scanlon said. “New restrictions must balance the goal of curbing China’s capabilities with preserving U.S. leadership in semiconductor manufacturing. If implemented bluntly, they risk” hurting the ability of American firms to reinvest revenue into advanced research and development.
+
+She also said any new controls should be coordinated with other countries that also produce those subsystems, noting that the AI Action Plan calls on the government to align controls with partner nations.
+
+“If foreign competitors can still sell similar products without restriction, U.S. firms will lose market share and revenue that fuels reinvestment in advanced R&D,” Scanlon said. “Broad, unilateral restrictions that outpace global consensus may end up strengthening competitors -- and undermining the very goals they intend to serve.”
+
+Although the plan said the U.S. should convince other nations to impose similar controls through diplomacy, it also said the government should feel free to use more coercive methods. It specifically mentioned the Foreign Direct Product Rule, which Commerce could use to place export license restrictions on certain foreign-made items that are made with U.S.-origin software or technology.
+
+Emily Kilcrease, director of the CNAS Energy, Economics and Security Program, said U.S. allies are already “well aware” of Commerce's extraterritorial powers, and it “would be helpful to see more emphasis on positive inducements to align with the United States.” She and CNAS senior fellow Geoffrey Gertz floated an idea in January for new economic security agreements, which could be used to integrate export control commitments into broader trade deals (see 2501230001).
+
+Those deals could provide incentives, such as a fast-track licensing process, “as part of a broader deal to strengthen controls vis-a-vis third party threats,” Kilcrease wrote. “Extraterritorial controls are the hardest to enforce and easiest to circumvent, so should be sparingly used with those constraints in mind.”
+
+Another portion of the AI Action Plan calls on U.S. agencies to develop a new “technology diplomacy strategic plan” to “induce” key allies to adopt similar AI protection systems and export controls. Gertz said the Trump administration could use this plan to address the lack of clarity surrounding its chip controls, noting that the administration recently reversed its restrictions on Nvidia’s previously controlled advanced H20 chips as part of trade negotiations with China (see 2507150013).
+
+“Many partners and allies have questions on what exactly is the U.S. strategy on semiconductor export controls,” Gertz said. “The administration should use this diplomatic strategic plan to provide greater clarity and assurances on how it intends to use export controls in the context of trade and technology competition with China.”",Ian Cohen
+"$1 Billion of Advanced Nvidia Chips Smuggled to China Earlier This Year, Report Says",Export Compliance Daily,"At least $1 billion worth of Nvidia advanced AI chips were smuggled into China about a month after the Trump administration placed new export controls on the company's less advanced chips, the Financial Times reported July 24. Multiple Chinese distributors in May began selling Nvidia's B200 chips to suppliers of data centers that serve Chinese AI groups, the report said, adding that those chips are more advanced than Nvidia's H20s, which the Trump administration restricted in April (see 2504160026). Contracts reviewed by the Financial Times for sales during that time period showed shipments ""estimated to be more than"" $1 billion.
+
+An Nvidia spokesperson said in a July 24 statement that ""trying to cobble together datacenters from smuggled products is a losing proposition, both technically and economically. Datacenters require service and support, which we provide only to authorized NVIDIA products.""
+
+A Commerce Department spokesperson didn't respond to a request for comment.",
+Senate Bill Seeks to Ease Restrictions on Drone Exports,Export Compliance Daily,"Sens. Tom Cotton, R-Ark.; Chris Coons, D-Del.; and John Cornyn, R-Texas, introduced a bill July 23 aimed at making it easier for American companies to sell unmanned aircraft to U.S. allies and partners.
+
+The Leading Exports of Aerial Drones Act, or Lead Act, would require that drones face the same export controls as manned aircraft and no longer be subject to the tight restrictions of the multilateral Missile Technology Control Regime (MTCR).
+
+Cotton said the current restrictions on unmanned aircraft exports “are outdated and put American companies at a disadvantage, all while ceding the market to Communist China,"" which is not a member of the MTCR. The bill was referred to the Senate Foreign Relations Committee.
+
+President Donald Trump signed an executive order in April directing his administration to reevaluate restrictions the MTCR imposes on certain systems, including drones (see 2504100009).",
+Morning Tech,Politico,,

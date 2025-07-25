@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>BIS News Clips</title>
+</head>
+<body style="font-family: 'Times New Roman', Times, serif; font-size: 12pt;">
+
+    <p style="font-weight: bold; text-align: center;">
+        BIS NEWS CLIPS | {{today_date}}
+    </p>
+    <br>
+
+    <ol style="font-weight: bold;">
+        {% for article in articles %}
+            <li>
+                <a href="#C{{ loop.index }}" style="font-weight: bold;">
+                    {{ article.source }}: {{ article.title }}
+                </a>
+            </li>
+        {% endfor %}
+        <li>
+            <a href="#C{{ articles | length + 1 }}" style="font-weight: bold;">
+                POLITICO: Morning Trade
+            </a>
+        </li>
+    </ol>
+    <br>
+
+    {% if congress_activity %}
+        <div style="margin-bottom:0;">
+            <p style="font-weight: bold; margin-bottom: 0;">Congressional Activity</p>
+            <ul>
+                <li><b>Senate:</b> {{ congress_activity.senate }}</li>
+                <li><b>House:</b> {{ congress_activity.house }}</li>
+            </ul>
+            <br>
+        </div>
+    {% endif %}
+
+    {% for article in articles %}
+        <div style="margin-bottom: 0;">
+
+            <a name="C{{ loop.index }}"></a>
+
+            <br>
+            <h3 id="C{{ loop.index }}" style="font-weight: bold; text-decoration: underline; margin-bottom: 0;">
+                {{ article.source }}: {{ article.title }}
+            </h3>
+
+            <br> {% if article.author %}
+                <p style="margin-top: 0; margin-bottom: 0;">
+                    By {{ article.author }}
+                </p>
+            <br> {% endif %}
+
+            <p style="margin-top: 0; margin-bottom:0;">{{ article.content | replace('\n', '<br>') }}</p>
+            <br><br>
+        </div>
+    {% endfor %}
+
+    <div style="margin-bottom: 0;">
+        <a name="C{{ articles | length + 1 }}"></a>
+        <h3 id="C{{ articles | length + 1 }}" style="font-weight: bold; text-decoration: underline; margin-bottom: 0;">
+            POLITICO: Morning Trade
+        </h3>
+    </div>
+    
+</body>
+</html>
