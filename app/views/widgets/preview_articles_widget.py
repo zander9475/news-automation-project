@@ -1,4 +1,4 @@
 from PySide6.QtWidgets import QWidget
 
-class ManualInputWidget(QWidget):
+class PreviewArticlesWidget(QWidget):
     pass

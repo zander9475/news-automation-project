@@ -2,7 +2,7 @@ from PySide6.QtWidgets import QMainWindow, QStackedWidget
 from .widgets.main_menu_widget import MainMenuWidget
 from .widgets.collection_widget import CollectionWidget
 from .widgets.search_widget import SearchWidget
-from .widgets.preview_widget import PreviewWidget
+from .widgets.preview_articles_widget import PreviewArticlesWidget
 from .widgets.manual_input_widget import ManualInputWidget
 
 class MainWindow(QMainWindow):
@@ -19,21 +19,21 @@ class MainWindow(QMainWindow):
         Initializes the user interface components.
         """
         # Create a stacked widget to manage different views
-        self.stacked_widget = QStackedWidget()
+        self.Stack = QStackedWidget(self)
 
         # Create an instance of each view widget
         self.main_menu_widget = MainMenuWidget()
         self.collection_widget = CollectionWidget()
         self.search_widget = SearchWidget()
-        self.preview_widget = PreviewWidget()
+        self.preview_widget = PreviewArticlesWidget()
         self.manual_input_widget = ManualInputWidget()
 
         # Add the widgets to the stacked widget
-        self.stacked_widget.addWidget(self.main_menu_widget)
-        self.stacked_widget.addWidget(self.collection_widget)
-        self.stacked_widget.addWidget(self.search_widget)
-        self.stacked_widget.addWidget(self.preview_widget)
-        self.stacked_widget.addWidget(self.manual_input_widget)
+        self.Stack.addWidget(self.main_menu_widget)
+        self.Stack.addWidget(self.collection_widget)
+        self.Stack.addWidget(self.search_widget)
+        self.Stack.addWidget(self.preview_widget)
+        self.Stack.addWidget(self.manual_input_widget)
 
         # Set the stacked widget as the central widget of the main window
-        self.setCentralWidget(self.stacked_widget)
+        self.setCentralWidget(self.Stack)
