@@ -49,7 +49,7 @@
 
             <br> {% if article.author %}
                 <p style="margin-top: 0; margin-bottom: 0;">
-                    By {{ article.author }}
+                    By {{ article.author | join(', ') }}
                 </p>
             <br> {% endif %}
 

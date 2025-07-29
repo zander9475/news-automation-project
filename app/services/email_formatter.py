@@ -1,7 +1,7 @@
 import pandas as pd
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
-from congress_scraper import get_congressional_activity
+from app.services.congress_scraper import get_congressional_activity
 
 def build_email():
     # Load email template and article data

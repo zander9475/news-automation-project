@@ -3,7 +3,7 @@ import FreeSimpleGUI as sg
 from urllib.parse import urlparse
 from titlecase import titlecase
 
-def clean_author_string(authors_raw):
+def clean_author_string(authors_raw): # Change to return a list of names
     """
     Cleans the raw author list from newspaper3k to remove duplicates and junk text.
     """
@@ -43,7 +43,7 @@ def clean_author_string(authors_raw):
     return ", ".join(unique_names)
 
 
-def scrape_single_article(url):
+def scrape_article_from_url(url):
     """
     Tries to scrape a single URL.
     Returns a dictionary of article data on success.

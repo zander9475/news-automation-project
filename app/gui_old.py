@@ -1,7 +1,5 @@
 # pyright: reportUnknownMemberType=false, reportGeneralTypeIssues=false, reportOptionalMemberAccess=false
 
-print("Loading gui.py...")
-
 import FreeSimpleGUI as sg
 import pandas as pd
 import os
@@ -9,9 +7,9 @@ import json
 from dotenv import load_dotenv
 from datetime import datetime
 # Import helper functions from other modules
-from scraper import scrape_single_article, prompt_for_manual_article
-from search import search_articles
-from formatter import build_email
+from app.services.web_scraper import scrape_article_from_url, prompt_for_manual_article
+from app.services.google_searcher import search_articles
+from app.services.email_formatter import build_email
 
 def create_window(title, layout):
     """Creates a standard window for the application."""
@@ -152,7 +150,7 @@ def run_gui():
             window_step2["Scrape URL"].update(disabled=True)
             sg.popup_quick_message("Scraping... please wait.", auto_close_duration=3, non_blocking=True)
             try:
-                article_data = scrape_single_article(url_to_scrape)
+                article_data = scrape_article_from_url(url_to_scrape)
                 collected_articles.append(article_data)
                 window_step2["-URL-"].update("") # type:ignore
             except Exception as e:
