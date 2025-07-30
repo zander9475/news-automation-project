@@ -2,6 +2,7 @@ from ..models.article_manager import ArticleManager
 from ..views.widgets.search_dialog import SearchDialog
 from ..services.google_searcher import search_articles
 import os
+from dotenv import load_dotenv
 import json
 
 class MainController:
@@ -61,6 +62,7 @@ class MainController:
         Handles the search operation by calling the search service and updating the view.
         """
         # Load API key and CSE ID from environment variables
+        load_dotenv()
         api_key = os.getenv("API_KEY")
         cse_id = os.getenv("CSE_ID")
 

@@ -23,6 +23,9 @@ class SearchResultsWidget(QWidget):
         # Configure the columns
         self.table.setColumnCount(3)
         self.table.setHorizontalHeaderLabels(["Title", "Source", "Keyword"])
+
+        # Set the table to stretch the columns to fit the content
+        self.table.horizontalHeader().setStretchLastSection(True)
         
         layout.addWidget(self.table)
 
@@ -37,13 +40,8 @@ class SearchResultsWidget(QWidget):
         """
         self.table.setRowCount(len(results))
         for row, article in enumerate(results):
-            # Style the title as a clickable link
+            # Create a table item for the title
             title_item = QTableWidgetItem(article['title'])
-            font = title_item.font()
-            font.setUnderline(True)
-            title_item.setFont(font)
-            title_item.setForeground(QColor("blue"))
-
             # Set the URL as hidden data on the title item
             title_item.setData(Qt.ItemDataRole.UserRole, article['url'])
 
