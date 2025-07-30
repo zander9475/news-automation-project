@@ -13,6 +13,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("News Automation Tool")
         self.setGeometry(300, 100, 800, 600)
+        self.initUI()
 
     def initUI(self):
         """
@@ -34,6 +35,9 @@ class MainWindow(QMainWindow):
         self.Stack.addWidget(self.search_results_widget)
         self.Stack.addWidget(self.preview_widget)
         self.Stack.addWidget(self.manual_input_widget)
+
+        # Set initial page to main menu
+        self.Stack.setCurrentWidget(self.main_menu_widget)
 
         # Set the stacked widget as the central widget of the main window
         self.setCentralWidget(self.Stack)

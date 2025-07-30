@@ -1,6 +1,6 @@
 import pandas as pd
 from .article import Article
-from utils import normalize_url
+from ..utils import normalize_url
 
 class ArticleManager:
     """

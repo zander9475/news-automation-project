@@ -2,7 +2,7 @@ import sys
 from PySide6.QtWidgets import QApplication
 
 from app.views.main_window import MainWindow
-# from app.controllers.main_controller import MainController
+from app.controllers.main_controller import MainController
 
 def main():
     """
@@ -11,7 +11,7 @@ def main():
     app = QApplication(sys.argv)
 
     window = MainWindow()
-    # controller = MainController(window)
+    controller = MainController(window)
 
     window.show()
     sys.exit(app.exec())
