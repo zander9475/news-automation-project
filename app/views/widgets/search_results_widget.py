@@ -1,4 +1,4 @@
 from PySide6.QtWidgets import QWidget
 
-class SearchWidget(QWidget):
+class SearchResultsWidget(QWidget):
     pass
