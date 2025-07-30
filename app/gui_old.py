@@ -61,7 +61,7 @@ def reorder_articles_ui():
     df.to_csv("data/full_articles.csv", index=False)
 
 def run_gui():
-    """Runs the main GUI in a step-by-step sequential flow."""
+    """ \"""Runs the main GUI in a step-by-step sequential flow.\"""
     print("Starting the GUI...")
     sg.theme("SystemDefault")
     # --- Step 0: Welcome Screen ---
@@ -74,9 +74,9 @@ def run_gui():
     event, _ = window_start.read()
     window_start.close()
     if event in (sg.WINDOW_CLOSED, "Exit"):
-        return
+        return """
 
-    # --- Step 1: Run Google Search ---
+    """ # --- Step 1: Run Google Search ---
     layout_step1 = [
         [sg.Text("Step 1: Find Articles", font=("Helvetica", 16))],
         [sg.Text("Select how many days back to pull results from")],
@@ -118,7 +118,7 @@ def run_gui():
         "\nYou can use this file as a reference for the next step.")
     except Exception as e:
         sg.popup_error("Search Failed", f"An error occurred during search: {e}")
-        return # Stop execution if search fails
+        return # Stop execution if search fails """
 
     # --- Step 2: The Article Collection Screen ---
     collected_articles = []

@@ -1,93 +1,7 @@
 # search.py
 
 import requests
-import pandas as pd
-import os
-from urllib.parse import urlparse
-from pandas.errors import EmptyDataError
-
-def is_article(url, title):
-    """
-    Determines if a result is likely to be a news article using layered checks.
-    Returns (True, "") if it's an article.
-    Returns (False, "reason") if it is not.
-    """
-    parsed = urlparse(url)
-    path = parsed.path.lower()
-    title = title.lower()
-
-    # --- RULE 1: High-Priority Exclusions ---
-    high_priority_path_exclusions = [
-        "/print-edition", "/digital-print-edition", "/subscribe",
-        "/archive", "/home", "/index", "/category", "/podcast", 
-        "/video", "/sport", "/athletic"
-    ]
-    for p in high_priority_path_exclusions:
-        if p in path:
-            return False, f"High-priority excluded path: '{p}'"
-        
-    high_priority_title_exclusions = [
-        "live:", "live blog", "live updates"
-    ]
-    for term in high_priority_title_exclusions:
-        if term in title:
-            return False, f"High-priority excluded title: '{term}'"
-
-    # --- RULE 2: Check for strong positive signals ---
-    # If a URL has a date or a clear article pattern, approve it immediately.
-    article_patterns = [
-        "/article/", "/story/", "/post/", "/report/", "/202", 
-        "/jan/", "/feb/", "/mar/", "/apr/", "/may/", "/jun/",
-        "/jul/", "/aug/", "/sep/", "/oct/", "/nov/", "/dec/"
-    ]
-    if any(pattern in path for pattern in article_patterns):
-        return True, "" # It's an article, no more checks needed.
-
-    # --- RULE 3: Check for general negative signals ---
-    # Path-based exclusions (less critical than high-priority ones)
-    excluded_paths = [
-        "/user", "/author", "/tags", "/topic", "/section",
-        "/profile", "/account", "/login", "/signup", "/register",
-        "/about", "/contact", "/by", "/newsletter", "/people",
-        "scmp.com/news/china/diplomacy", "/quotes", "/company",
-        "/earnings", "scmp.com/opinion"
-    ]
-    for p in excluded_paths:
-        if p in path:
-            return False, f"Excluded path: '{p}'"
-
-    # Title-based exclusions
-    excluded_title_terms = [
-        "sign up", "topic:", "author:",
-        "homepage", "section:", "your daily", "briefing", 
-        "bulletin", "alert", "update", "digest"
-    ]
-    for term in excluded_title_terms:
-        if term in title:
-            return False, f"Excluded title keyword: '{term}'"
-
-    # --- RULE 4: Final structural checks ---
-    if path.count('/') < 2:
-        return False, "Path too shallow"
-    if len(path) <= 30:
-        return False, "Path too short"
-    
-    # If it passes all checks, assume it's an article.
-    return True, ""
-
-
-def normalize_url(url):
-    """Strips a URL down to a clean, consistent format for matching."""
-    if not url:
-        return ""
-    # Use urlparse to handle complex URLs safely
-    parsed = urlparse(url)
-    # Rebuild the URL with just the core domain and path
-    # Removes http/https, www, query parameters, and fragments
-    domain = parsed.netloc.replace("www.", "")
-    path = parsed.path.rstrip('/') # remove trailing slash
-    return f"{domain}{path}"
-
+from ..utils import normalize_url, is_article
 
 def search_articles(api_key, cse_id, keywords, days_back):
     """
@@ -124,10 +38,10 @@ def search_articles(api_key, cse_id, keywords, days_back):
                 # Add article if not a duplicate
                 if normalized_url not in seen_urls:
                     articles.append({
-                        "Title": item["title"],
-                        "URL": item["link"],
-                        "Source": item.get("displayLink", ""),
-                        "Keyword": keyword,
+                        "title": item["title"],
+                        "url": item["link"],
+                        "source": item.get("displayLink", ""),
+                        "keyword": keyword,
                     })
                     seen_urls.add(normalized_url)
 
@@ -148,24 +62,6 @@ def search_articles(api_key, cse_id, keywords, days_back):
 
     if not articles:
         print("No new articles found across all keywords.")
-        # Create empty excel to not break workflow, but don't use pandas for it
-        if not os.path.exists("data/raw_results.xlsx"):
-            pd.DataFrame().to_excel("data/raw_results.xlsx", index=False)
-        return
 
-
-    # Create dataframe of articles and save to excel sheet
-    df = pd.DataFrame(articles)
-    output_path = "data/raw_results.xlsx"
-    with pd.ExcelWriter(output_path, engine='xlsxwriter') as writer:
-        df.to_excel(writer, sheet_name='Search Results', index=False)
-        # (Formatting code remains the same)
-        worksheet = writer.sheets['Search Results']
-        for i, col in enumerate(df.columns):
-            if col == 'URL':
-                worksheet.set_column(i, i, 50)
-                continue
-            column_len = df[col].astype(str).map(len).max()
-            header_len = len(col)
-            width = max(column_len, header_len) if pd.notna(column_len) else header_len
-            worksheet.set_column(i, i, width + 2)
+    # Return article list to controller        
+    return articles
