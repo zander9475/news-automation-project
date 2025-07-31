@@ -1,8 +1,7 @@
 from PySide6.QtWidgets import QMainWindow, QStackedWidget
 from .widgets.main_menu_widget import MainMenuWidget
-from .widgets.collection_widget import CollectionWidget
+from .widgets.articles_widget import ArticlesWidget
 from .widgets.search_results_widget import SearchResultsWidget
-from .widgets.preview_articles_widget import PreviewArticlesWidget
 from .widgets.manual_input_widget import ManualInputWidget
 
 class MainWindow(QMainWindow):
@@ -24,16 +23,14 @@ class MainWindow(QMainWindow):
 
         # Create an instance of each view widget
         self.main_menu_widget = MainMenuWidget()
-        self.collection_widget = CollectionWidget()
+        self.articles_widget = ArticlesWidget()
         self.search_results_widget = SearchResultsWidget()
-        self.preview_widget = PreviewArticlesWidget()
         self.manual_input_widget = ManualInputWidget()
 
         # Add the widgets to the stacked widget
         self.Stack.addWidget(self.main_menu_widget)
-        self.Stack.addWidget(self.collection_widget)
+        self.Stack.addWidget(self.articles_widget)
         self.Stack.addWidget(self.search_results_widget)
-        self.Stack.addWidget(self.preview_widget)
         self.Stack.addWidget(self.manual_input_widget)
 
         # Set initial page to main menu

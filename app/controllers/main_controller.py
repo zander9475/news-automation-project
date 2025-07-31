@@ -7,7 +7,7 @@ import json
 
 class MainController:
     """
-    Controls top-level application logic, such as switching pages
+    Controls top-level application logig (e.g. switching pages)
     """
     def __init__(self, view):
         # Store main window as instance attribute
@@ -30,10 +30,18 @@ class MainController:
         """
         Connects signals from the view to controller methods.
         """
+        # Main menu page signals
         self.view.main_menu_widget.search_requested.connect(self.show_search_dialog)
         self.view.main_menu_widget.search_results_page_requested.connect(self.show_search_results)
-        self.view.main_menu_widget.collection_page_requested.connect(self.show_collection_page)
-        self.view.main_menu_widget.preview_articles_page_requested.connect(self.show_preview_articles)
+        self.view.main_menu_widget.articles_page_requested.connect(self.show_articles_page)
+
+        # Search results page signals
+        self.view.search_results_widget.rerun_search_requested.connect(self.show_search_dialog)
+        self.view.search_results_widget.main_menu_requested.connect(self.show_main_menu)
+
+    def show_main_menu(self):
+        """Displays the main menu page"""
+        self.view.Stack.setCurrentWidget(self.view.main_menu_widget) 
 
     def show_search_dialog(self):
         """Displays the search dialog for Google search."""
@@ -48,14 +56,11 @@ class MainController:
     def show_search_results(self):
         """Displays the latest search results."""
         self.view.Stack.setCurrentWidget(self.view.search_results_widget)
+        print("Showing search results")
 
-    def show_collection_page(self):
-        """Displays the article collection page."""
-        self.view.Stack.setCurrentWidget(self.view.collection_widget)
-
-    def show_preview_articles(self):
-        """Displays the preview articles page."""
-        self.view.Stack.setCurrentWidget(self.view.preview_widget)
+    def show_articles_page(self):
+        """Displays the article management page."""
+        self.view.Stack.setCurrentWidget(self.view.articles_widget)
 
     def _handle_search(self, days_back):
         """

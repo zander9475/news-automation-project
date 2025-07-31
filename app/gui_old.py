@@ -61,64 +61,6 @@ def reorder_articles_ui():
     df.to_csv("data/full_articles.csv", index=False)
 
 def run_gui():
-    """ \"""Runs the main GUI in a step-by-step sequential flow.\"""
-    print("Starting the GUI...")
-    sg.theme("SystemDefault")
-    # --- Step 0: Welcome Screen ---
-    layout_start = [
-        [sg.Text("News Clipper Tool", font=("Helvetica", 16))],
-        [sg.Text("This tool will guide you through collecting and formatting news articles.")],
-        [sg.Button("Start"), sg.Button("Exit")]
-    ]
-    window_start = create_window("Welcome", layout_start)
-    event, _ = window_start.read()
-    window_start.close()
-    if event in (sg.WINDOW_CLOSED, "Exit"):
-        return """
-
-    """ # --- Step 1: Run Google Search ---
-    layout_step1 = [
-        [sg.Text("Step 1: Find Articles", font=("Helvetica", 16))],
-        [sg.Text("Select how many days back to pull results from")],
-        [[sg.Spin([1, 2, 3, 4, 5, 6, 7], size=(10, 1), key="-DAYS_BACK-")]],
-        [sg.Button("Run Google Search")]
-    ]
-    window_step1 = create_window("Step 1", layout_step1)
-    event, values = window_step1.read()
-    window_step1.close()
-
-    # Only run search if "Run Google Search" was clicked
-    if event != "Run Google Search":
-        return
-    
-    # Ensure necessary folders exist
-    os.makedirs("data", exist_ok=True)
-    os.makedirs("output", exist_ok=True)
-
-    # load environment variables (api key, search engine id)
-    load_dotenv()
-
-    # Get secrets from .env
-    api_key = os.getenv("API_KEY")
-    cse_id = os.getenv("CSE_ID")
-
-    # Load keywords from JSON file
-    try:
-        with open("keywords.json") as f:
-            keywords = json.load(f)["keywords"]
-
-        # Call search function
-        search_articles(
-            api_key=api_key,
-            cse_id=cse_id,
-            keywords=keywords,
-            days_back=values["-DAYS_BACK-"]
-        )
-        sg.popup_ok("Search Complete!", "A file named 'raw_results.xlsx' has been created." \
-        "\nYou can use this file as a reference for the next step.")
-    except Exception as e:
-        sg.popup_error("Search Failed", f"An error occurred during search: {e}")
-        return # Stop execution if search fails """
 
     # --- Step 2: The Article Collection Screen ---
     collected_articles = []

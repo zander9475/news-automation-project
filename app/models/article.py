@@ -9,12 +9,13 @@ class Article:
     title: str
     content: str
     source: str
-    url: str
+    keyword: str = "Manual"
     authors: List[str] = field(default_factory=list)
+    url: Optional[str] = None
     lead: Optional[str] = None
 
     def to_dict(self):
-        """Converts the article object to a dictionary."""
+        """Converts the Article object to a dictionary."""
         return {
             "title": self.title,
             "lead": self.lead,
@@ -22,5 +23,5 @@ class Article:
             "source": self.source,
             "url": self.url,
             "authors": self.authors,
-            "lead": self.lead
+            "keyword": self.keyword
         }

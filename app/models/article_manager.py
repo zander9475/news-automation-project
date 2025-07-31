@@ -34,6 +34,7 @@ class ArticleManager:
                     content=row.get('content', ''),
                     source=row.get('source', ''),
                     url=row.get('url', ''),
+                    keyword=row.get('keyword', ''),
                     authors=row.get('authors', []),
                     lead=row.get("lead")
                     )

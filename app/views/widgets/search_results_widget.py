@@ -1,12 +1,16 @@
 import webbrowser
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QColor
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtWidgets import (QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, 
+                               QHBoxLayout, QPushButton, QAbstractItemView)
 
 class SearchResultsWidget(QWidget):
     """
     Displays Google search results.
     """
+    # Custom signals
+    rerun_search_requested = Signal()
+    main_menu_requested = Signal()
+
     def __init__(self):
         super().__init__()
         self.initUI()
@@ -15,7 +19,7 @@ class SearchResultsWidget(QWidget):
         """
         Initializes UI components. Will show search results by displaying title (as clickable url), source, and keyword
         """
-        layout = QVBoxLayout(self)
+        self.main_layout = QVBoxLayout()
     
         # Create search results table
         self.table = QTableWidget()
@@ -27,10 +31,25 @@ class SearchResultsWidget(QWidget):
         # Set the table to stretch the columns to fit the content
         self.table.horizontalHeader().setStretchLastSection(True)
         
-        layout.addWidget(self.table)
+        # Disable editing
+        self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.main_layout.addWidget(self.table)
+
+        # Action buttons
+        self.action_btns = QHBoxLayout()
+        self.rerun_search_btn= QPushButton("Rerun Search")
+        self.rerun_search_btn.clicked.connect(self.rerun_search_requested.emit)
+        self.main_menu_btn = QPushButton("Back to Main Menu")
+        self.main_menu_btn.clicked.connect(self.main_menu_requested.emit)
+        self.action_btns.addWidget(self.rerun_search_btn)
+        self.action_btns.addWidget(self.main_menu_btn)
+        self.main_layout.addLayout(self.action_btns)
 
         # Connect the item clicked signal to a method that opens the URL
         self.table.itemClicked.connect(self._on_title_clicked)
+
+        # Set layout
+        self.setLayout(self.main_layout)
 
     def display_results(self, results):
         """
