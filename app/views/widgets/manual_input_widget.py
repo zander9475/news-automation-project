@@ -1,8 +1,12 @@
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QLineEdit, 
                                QTextEdit, QHBoxLayout, QPushButton)
 
 class ManualInputWidget(QWidget):
+    # Custom signals
+    article_submitted = Signal() # still need to define slot that adds article
+    submission_cancelled = Signal()
+
     def __init__(self):
         super().__init__()
         self.initUI()
@@ -60,7 +64,11 @@ class ManualInputWidget(QWidget):
         # Component 7: Action buttons
         self.action_btns = QHBoxLayout()
         self.submit_btn = QPushButton("Add Article")
+        self.submit_btn.clicked.connect(self.article_submitted)
         self.cancel_btn = QPushButton("Cancel")
+        self.cancel_btn.clicked.connect(self.submission_cancelled)
+        self.action_btns.addWidget(self.submit_btn)
+        self.action_btns.addWidget(self.cancel_btn)
         self.main_layout.addLayout(self.action_btns)
 
         # Set layout

@@ -1,7 +1,9 @@
 from urllib.parse import urlparse
 
 def normalize_url(url):
-    """Strips a URL down to a clean, consistent format for matching."""
+    """Strips a URL down to just domain and path for duplicate checking.
+    Example: nytimes.com/2025/07/31/us/politics/white-house-ballroom-trump.html
+    """
     if not url:
         return ""
     # Use urlparse to handle complex URLs safely

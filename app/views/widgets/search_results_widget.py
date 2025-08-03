@@ -10,6 +10,7 @@ class SearchResultsWidget(QWidget):
     # Custom signals
     rerun_search_requested = Signal()
     main_menu_requested = Signal()
+    article_addition_requested = Signal(dict)
 
     def __init__(self):
         super().__init__()
@@ -25,8 +26,8 @@ class SearchResultsWidget(QWidget):
         self.table = QTableWidget()
         
         # Configure the columns
-        self.table.setColumnCount(3)
-        self.table.setHorizontalHeaderLabels(["Title", "Source", "Keyword"])
+        self.table.setColumnCount(4)
+        self.table.setHorizontalHeaderLabels(["Title", "Source", "Keyword", ""])
 
         # Set the table to stretch the columns to fit the content
         self.table.horizontalHeader().setStretchLastSection(True)
@@ -64,10 +65,19 @@ class SearchResultsWidget(QWidget):
             # Set the URL as hidden data on the title item
             title_item.setData(Qt.ItemDataRole.UserRole, article['url'])
 
+            # Create "Add to Email" button for each article
+            add_btn = QPushButton("Add to Email")
+            # Use a lambda function to to pass specific article from the loop when clicked
+            add_btn.clicked.connect(
+                lambda _=False, # Catch boolean value from click
+                article=article: (self.article_addition_requested.emit(article))
+            )
+
             # Set the items in the table
             self.table.setItem(row, 0, title_item)
             self.table.setItem(row, 1, QTableWidgetItem(article['source']))
             self.table.setItem(row, 2, QTableWidgetItem(article['keyword']))
+            self.table.setCellWidget(row, 3, add_btn)
 
     def _on_title_clicked(self, item):
         """

@@ -2,3 +2,4 @@ Links from news articles don't carry over to manual insertion
 Congressional activity bulleted list not formatted correctly
 Source names being title()d for manual insertion (bypassing POLITICO, for example)
     Make SOURCE_MAP global?
+Duplicate articles in search results page

@@ -1,13 +1,16 @@
+from .article_controller import ArticleController
 from ..models.article_manager import ArticleManager
 from ..views.widgets.search_dialog import SearchDialog
 from ..services.google_searcher import search_articles
+from PySide6.QtWidgets import QMessageBox
+from typing import Optional
 import os
 from dotenv import load_dotenv
 import json
 
 class MainController:
     """
-    Controls top-level application logig (e.g. switching pages)
+    Controls top-level application logic (e.g. switching pages)
     """
     def __init__(self, view):
         # Store main window as instance attribute
@@ -15,6 +18,9 @@ class MainController:
 
         # Create article manager
         self.article_manager = ArticleManager()
+
+        # Create article controller
+        self.article_controller = ArticleController(self.article_manager, self.view)
 
         # Ensure necessary directories exist
         os.makedirs("data", exist_ok=True)
@@ -33,11 +39,18 @@ class MainController:
         # Main menu page signals
         self.view.main_menu_widget.search_requested.connect(self.show_search_dialog)
         self.view.main_menu_widget.search_results_page_requested.connect(self.show_search_results)
-        self.view.main_menu_widget.articles_page_requested.connect(self.show_articles_page)
+        self.view.main_menu_widget.articles_page_requested.connect(self.show_article_management_page)
 
         # Search results page signals
         self.view.search_results_widget.rerun_search_requested.connect(self.show_search_dialog)
         self.view.search_results_widget.main_menu_requested.connect(self.show_main_menu)
+
+        # Article management page signals
+        self.view.article_management_widget.main_menu_requested.connect(self.show_main_menu)
+        self.view.article_management_widget.manual_input_requested.connect(self.show_manual_input_page)
+
+        # Manual input page signals
+        self.view.manual_input_widget.submission_cancelled.connect(self.show_article_management_page)
 
     def show_main_menu(self):
         """Displays the main menu page"""
@@ -56,11 +69,14 @@ class MainController:
     def show_search_results(self):
         """Displays the latest search results."""
         self.view.Stack.setCurrentWidget(self.view.search_results_widget)
-        print("Showing search results")
 
-    def show_articles_page(self):
+    def show_article_management_page(self):
         """Displays the article management page."""
-        self.view.Stack.setCurrentWidget(self.view.articles_widget)
+        self.view.Stack.setCurrentWidget(self.view.article_management_widget)
+
+    def show_manual_input_page(self):
+        """Displays the manual input page"""
+        self.view.Stack.setCurrentWidget(self.view.manual_input_widget)
 
     def _handle_search(self, days_back):
         """
@@ -101,4 +117,3 @@ class MainController:
         except (FileNotFoundError, json.JSONDecodeError):
             # If file doesn't exist or is empty, do nothing
             pass
-

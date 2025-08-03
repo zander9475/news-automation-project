@@ -35,7 +35,7 @@ class ArticleManager:
                     source=row.get('source', ''),
                     url=row.get('url', ''),
                     keyword=row.get('keyword', ''),
-                    authors=row.get('authors', []),
+                    author=row.get('author', []),
                     lead=row.get("lead")
                     )
                 self.articles.append(article)
@@ -60,11 +60,12 @@ class ArticleManager:
         # Check for duplicate
         if url in self.seen_session_urls:
             print(f'Duplicate article found: {new_article.title}')
-            return
+            return False
         
         # If not duplicate, add article to list and url to set
         self.articles.append(new_article)
         self.seen_session_urls.add(url)
+        return True
 
     def remove_article(self, index):
         """

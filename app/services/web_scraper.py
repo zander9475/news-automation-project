@@ -1,49 +1,56 @@
 from newspaper import Article, ArticleException
-import FreeSimpleGUI as sg
 from urllib.parse import urlparse
 from titlecase import titlecase
 
-def clean_author_string(authors_raw): # Change to return a list of names
+def clean_author_string(authors_raw):
     """
     Cleans the raw author list from newspaper3k to remove duplicates and junk text.
     """
     if not authors_raw:
         return ""
 
-    # Combine all found authors into a single string, separate by commas
-    full_string = ", ".join(authors_raw)
-
-    # List of common junk phrases to remove
+    cleaned_names = []
     junk_phrases = ["Updated On", "By"]
-    for phrase in junk_phrases:
-        full_string = full_string.replace(phrase, "")
 
-    # Split the string into individual names
-    names = [name.strip() for name in full_string.split(',') if name.strip()]
+    # Loop through each string in the author list provided by newspaper3k
+    for raw_string in authors_raw:
+        # Remove any junk phrases from the string
+        for phrase in junk_phrases:
+            raw_string = raw_string.replace(phrase, "")
 
-    # Use a list to find unique names while preserving order
+        # Split each string by commas in case it accidentally contains multiple names
+        names = raw_string.split(',')
+
+        # Add the cleaned names to cleaned names list
+        for name in names:
+            clean_name = name.strip()
+            if clean_name:
+                cleaned_names.append(clean_name)
+            
+    # Remove duplicate names
     unique_names = []
-    for name in names:
-        if name and name not in unique_names:
+    for name in cleaned_names:
+        if name not in unique_names:
             unique_names.append(name)
             
-    #Second cleaning step to remove combined names
+    # Remove combined names (e.g. "John Doe Jane Smith")
     if len(unique_names) > 1:
-        final_names = []
-        for name_to_check in unique_names:
-            is_redundant = False
+        combined_names = []
+        # Loop through list
+        for name in unique_names:
+            # For each name, loop through rest of list
             for other_name in unique_names:
-                if name_to_check != other_name and other_name in name_to_check:
-                    is_redundant = True
-                    break
-            if not is_redundant:
-                final_names.append(name_to_check)
-        unique_names = final_names
+                # Combined name if name (outer loop) contains another name
+                if other_name in name and other_name != name:
+                    combined_names.append(name)
+        # Include only names not found in combined names
+        final_names = [name for name in unique_names if name not in combined_names]
+        return final_names
     
-    return ", ".join(unique_names)
+    return unique_names
 
 
-def scrape_article_from_url(url):
+def scrape_url(url):
     """
     Tries to scrape a single URL.
     Returns a dictionary of article data on success.
@@ -73,8 +80,8 @@ def scrape_article_from_url(url):
         # Capitalize article title
         capitalized_title = titlecase(article.title) if article.title else "Untitled"
 
-        # Clean the author string
-        cleaned_authors = clean_author_string(article.authors).title()
+        # Clean author list
+        cleaned_authors = clean_author_string(article.authors)
 
         # Extract the base domain name from the URL
         source_domain = urlparse(url).netloc.replace("www.", "").split('.')[0].lower()
@@ -93,45 +100,8 @@ def scrape_article_from_url(url):
         # Check if the error message contains the '403' error code
         if '403' in str(e):
             raise ArticleException("This website does not allow web scraping by bots.")
+        elif '401' in str(e):
+            raise ArticleException("This article is paywalled or requires a login\n(Usually a Google sign-in).")
         else:
             # For all other errors, re-raise the original exception
             raise ArticleException(f"Failed to process article: {e}")
-
-
-def prompt_for_manual_article():
-    """
-    Opens a GUI window to get article details manually.
-    Returns a dictionary of article data if submitted, otherwise None.
-    """
-    layout = [
-        [sg.Text("Please enter content manually.")],
-        [sg.Text("Title:", size=(8,1)), sg.InputText(key="-TITLE-")],
-        [sg.Text("Author:", size=(8,1)), sg.InputText(key="-AUTHOR-")],
-        [sg.Text("Source: ", size=(8,1)), sg.InputText(key="-SOURCE-")],
-        [sg.Text("Content:")],
-        [sg.Multiline(size=(70, 15), key="-CONTENT-")],
-        [sg.Submit(), sg.Cancel()]
-    ]
-    window = sg.Window("Manual Entry Required", layout)
-    event, values = window.read() # type: ignore
-    window.close()
-
-    if event == "Submit":
-        # Capitalize title and source
-        capitalized_title = titlecase(values["-TITLE-"])
-        capitalized_source = values["-SOURCE-"].title()
-
-        # Create the base dictionary with required fields
-        article_data = {
-            "title": capitalized_title,
-            "source": capitalized_source,
-            "content": values["-CONTENT-"],
-        }
-        # Check if the author field has text before adding it
-        author_text = values["-AUTHOR-"]
-        if author_text:
-            article_data["author"] = author_text.title()
- 
-        return article_data  
-
-    return None # Return None if user cancels

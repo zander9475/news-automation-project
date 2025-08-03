@@ -1,12 +1,13 @@
-import webbrowser
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QPushButton, QSplitter, 
                                 QHBoxLayout, QLineEdit, QListWidget, QAbstractItemView)
 from PySide6.QtCore import Qt, Signal
 from .article_preview_widget import ArticlePreviewWidget
 
-class ArticlesWidget(QWidget):
-    # Define signals to communicate with ArticleController
+class ArticleManagementWidget(QWidget):
+    # Custom signals
+    url_scrape_requested = Signal(str) # Needs method in main_controller
     manual_input_requested = Signal()
+    main_menu_requested = Signal()
 
     def __init__(self):
         super().__init__()
@@ -27,6 +28,7 @@ class ArticlesWidget(QWidget):
         self.url_input = QLineEdit()
         self.url_input.setPlaceholderText("Paste URL here")
         self.submit_url_btn = QPushButton("Submit URL")
+        self.submit_url_btn.clicked.connect(self._on_url_btn_clicked)
         self.url_input_layout.addWidget(self.url_header)
         self.url_input_layout.addWidget(self.url_input)
         self.url_input_layout.addWidget(self.submit_url_btn)
@@ -36,6 +38,7 @@ class ArticlesWidget(QWidget):
         self.manual_input_layout = QHBoxLayout()
         self.manual_header = QLabel("Enter article details manually: ")
         self.submit_manual_btn = QPushButton("Add Manually")
+        self.submit_manual_btn.clicked.connect(self.manual_input_requested.emit)
         self.manual_input_layout.addWidget(self.manual_header)
         self.manual_input_layout.addWidget(self.submit_manual_btn)
         self.main_layout.addLayout(self.manual_input_layout)
@@ -56,6 +59,9 @@ class ArticlesWidget(QWidget):
         self.listbox.setDefaultDropAction(Qt.DropAction.MoveAction)
         self.splitter.addWidget(self.listbox)
 
+        # Enable previewing by clicking on article title
+        self.listbox.itemClicked.connect(self._on_title_clicked)
+
         # Detail view: preview pane
         self.preview_pane = ArticlePreviewWidget()
         self.splitter.addWidget(self.preview_pane)
@@ -66,17 +72,22 @@ class ArticlesWidget(QWidget):
         self.action_btns = QHBoxLayout()
         self.save_order_btn = QPushButton("Save Order")
         self.main_menu_btn = QPushButton("Back to Main Menu")
+        self.main_menu_btn.clicked.connect(self.main_menu_requested.emit)
         self.action_btns.addWidget(self.save_order_btn)
         self.action_btns.addWidget(self.main_menu_btn)
         self.main_layout.addLayout(self.action_btns)
 
-        # Connect signals
-        # self.submit_url_btn.clicked.connect(self._on_url_btn_clicked)
-        self.submit_manual_btn.clicked.connect(self.manual_input_requested.emit)
-        self.listbox.itemClicked.connect(self._on_title_clicked)
-
         # Set layout
         self.setLayout(self.main_layout)
+
+    def _on_url_btn_clicked(self):
+        """
+        Passes the URL to the controller for scraping.
+        """
+        url = self.url_input.text().strip()
+        if url:
+            self.url_scrape_requested.emit(url)
+            self.url_input.clear()
 
     def _on_title_clicked(self, item):
         """

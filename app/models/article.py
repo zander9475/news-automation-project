@@ -10,7 +10,7 @@ class Article:
     content: str
     source: str
     keyword: str = "Manual"
-    authors: List[str] = field(default_factory=list)
+    author: List[str] = field(default_factory=list)
     url: Optional[str] = None
     lead: Optional[str] = None
 
@@ -22,6 +22,6 @@ class Article:
             "content": self.content,
             "source": self.source,
             "url": self.url,
-            "authors": self.authors,
+            "author": self.author,
             "keyword": self.keyword
         }
