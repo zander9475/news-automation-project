@@ -13,12 +13,24 @@ class ArticleController:
         self.view = view
         self._connect_signals()
 
+        # Load existing articles to article management page
+        self._refresh_articles_view()
+
     def _connect_signals(self):
         # Search results page signals
         self.view.search_results_widget.article_addition_requested.connect(self.handle_search_result_add)
 
         # Article management page signals
         self.view.article_management_widget.url_scrape_requested.connect(self.handle_manual_url_add)
+        self.view.article_management_widget.article_preview_requested.connect(self._show_article_preview)
+
+        # Article manager model signals
+        self.model.articles_changed.connect(self._refresh_articles_view)
+
+    @Slot()
+    def _refresh_articles_view(self):
+        articles = self.model.get_all_articles()
+        self.view.article_management_widget.populate_list(articles)
 
     @Slot(dict)
     def handle_search_result_add(self, result_data: dict):
@@ -49,10 +61,6 @@ class ArticleController:
                 "Duplicate Article", 
                 f"'{article.title}' is already in your collection."
             )
-
-        # Update the article management page
-        all_articles = self.model.get_all_articles()
-        self.view.articles_widget.display_articles(all_articles) 
 
     @Slot(str)
     def handle_manual_url_add(self, url: str):
@@ -86,7 +94,6 @@ class ArticleController:
         """
         try:
             # Attempt to scrape, pass keyword in if coming from search results page
-            print("Scraping...")
             article_dict = scrape_url(url)
             if keyword:
                 article_dict['keyword'] = keyword
@@ -109,3 +116,16 @@ class ArticleController:
                 f"Scrape failed: {e}\n\n{user_prompt}"
             )
             return None, None
+        
+    def _show_article_preview(self, index):
+        """
+        Retrieves article from ArticleManager. Updates preview pane with that article.
+
+        @param index (int): The article's index in the articles order.
+        """
+        # Retrieve article from model
+        article = self.model.get_single_article(index)
+
+        # Pass article to preview pane and show it
+        if article:
+            self.view.article_management_widget.update_preview(article)

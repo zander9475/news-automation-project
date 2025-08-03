@@ -1,17 +1,22 @@
 import pandas as pd
 from .article import Article
 from ..utils import normalize_url
+from PySide6.QtCore import Signal, QObject
 
-class ArticleManager:
+class ArticleManager(QObject):
     """
     Manages the collection of all Article objects.
     """
+    # Custom signals
+    articles_changed = Signal()
+
     def __init__(self, filepath="data/full_articles.csv"):
         """
         Initializes the ArticleModel.
         
         @param filepath (str): Path to the CSV file containing articles.
         """
+        super().__init__()
         self.filepath = filepath
         self.articles = []
         self.seen_session_urls = set() # Keep a set of normalized URLs for fast lookup
@@ -50,6 +55,14 @@ class ArticleManager:
         """Returns a list of all Article objects"""
         return self.articles
     
+    def get_single_article(self, index):
+        """Returns a single Article object given its list index"""
+        try:
+            return self.articles[index]
+        except IndexError:
+            print("Error: Invalid article index.")
+            return None
+    
     def add_article(self, new_article):
         """
         Takes a new Article object and adds it to the list of Articles.
@@ -65,6 +78,7 @@ class ArticleManager:
         # If not duplicate, add article to list and url to set
         self.articles.append(new_article)
         self.seen_session_urls.add(url)
+        self.articles_changed.emit()
         return True
 
     def remove_article(self, index):
@@ -73,6 +87,7 @@ class ArticleManager:
         @param index (int): The list position of the article to be removed.
         """
         del self.articles[index]
+        self.articles_changed.emit()
 
     def reorder_articles(self, new_title_order):
         """
@@ -86,6 +101,7 @@ class ArticleManager:
 
         # Replace unordered list with ordered list
         self.articles = reordered_articles
+        self.articles_changed.emit()
 
     def save(self):
         """

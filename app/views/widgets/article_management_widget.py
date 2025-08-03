@@ -1,13 +1,14 @@
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QPushButton, QSplitter, 
-                                QHBoxLayout, QLineEdit, QListWidget, QAbstractItemView)
-from PySide6.QtCore import Qt, Signal
+                                QHBoxLayout, QLineEdit, QListWidget, QListWidgetItem, QAbstractItemView)
+from PySide6.QtCore import Qt, Signal, Slot
 from .article_preview_widget import ArticlePreviewWidget
 
 class ArticleManagementWidget(QWidget):
     # Custom signals
-    url_scrape_requested = Signal(str) # Needs method in main_controller
-    manual_input_requested = Signal()
+    url_scrape_requested = Signal(str) # Connects to ArticleController
+    manual_input_requested = Signal() # Connects to ArticleController
     main_menu_requested = Signal()
+    article_preview_requested = Signal(int)
 
     def __init__(self):
         super().__init__()
@@ -44,7 +45,9 @@ class ArticleManagementWidget(QWidget):
         self.main_layout.addLayout(self.manual_input_layout)
 
         # Fourth component: QLabel for reordering articles
-        self.listbox_header = QLabel("Reorder articles by selecting an article and dragging it to your desired location.")
+        self.listbox_header = QLabel("Reorder articles by selecting an article and dragging it to your desired location." \
+                                        "\nClick on any article title to preview its contents.")
+        self.listbox_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.main_layout.addWidget(self.listbox_header)
 
         # Fifth component: QSplitter for master-detail view
@@ -59,8 +62,8 @@ class ArticleManagementWidget(QWidget):
         self.listbox.setDefaultDropAction(Qt.DropAction.MoveAction)
         self.splitter.addWidget(self.listbox)
 
-        # Enable previewing by clicking on article title
-        self.listbox.itemClicked.connect(self._on_title_clicked)
+        # Enable previewing by selecting article title
+        self.listbox.currentItemChanged.connect(self._on_item_changed)
 
         # Detail view: preview pane
         self.preview_pane = ArticlePreviewWidget()
@@ -89,27 +92,42 @@ class ArticleManagementWidget(QWidget):
             self.url_scrape_requested.emit(url)
             self.url_input.clear()
 
-    def _on_title_clicked(self, item):
+    @Slot()
+    def _on_item_changed(self):
         """
-        Pops up a dialog showing a preview of selected article.
-        Allows user to edit article details.
+        Handles selection of an article title in the listbox.
         """
-        pass
+        selected_item = self.listbox.currentItem()
 
-    def display_articles(self, articles):
+        if selected_item:
+            # Get its index
+            index = self.listbox.row(selected_item)
+            # Pass that index to the controller
+            self.article_preview_requested.emit(index)
+
+    def populate_list(self, articles):
         """
         Displays the list of article titles in the ListWidget.
         
         @param articles: list of Article objects.
         """
-        """ self.table.setRowCount(len(results))
-        for row, article in enumerate(results):
-            # Create a table item for the title
-            title_item = QTableWidgetItem(article['title'])
-            # Set the URL as hidden data on the title item
-            title_item.setData(Qt.ItemDataRole.UserRole, article['url'])
+        # Clear listbox
+        self.listbox.clear()
 
-            # Set the items in the table
-            self.table.setItem(row, 0, title_item)
-            self.table.setItem(row, 1, QTableWidgetItem(article['source']))
-            self.table.setItem(row, 2, QTableWidgetItem(article['keyword'])) """
+        for article in articles:
+            # Create a list item
+            title_item = QListWidgetItem(article.title)
+            
+            # Set the Article object as hidden data on the title
+            title_item.setData(Qt.ItemDataRole.UserRole, article)
+
+            # Add the item to the list widget
+            self.listbox.addItem(title_item)
+
+    def set_preview_visible(self, visible: bool):
+        """Public method to control preview visibility"""
+        self.preview_pane.setVisible(visible)
+
+    def update_preview(self, article):
+        """Public method to update preview content"""
+        self.preview_pane.display_article(article)

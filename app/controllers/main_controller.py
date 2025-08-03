@@ -2,8 +2,6 @@ from .article_controller import ArticleController
 from ..models.article_manager import ArticleManager
 from ..views.widgets.search_dialog import SearchDialog
 from ..services.google_searcher import search_articles
-from PySide6.QtWidgets import QMessageBox
-from typing import Optional
 import os
 from dotenv import load_dotenv
 import json
@@ -17,10 +15,10 @@ class MainController:
         self.view = view
 
         # Create article manager
-        self.article_manager = ArticleManager()
+        self.model = ArticleManager()
 
         # Create article controller
-        self.article_controller = ArticleController(self.article_manager, self.view)
+        self.article_controller = ArticleController(self.model, self.view)
 
         # Ensure necessary directories exist
         os.makedirs("data", exist_ok=True)
@@ -37,26 +35,26 @@ class MainController:
         Connects signals from the view to controller methods.
         """
         # Main menu page signals
-        self.view.main_menu_widget.search_requested.connect(self.show_search_dialog)
-        self.view.main_menu_widget.search_results_page_requested.connect(self.show_search_results)
-        self.view.main_menu_widget.articles_page_requested.connect(self.show_article_management_page)
+        self.view.main_menu_widget.search_requested.connect(self._show_search_dialog)
+        self.view.main_menu_widget.search_results_page_requested.connect(self._show_search_results)
+        self.view.main_menu_widget.articles_page_requested.connect(self._show_article_management_page)
 
         # Search results page signals
-        self.view.search_results_widget.rerun_search_requested.connect(self.show_search_dialog)
-        self.view.search_results_widget.main_menu_requested.connect(self.show_main_menu)
+        self.view.search_results_widget.rerun_search_requested.connect(self._show_search_dialog)
+        self.view.search_results_widget.main_menu_requested.connect(self._show_main_menu)
 
         # Article management page signals
-        self.view.article_management_widget.main_menu_requested.connect(self.show_main_menu)
-        self.view.article_management_widget.manual_input_requested.connect(self.show_manual_input_page)
+        self.view.article_management_widget.main_menu_requested.connect(self._show_main_menu)
+        self.view.article_management_widget.manual_input_requested.connect(self._show_manual_input_page)
 
         # Manual input page signals
-        self.view.manual_input_widget.submission_cancelled.connect(self.show_article_management_page)
+        self.view.manual_input_widget.submission_cancelled.connect(self._show_article_management_page)
 
-    def show_main_menu(self):
+    def _show_main_menu(self):
         """Displays the main menu page"""
         self.view.Stack.setCurrentWidget(self.view.main_menu_widget) 
 
-    def show_search_dialog(self):
+    def _show_search_dialog(self):
         """Displays the search dialog for Google search."""
         dialog = SearchDialog(self.view)
     
@@ -66,15 +64,15 @@ class MainController:
             # Pass the selected days back to the search handler
             self._handle_search(days_back)
 
-    def show_search_results(self):
+    def _show_search_results(self):
         """Displays the latest search results."""
         self.view.Stack.setCurrentWidget(self.view.search_results_widget)
 
-    def show_article_management_page(self):
+    def _show_article_management_page(self):
         """Displays the article management page."""
         self.view.Stack.setCurrentWidget(self.view.article_management_widget)
 
-    def show_manual_input_page(self):
+    def _show_manual_input_page(self):
         """Displays the manual input page"""
         self.view.Stack.setCurrentWidget(self.view.manual_input_widget)
 
@@ -106,7 +104,7 @@ class MainController:
         self.view.search_results_widget.display_results(articles)
         
         # Switch to the search results page
-        self.show_search_results()
+        self._show_search_results()
 
     def _load_cached_results(self):
         try:

@@ -1,6 +1,8 @@
 from newspaper import Article, ArticleException
 from urllib.parse import urlparse
 from titlecase import titlecase
+from bs4 import BeautifulSoup
+import re
 
 def clean_author_string(authors_raw):
     """
@@ -89,11 +91,33 @@ def scrape_url(url):
         # Look up source domain in the map. If not found, use capitalized domain name.
         formatted_source = SOURCE_MAP.get(source_domain, source_domain.title())
 
+           # Create a clean HTML structure with just the article content
+        clean_html = f"<div>{article.text}</div>"
+        
+        # Convert plain text paragraphs to HTML paragraphs
+        soup = BeautifulSoup(clean_html, 'html.parser')
+        
+        # Find all text nodes and wrap them in <p> tags
+        for element in soup.find_all(text=True):
+            if element.parent.name == 'div' and element.strip(): # type: ignore
+                # Create a new paragraph element
+                p_tag = soup.new_tag('p')
+                p_tag.string = element.replace('\n', ' ').strip() # type: ignore
+                element.replace_with(p_tag)
+        
+        # Convert URLs to clickable links
+        text = str(soup)
+        text = re.sub(
+            r'(https?://[^\s]+)', 
+            r'<a href="\1">\1</a>', 
+            text
+        )
+
         return {
             "title": capitalized_title or "Untitled",
             "author": cleaned_authors,
             "source": formatted_source,
-            "content": article.text,
+            "content": text,
             "url": url
         }
     except Exception as e:
