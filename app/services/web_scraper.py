@@ -1,8 +1,8 @@
 from newspaper import Article, ArticleException
+import trafilatura
 from urllib.parse import urlparse
 from titlecase import titlecase
 from bs4 import BeautifulSoup
-import re
 
 def clean_author_string(authors_raw):
     """
@@ -91,33 +91,51 @@ def scrape_url(url):
         # Look up source domain in the map. If not found, use capitalized domain name.
         formatted_source = SOURCE_MAP.get(source_domain, source_domain.title())
 
-           # Create a clean HTML structure with just the article content
-        clean_html = f"<div>{article.text}</div>"
+        # Get article content as html using trafilatura
+        full_html= trafilatura.fetch_url(url)
+
+        if full_html:
+            unclean_html = trafilatura.extract(
+                full_html,
+                include_links=True,
+                output_format='html',
+                favor_recall=False,
+                include_tables=False,
+                include_images=False
+            )
         
-        # Convert plain text paragraphs to HTML paragraphs
-        soup = BeautifulSoup(clean_html, 'html.parser')
+        if not unclean_html:
+            return None
+
+        # Parse with BeautifulSoup for cleaning
+        soup = BeautifulSoup(unclean_html, 'html.parser')
         
-        # Find all text nodes and wrap them in <p> tags
-        for element in soup.find_all(text=True):
-            if element.parent.name == 'div' and element.strip(): # type: ignore
-                # Create a new paragraph element
-                p_tag = soup.new_tag('p')
-                p_tag.string = element.replace('\n', ' ').strip() # type: ignore
-                element.replace_with(p_tag)
+        # Remove unwanted elements but be more selective
+        # Don't remove all divs/spans as they might contain legitimate content
+        unwanted_selectors = [
+            'table', 'tr', 'td', 'th', 'thead', 'tbody', 'tfoot',
+            'nav', 'aside', 'header', 'footer', 'figure', 'figcaption',
+            '.ad', '.advertisement', '.social-share', '.related-articles',
+            '.newsletter-signup', '.author-bio', '.tags', '.metadata'
+        ]
         
-        # Convert URLs to clickable links
-        text = str(soup)
-        text = re.sub(
-            r'(https?://[^\s]+)', 
-            r'<a href="\1">\1</a>', 
-            text
-        )
+        for selector in unwanted_selectors:
+            for element in soup.select(selector):
+                element.decompose()
+
+        # Check if this looks like real article content
+        if not is_likely_article_content(soup):
+            raise ArticleException("This does not look like a regular news article." \
+                                    "\nPlease add content manually if you would like to include it anyway.")
+
+        # Convert the cleaned soup back to HTML string
+        content_html = str(soup)
 
         return {
             "title": capitalized_title or "Untitled",
             "author": cleaned_authors,
             "source": formatted_source,
-            "content": text,
+            "content": content_html,
             "url": url
         }
     except Exception as e:
@@ -128,4 +146,41 @@ def scrape_url(url):
             raise ArticleException("This article is paywalled or requires a login\n(Usually a Google sign-in).")
         else:
             # For all other errors, re-raise the original exception
-            raise ArticleException(f"Failed to process article: {e}")
+            raise ArticleException(e)
+        
+def is_likely_article_content(soup):
+    """
+    Determine if the extracted content looks like a real article
+    """
+    # Get all text content
+    text = soup.get_text()
+    
+    # Count different types of content
+    paragraphs = soup.find_all('p')
+    lists = soup.find_all(['ul', 'ol'])
+    list_items = soup.find_all('li')
+    
+    # Red flags for interactive graphics/data viz
+    red_flags = 0
+    
+    # Too many list items relative to paragraphs
+    if len(list_items) > len(paragraphs) * 3:
+        red_flags += 1
+    
+    # Very short paragraphs (likely labels/captions)
+    short_paragraphs = sum(1 for p in paragraphs if len(p.get_text().strip()) < 50)
+    if short_paragraphs > len(paragraphs) * 0.7:
+        red_flags += 1
+    
+    # Lots of numbers/percentages (suggests data viz)
+    import re
+    numbers = re.findall(r'\d+%|\d+\.\d+%|\$\d+', text)
+    if len(numbers) > 20:
+        red_flags += 1
+    
+    # Too many single-word list items (country lists, etc.)
+    single_word_items = sum(1 for li in list_items if len(li.get_text().strip().split()) <= 2)
+    if single_word_items > len(list_items) * 0.5:
+        red_flags += 1
+    
+    return red_flags <= 1  # Allow some red flags, but not too many

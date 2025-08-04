@@ -1,14 +1,18 @@
 from ..models.article import Article
 from ..services.web_scraper import scrape_url
 from PySide6.QtWidgets import QMessageBox
-from PySide6.QtCore import Slot
+from PySide6.QtCore import Signal, Slot, QObject
 from typing import Optional
 
-class ArticleController:
+class ArticleController(QObject):
     """
     Controls logic to perform CRUD operations on Articles. Communicates with ArticleManager
     """
+    # Custom signals
+    manual_article_added = Signal()
+
     def __init__(self, model, view):
+        super().__init__()
         self.model = model
         self.view = view
         self._connect_signals()
@@ -21,8 +25,11 @@ class ArticleController:
         self.view.search_results_widget.article_addition_requested.connect(self.handle_search_result_add)
 
         # Article management page signals
-        self.view.article_management_widget.url_scrape_requested.connect(self.handle_manual_url_add)
+        self.view.article_management_widget.url_scrape_requested.connect(self._handle_manual_url_add)
         self.view.article_management_widget.article_preview_requested.connect(self._show_article_preview)
+
+        # Manual input page signals
+        self.view.manual_input_widget.article_submitted.connect(self._handle_manual_input_add)
 
         # Article manager model signals
         self.model.articles_changed.connect(self._refresh_articles_view)
@@ -63,7 +70,7 @@ class ArticleController:
             )
 
     @Slot(str)
-    def handle_manual_url_add(self, url: str):
+    def _handle_manual_url_add(self, url: str):
         """
         Adds an article entered by the user through the URL field in the article management page
 
@@ -85,6 +92,29 @@ class ArticleController:
                 "Duplicate Article", 
                 f"'{article.title}' is already in your collection."
             )
+
+    def _handle_manual_input_add(self, article: Article):
+        """
+        Adds an article entered through manual input to the article management page
+
+        @param article (Article): the Article object to add
+        """
+        was_added = self.model.add_article(article)
+        if was_added:
+            # Success dialog
+            QMessageBox.information(
+                self.view, 
+                "Success", 
+                f"'{article.title}' was successfully added."
+            )
+        else:
+            # Duplicate error dialog
+            QMessageBox.warning(
+                self.view, 
+                "Duplicate Article", 
+                f"'{article.title}' is already in your collection."
+            )
+        self.manual_article_added.emit()
 
     def _scrape_url_and_add(self, url: str, keyword: Optional[str] = None):
         """

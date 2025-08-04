@@ -18,7 +18,7 @@ class MainController:
         self.model = ArticleManager()
 
         # Create article controller
-        self.article_controller = ArticleController(self.model, self.view)
+        self.controller = ArticleController(self.model, self.view)
 
         # Ensure necessary directories exist
         os.makedirs("data", exist_ok=True)
@@ -49,6 +49,9 @@ class MainController:
 
         # Manual input page signals
         self.view.manual_input_widget.submission_cancelled.connect(self._show_article_management_page)
+
+        # Article controller signals
+        self.controller.manual_article_added.connect(self._show_article_management_page)
 
     def _show_main_menu(self):
         """Displays the main menu page"""

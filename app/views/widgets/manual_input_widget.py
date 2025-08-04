@@ -1,10 +1,11 @@
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QLineEdit, 
-                               QTextEdit, QHBoxLayout, QPushButton)
+                               QTextEdit, QHBoxLayout, QPushButton, QMessageBox)
+from app.models.article import Article
 
 class ManualInputWidget(QWidget):
     # Custom signals
-    article_submitted = Signal() # still need to define slot that adds article
+    article_submitted = Signal(Article)
     submission_cancelled = Signal()
 
     def __init__(self):
@@ -64,7 +65,7 @@ class ManualInputWidget(QWidget):
         # Component 7: Action buttons
         self.action_btns = QHBoxLayout()
         self.submit_btn = QPushButton("Add Article")
-        self.submit_btn.clicked.connect(self.article_submitted)
+        self.submit_btn.clicked.connect(self._on_article_submission)
         self.cancel_btn = QPushButton("Cancel")
         self.cancel_btn.clicked.connect(self.submission_cancelled)
         self.action_btns.addWidget(self.submit_btn)
@@ -73,3 +74,64 @@ class ManualInputWidget(QWidget):
 
         # Set layout
         self.setLayout(self.main_layout)
+
+    def _on_article_submission(self):
+        """
+        Gathers data from UI fields and assembles or edits Article object
+        """
+        # Gather data from input fields
+        title = self.title_input.text().strip()
+        lead = self.lead_input.text().strip() if self.lead_input.text().strip() else None
+        author_text = self.author_input.text().strip()
+        source = self.source_input.text().strip()
+        content = self.content_input.toHtml().strip() 
+
+        # Validate required fields
+        if not title:
+            QMessageBox.warning(self, "Validation Error", "Title is required.")
+            return
+        
+        if not source:
+            QMessageBox.warning(self, "Validation Error", "Source is required.")
+            return
+        
+        if not content:
+            QMessageBox.warning(self, "Validation Error", "Content is required.")
+            return
+        
+        # Process authors - split by comma and clean up whitespace
+        authors = []
+        if author_text:
+            # Splits authors string by comma, adds individual authors into list
+            authors = [author.strip() for author in author_text.split(',') if author.strip()]
+
+        # Create Article object
+        try:
+            article = Article(
+                title=title,
+                content=content,
+                source=source,
+                keyword="Manual",
+                author=authors,
+                url=None,
+                lead=lead
+            )
+            
+            # Emit article submission signal
+            self.article_submitted.emit(article)
+            
+            # Clear the form after successful submission
+            self._clear_form()
+            
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to create article: {str(e)}")
+
+    def _clear_form(self):
+        """
+        Clears all input fields in the form
+        """
+        self.title_input.clear()
+        self.lead_input.clear()
+        self.author_input.clear()
+        self.source_input.clear()
+        self.content_input.clear()
