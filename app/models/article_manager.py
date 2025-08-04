@@ -20,7 +20,8 @@ class ArticleManager(QObject):
         super().__init__()
         self.filepath = filepath
         self.articles = []
-        self.seen_session_urls = set() # Keep a set of normalized URLs for fast lookup
+        self.seen_urls = set() # Keep a set of normalized URLs for fast lookup
+        self.seen_titles = set() # Same thing for titles. This is for manual article duplicate checking
         self._load_articles()
 
     def _load_articles(self):
@@ -47,7 +48,10 @@ class ArticleManager(QObject):
                 self.articles.append(article)
                 # Populate the set of seen URLs
                 if article.url:
-                    self.seen_session_urls.add(normalize_url(article.url))            
+                    self.seen_urls.add(normalize_url(article.url)) 
+                # Populate the set of seen titles
+                if article.title:
+                    self.seen_titles.add(article.title.lower().strip())           
         except FileNotFoundError:
             print(f"{self.filepath} not found. Starting with empty article list.")
             self.articles = []
@@ -66,7 +70,6 @@ class ArticleManager(QObject):
                 return article
                 
         # If the loop finishes without finding a match, the article doesn't exist.
-        print(f"Error: Article with ID '{article_id}' not found.")
         return None
     
     def add_article(self, new_article):
@@ -74,16 +77,29 @@ class ArticleManager(QObject):
         Takes a new Article object and adds it to the list of Articles.
         Performs a duplicate check before adding.
         """
-        url = normalize_url(new_article.url)
+        # First priority duplicate check: URL
+        if new_article.url:
+            url = normalize_url(new_article.url)
+            # Check for duplicate
+            if url in self.seen_urls:
+                print(f'Duplicate article found: {new_article.title}')
+                return False
         
-        # Check for duplicate
-        if url in self.seen_session_urls:
-            print(f'Duplicate article found: {new_article.title}')
-            return False
+        # If no url, check duplicate on title
+        else:
+            normalized_title = new_article.title.lower().strip()
+            if normalized_title in self.seen_titles:
+                print(f'Duplicate article found: {new_article.title}')
+                return False
         
-        # If not duplicate, add article to list and url to set
+        # If not duplicate, add article to list
         self.articles.append(new_article)
-        self.seen_session_urls.add(url)
+        # Add url to seen urls
+        if new_article.url:
+            self.seen_urls.add(url)
+        # Add title to seen titles
+        self.seen_titles.add(new_article.title)
+        
         self.articles_changed.emit()
         return True
     
