@@ -2,14 +2,17 @@ from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QLineEdit, 
                                QTextEdit, QHBoxLayout, QPushButton, QMessageBox)
 from app.models.article import Article
+from typing import Optional
 
 class ManualInputWidget(QWidget):
     # Custom signals
-    article_submitted = Signal(Article)
+    submission_completed = Signal(Article)
     submission_cancelled = Signal()
 
     def __init__(self):
         super().__init__()
+        self._is_editing_mode = False
+        self._article_being_edited: Optional[Article]
         self.initUI()
 
     def initUI(self):
@@ -17,7 +20,7 @@ class ManualInputWidget(QWidget):
         self.main_layout = QVBoxLayout()
 
         # Component 1: Header
-        self.header = QLabel("Enter article details: ")
+        self.header = QLabel("<h2>Enter Article Details</h2>")
         self.header.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.main_layout.addWidget(self.header)
 
@@ -105,43 +108,72 @@ class ManualInputWidget(QWidget):
             # Splits authors string by comma, adds individual authors into list
             authors = [author.strip() for author in author_text.split(',') if author.strip()]
 
-        # Create Article object
-        try:
-            article = Article(
-                title=title,
-                content=content,
-                source=source,
-                keyword="Manual",
-                author=authors,
-                url=None,
-                lead=lead
-            )
-            
-            # Emit article submission signal
-            self.article_submitted.emit(article)
-            
-            # Clear the form after successful submission
-            self._clear_form()
-            
-        except Exception as e:
-            QMessageBox.critical(self, "Error", f"Failed to create article: {str(e)}")
+        # Check if adding or editing article
+        if self._is_editing_mode:
+            # Update the properties of the existing article object
+            edited_article = self._article_being_edited
+            edited_article.title = title
+            edited_article.lead = lead
+            edited_article.author = authors if authors else [""]
+            edited_article.source = source
+            edited_article.content = content
+
+            # Emit signal
+            self.submission_completed.emit(edited_article)
+        else:
+            # Create Article object
+            try:
+                article = Article(
+                    title=title,
+                    content=content,
+                    source=source,
+                    keyword="Manual",
+                    author=authors,
+                    url=None,
+                    lead=lead
+                )
+                
+                # Emit article submission signal
+                self.submission_completed.emit(article)
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"Failed to create article: {str(e)}")
+
+        # Reset form state
+        self._clear_form()
 
     def _clear_form(self):
         """
-        Clears all input fields in the form
+        Clears all input fields in the form and resets widget state
         """
+        # Clear inputs
         self.title_input.clear()
         self.lead_input.clear()
         self.author_input.clear()
         self.source_input.clear()
         self.content_input.clear()
 
+        # Reset flags
+        self._is_editing_mode = False
+        self._article_being_edited = None
+
+        # Reset UI elements
+        self.submit_btn.setText("Add Article")
+        self.header.setText("<h2>Enter Article Details</h2>")
+
     def set_article_data(self, article: Article):
         """
         Populates the form with data from an Article object for editing.
-        
         @param article: Article object to populate the form with.
         """
+        # Set flags
+        self._is_editing_mode = True
+        self._article_being_edited = article
+
+        # Update UI elements for editing
+        self.submit_btn.setText("Save Changes")
+        self.header.setText("<h2>Edit Article Details</h2>")
+
+        # Pre-fill input fields
         self.title_input.setText(article.title)
         self.lead_input.setText(article.lead if article.lead else "")
         self.author_input.setText(", ".join(article.author) if article.author else "")

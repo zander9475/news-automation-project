@@ -37,3 +37,19 @@ class MainWindow(QMainWindow):
 
         # Set the stacked widget as the central widget of the main window
         self.setCentralWidget(self.Stack)
+
+    def switch_page(self, page: str):
+        """
+        Switches to a specified page in the stacked widget.
+        @param page (str): The name of the page to switch to.
+        """
+        if page == "main_menu":
+            self.Stack.setCurrentWidget(self.main_menu_widget)
+        elif page == "article_management":
+            self.Stack.setCurrentWidget(self.article_management_widget)
+        elif page == "search_results":
+            self.Stack.setCurrentWidget(self.search_results_widget)
+        elif page == "manual_input":
+            self.Stack.setCurrentWidget(self.manual_input_widget)
+        else:
+            raise ValueError(f"Unknown page: {page}")

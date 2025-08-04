@@ -5,4 +5,3 @@
 4. Allow user to preview content before confirming it (to catch partly scraped articles)
 5. Add option to include placeholders for morning tech/morning trade
 6. Create email draft in outlook
-7. Keep existing links when adding content manually

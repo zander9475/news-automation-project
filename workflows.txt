@@ -1,0 +1,22 @@
+Editing article workflow:
+
+1. Create action buttons and properly add them to layout
+2. edit button -> _on_edit_clicked(slot): Passes article on to parent -> controller
+3. -> edit_article_requested(Signal, to parent) -> 
+4. _handle_article_edit_request(Slot, controller): Takes article, prepares manual input widget
+for editing, tells main window to switch to edit form
+5. User edits form, saves changes -> _on_article_submission(slot): updates article object and sends it
+6. -> submittion_completed(Signal, carries Article) -> _handle_manual_submission (Slot, controller)
+7. If edit submission: uses id from passed in article to pull corresponding article from model, 
+calls edit_article on the model
+8. Model emits articles changed signal, controller catches it and updates article management view
+9. After controller does its work, _handle_manual_submission switches back to management page
+
+
+Deleting article workflow:
+
+1. Create action buttons and properly add them to layout
+2. delete button -> _on_delete_clicked(slot): Passes article on to parent -> controller
+3. -> delete_article_requested(Signal, to parent) -> 
+4. _handle_article_delete_request(Slot, controller): Takes article, calls function on model to delete it
+5. Model emits articles changed signal, controller catches it and updates article management view

@@ -10,7 +10,8 @@ class ArticleManagementWidget(QWidget):
     manual_input_requested = Signal() # Connects to ArticleController
     main_menu_requested = Signal()
     article_preview_requested = Signal(int)
-    edit_article_requested = Signal(Article)
+    edit_article_requested = Signal(Article) # Connects to Article Controller
+    delete_article_requested = Signal(Article) # Connects to Article Controller
 
     def __init__(self):
         super().__init__()
@@ -85,8 +86,9 @@ class ArticleManagementWidget(QWidget):
         # Set layout
         self.setLayout(self.main_layout)
 
-        # Connect to the child's signal
-        self.preview_pane.edit_article_requested.connect(self._on_child_edit_request)
+        # Connect to preview pane signals
+        self.preview_pane.edit_article_requested.connect(self.edit_article_requested.emit)
+        self.preview_pane.delete_article_requested.connect(self.delete_article_requested.emit)
 
     def _on_url_btn_clicked(self):
         """
@@ -136,6 +138,3 @@ class ArticleManagementWidget(QWidget):
     def update_preview(self, article):
         """Public method to update preview content"""
         self.preview_pane.display_article(article)
-
-    def _on_child_edit_request(self, article):
-        self.edit_article_requested.emit(article)

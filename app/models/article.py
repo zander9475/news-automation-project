@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+import uuid
 from typing import List, Optional
 
 @dataclass
@@ -13,6 +14,14 @@ class Article:
     author: List[str] = field(default_factory=list)
     url: Optional[str] = None
     lead: Optional[str] = None
+    id: Optional[str] = None
+
+    def __post__init__(self):
+        """
+        Generates unique ID for Article objects
+        """
+        if self.id is None:
+            self.id = str(uuid.uuid4())
 
     def to_dict(self):
         """Converts the Article object to a dictionary."""

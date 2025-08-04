@@ -36,26 +36,22 @@ class MainController:
         """
         # Main menu page signals
         self.view.main_menu_widget.search_requested.connect(self._show_search_dialog)
-        self.view.main_menu_widget.search_results_page_requested.connect(self._show_search_results)
-        self.view.main_menu_widget.articles_page_requested.connect(self._show_article_management_page)
+        self.view.main_menu_widget.search_results_page_requested.connect(self.view.switch_page("search_results"))
+        self.view.main_menu_widget.articles_page_requested.connect(self.view.switch_page("article_management"))
 
         # Search results page signals
         self.view.search_results_widget.rerun_search_requested.connect(self._show_search_dialog)
-        self.view.search_results_widget.main_menu_requested.connect(self._show_main_menu)
+        self.view.search_results_widget.main_menu_requested.connect(self.view.switch_page("main_menu"))
 
         # Article management page signals
-        self.view.article_management_widget.main_menu_requested.connect(self._show_main_menu)
-        self.view.article_management_widget.manual_input_requested.connect(self._show_manual_input_page)
+        self.view.article_management_widget.main_menu_requested.connect(self.view.switch_page("main_menu"))
+        self.view.article_management_widget.manual_input_requested.connectself.view.switch_page("manual_input")
 
         # Manual input page signals
-        self.view.manual_input_widget.submission_cancelled.connect(self._show_article_management_page)
+        self.view.manual_input_widget.submission_cancelled.connect(self.view.switch_page("article_management"))
 
         # Article controller signals
-        self.controller.manual_article_added.connect(self._show_article_management_page)
-
-    def _show_main_menu(self):
-        """Displays the main menu page"""
-        self.view.Stack.setCurrentWidget(self.view.main_menu_widget) 
+        self.controller.manual_article_added.connect(self.view.switch_page("article_management"))
 
     def _show_search_dialog(self):
         """Displays the search dialog for Google search."""

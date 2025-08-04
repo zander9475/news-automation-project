@@ -2,6 +2,7 @@ import pandas as pd
 from .article import Article
 from ..utils import normalize_url
 from PySide6.QtCore import Signal, QObject
+from typing import Optional
 
 class ArticleManager(QObject):
     """
@@ -55,13 +56,18 @@ class ArticleManager(QObject):
         """Returns a list of all Article objects"""
         return self.articles
     
-    def get_single_article(self, index):
-        """Returns a single Article object given its list index"""
-        try:
-            return self.articles[index]
-        except IndexError:
-            print("Error: Invalid article index.")
-            return None
+    def get_single_article(self, article_id: str) -> Optional[Article]:
+        """
+        Returns a single Article object by its unique ID.
+        @param article_id (str): The unique ID of the article to retrieve.
+        """
+        for article in self.articles:
+            if article.id == article_id:
+                return article
+                
+        # If the loop finishes without finding a match, the article doesn't exist.
+        print(f"Error: Article with ID '{article_id}' not found.")
+        return None
     
     def add_article(self, new_article):
         """
@@ -81,26 +87,34 @@ class ArticleManager(QObject):
         self.articles_changed.emit()
         return True
     
-    def edit_article(self, index, article):
+    def edit_article(self, article):
         """
-        Edits an existing article at the given index.
-        @param index (int): The list position of the article to be edited.
+        Edits an existing article by finding it with its unique ID.
+        @param article (Article): The updated Article object. It MUST have a valid ID.
         """
-        if 0 <= index < len(self.articles):
-            self.articles[index] = article
-            self.articles_changed.emit()
-            return True
-        else:
-            print("Error: Invalid article index for editing.")
-            return None
+        for i, existing_article in enumerate(self.articles):
+            if existing_article.id == article.id:
+                # Found the article by ID, now replace it with the updated version
+                self.articles[i] = article
+                self.articles_changed.emit()
+                return True
+                
+        print(f"Error: Article with ID '{article.id}' not found for editing.")
+        return False
 
-    def remove_article(self, index):
+    def delete_article(self, article):
         """
-        Removes an article from the Article list.
-        @param index (int): The list position of the article to be removed.
+        Deletes an article from the Article list.
+        @param article (Article): The Article object to be deleted. It MUST have a valid ID.
         """
-        del self.articles[index]
-        self.articles_changed.emit()
+        for i, existing_article in enumerate(self.articles):
+            if existing_article.id == article.id:
+                del self.articles[i]
+                self.articles_changed.emit()
+                return True
+
+        print(f"Error: Article with ID '{article.id}' not found for deletion.")
+        return False
 
     def reorder_articles(self, new_title_order):
         """
@@ -116,7 +130,7 @@ class ArticleManager(QObject):
         self.articles = reordered_articles
         self.articles_changed.emit()
 
-    def save(self):
+    def save_articles(self):
         """
         Saves the Article list as a CSV file, overwriting the old file
         """

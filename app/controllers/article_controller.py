@@ -8,9 +8,6 @@ class ArticleController(QObject):
     """
     Controls logic to perform CRUD operations on Articles. Communicates with ArticleManager
     """
-    # Custom signals
-    manual_article_added = Signal()
-
     def __init__(self, model, view):
         super().__init__()
         self.model = model
@@ -27,10 +24,11 @@ class ArticleController(QObject):
         # Article management page signals
         self.view.article_management_widget.url_scrape_requested.connect(self._handle_manual_url_add)
         self.view.article_management_widget.article_preview_requested.connect(self._show_article_preview)
-        self.view.article_management_widget.edit_article_requested.connect(self._handle_article_edit)
+        self.view.article_management_widget.edit_article_requested.connect(self._handle_article_edit_request)
+        self.view.article_management_widget.delete_article_requested.connect(self._handle_article_delete_request)
 
         # Manual input page signals
-        self.view.manual_input_widget.article_submitted.connect(self._handle_manual_input_add)
+        self.view.manual_input_widget.submission_completed.connect(self._handle_manual_submission)
 
         # Article manager model signals
         self.model.articles_changed.connect(self._refresh_articles_view)
@@ -94,28 +92,50 @@ class ArticleController(QObject):
                 f"'{article.title}' is already in your collection."
             )
 
-    def _handle_manual_input_add(self, article: Article):
+    @Slot(Article)
+    def _handle_manual_submission(self, article: Article):
         """
-        Adds an article entered through manual input to the article management page
-
-        @param article (Article): the Article object to add
+        Handles a submission from the manual input form (could be add or edit).
+        The ManualInputWidget decides if it's an add or edit and passes the appropriate Article object.
         """
-        was_added = self.model.add_article(article)
-        if was_added:
-            # Success dialog
-            QMessageBox.information(
-                self.view, 
-                "Success", 
-                f"'{article.title}' was successfully added."
-            )
+        # Handle edit submission
+        # Check if passed in article has id AND if an article with that id already exists
+        if article.id and self.model.get_single_article(article.id):
+            was_updated = self.model.edit_article(article)
+            if was_updated:
+                # Success dialog
+                QMessageBox.information(
+                    self.view,
+                    "Success",
+                    f"'{article.title}' was successfully updated."
+                )
+            else:
+                # Fail dialog
+                QMessageBox.warning(
+                    self.view,
+                    "Update Failed",
+                    f"Failed to update '{article.title}'. Article not found."
+                )
+        
         else:
-            # Duplicate error dialog
-            QMessageBox.warning(
-                self.view, 
-                "Duplicate Article", 
-                f"'{article.title}' is already in your collection."
-            )
-        self.manual_article_added.emit()
+            was_added = self.model.add_article(article)
+            if was_added:
+                # Success dialog
+                QMessageBox.information(
+                    self.view, 
+                    "Success", 
+                    f"'{article.title}' was successfully added."
+                )
+            else:
+                # Duplicate error dialog
+                QMessageBox.warning(
+                    self.view, 
+                    "Duplicate Article", 
+                    f"'{article.title}' is already in your collection."
+                )
+
+        # Upon success or fail, switch back to article management page
+        self.view.switch_page("article_management")
 
     def _scrape_url_and_add(self, url: str, keyword: Optional[str] = None):
         """
@@ -161,22 +181,21 @@ class ArticleController(QObject):
         if article:
             self.view.article_management_widget.update_preview(article)
 
-    def _handle_article_edit(self, article: Article):
+    @Slot(Article)
+    def _handle_article_edit_request(self, article: Article):
         """
         Opens a pane to edit an existing article and updates the model if changes are saved.
         """
         if not article:
             return
         
-        # Open the manual input widget with the article data
+        # Prepare the manual input widget for editing
         self.view.manual_input_widget.set_article_data(article)
-        self.view.Stack.setCurrentWidget(self.view.manual_input_widget)
+        
+        # Switch to the manual input page
+        self.view.switch_to_page("manual_input")
 
-        # Connect the submission signal to the ArticleManager's edit method
-        self.view.manual_input_widget.article_submitted.connect(
-            lambda edited_article: self.model.edit_article(
-                self.model.get_all_articles().index(article), edited_article
-            )
-        )
-
-
+    @Slot(Article)
+    def _handle_article_delete_request(self, article: Article):
+        """Calls function on model to delete article"""
+        self.model.delete_article(article)
