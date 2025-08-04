@@ -74,7 +74,10 @@ class ArticlePreviewWidget(QWidget):
         self.author_label.setVisible(bool(self.article.author))
         if self.article.author:
             self.author_label.setText(f"<b>Author:</b> {self.article.author}")
+
+        # Enable action buttons
         self.edit_btn.setEnabled(True)
+        self.delete_btn.setEnabled(True)
 
     @Slot()
     def _on_edit_clicked(self):

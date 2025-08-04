@@ -1,5 +1,3 @@
-# search.py
-
 import requests
 from ..utils import normalize_url, is_article
 

@@ -1,7 +1,5 @@
-1. Streamline entire process in the GUI instead of making user pull up a spreadsheet
-    Or have them click a link to the spreadsheet from the application
-2. Allow user to change keywords from the application
-3. Allow user to add entries to the source map from the application
-4. Allow user to preview content before confirming it (to catch partly scraped articles)
-5. Add option to include placeholders for morning tech/morning trade
-6. Create email draft in outlook
+SETTINGS PAGE:
+    Allow user to change keywords from the application
+    Allow user to add entries to the source map from the application
+Add option to include placeholders for morning tech/morning trade
+Create email draft in outlook

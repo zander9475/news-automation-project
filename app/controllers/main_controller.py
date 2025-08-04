@@ -2,9 +2,12 @@ from .article_controller import ArticleController
 from ..models.article_manager import ArticleManager
 from ..views.widgets.search_dialog import SearchDialog
 from ..services.google_searcher import search_articles
+from ..services.email_builder import build_email
 import os
 from dotenv import load_dotenv
 import json
+from PySide6.QtCore import Slot
+from PySide6.QtWidgets import QMessageBox
 
 class MainController:
     """
@@ -46,6 +49,7 @@ class MainController:
         # Article management page signals
         self.view.article_management_widget.main_menu_requested.connect(lambda: self.view.switch_page("main_menu"))
         self.view.article_management_widget.manual_input_requested.connect(lambda: self.view.switch_page("manual_input"))
+        self.view.article_management_widget.save_articles_requested.connect(self._save_articles)
 
         # Manual input page signals
         self.view.manual_input_widget.submission_cancelled.connect(lambda: self.view.switch_page("article_management"))
@@ -99,3 +103,30 @@ class MainController:
         except (FileNotFoundError, json.JSONDecodeError):
             # If file doesn't exist or is empty, do nothing
             pass
+
+    @Slot()
+    def _save_articles(self):
+        """
+        Calls model to save articles to csv file.
+        Calls email formatter service to build email.
+        """
+        # Save articles to .csv file
+        save_success = self.model.save_articles()
+        if save_success:
+            # Build the email
+            email_build_success = build_email()
+            if email_build_success:
+                # Success dialog
+                QMessageBox.information(
+                    self.view,
+                    "Success",
+                    "The email has been generated as 'final_email.html' in the 'output' folder." \
+                    "\nDouble click on this file and then copy and paste into Outlook."
+                )
+            else:
+                # Fail dialog
+                QMessageBox.warning(
+                    self.view,
+                    "Build Failed",
+                    "The attempt to build the email failed."
+                )
