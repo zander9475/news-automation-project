@@ -132,7 +132,7 @@ class ArticleManagementWidget(QWidget):
             # Add the item to the list widget
             self.listbox.addItem(title_item)
 
-    def set_preview_visible(self, visible: bool):
+    def toggle_preview(self, visible: bool):
         """Public method to control preview visibility"""
         self.preview_pane.setVisible(visible)
 
