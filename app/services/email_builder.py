@@ -2,11 +2,14 @@ import pandas as pd
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 from app.services.congress_scraper import get_congressional_activity
+import ast
 
 def build_email():
     # Load email template and article data
     df = pd.read_csv("data/full_articles.csv")
 
+    # Convert the string representation of the list back to a Python list
+    df['author'] = df['author'].apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
     # Replace 'nan' in empty author column with empty string
     df['author'] =df['author'].fillna('')
 
