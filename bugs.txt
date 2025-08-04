@@ -9,4 +9,4 @@ Pulling keywords from website content post-article body
 
 Multiple different urls leading to the same url when clicked (check out 7/24 raw results)
 
-
+Preview pane showing immediately

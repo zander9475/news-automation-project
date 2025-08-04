@@ -118,8 +118,8 @@ class ArticleController(QObject):
                 )
         
         else:
-            was_added = self.model.add_article(article)
-            if was_added:
+            successful_add = self.model.add_article(article)
+            if successful_add:
                 # Success dialog
                 QMessageBox.information(
                     self.view, 
@@ -193,7 +193,7 @@ class ArticleController(QObject):
         self.view.manual_input_widget.set_article_data(article)
         
         # Switch to the manual input page
-        self.view.switch_to_page("manual_input")
+        self.view.switch_page("manual_input")
 
     @Slot(Article)
     def _handle_article_delete_request(self, article: Article):

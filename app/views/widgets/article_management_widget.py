@@ -5,13 +5,13 @@ from .article_preview_widget import ArticlePreviewWidget
 from app.models.article import Article
 
 class ArticleManagementWidget(QWidget):
-    # Custom signals
-    url_scrape_requested = Signal(str) # Connects to ArticleController
-    manual_input_requested = Signal() # Connects to ArticleController
-    main_menu_requested = Signal()
+    # Custom signals, connect to ArticleController
+    url_scrape_requested = Signal(str)
+    manual_input_requested = Signal()
+    main_menu_requested = Signal() # Connect to MainController
     article_preview_requested = Signal(int)
-    edit_article_requested = Signal(Article) # Connects to Article Controller
-    delete_article_requested = Signal(Article) # Connects to Article Controller
+    edit_article_requested = Signal(Article)
+    delete_article_requested = Signal(Article)
 
     def __init__(self):
         super().__init__()
