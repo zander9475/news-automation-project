@@ -73,7 +73,9 @@ class ArticlePreviewWidget(QWidget):
 
         self.author_label.setVisible(bool(self.article.author))
         if self.article.author:
-            self.author_label.setText(f"<b>Author:</b> {self.article.author}")
+            # Split the author list into a string
+            authors = ', '.join(self.article.author)
+            self.author_label.setText(f"<b>Author(s):</b> {authors}")
 
         # Enable action buttons
         self.edit_btn.setEnabled(True)
