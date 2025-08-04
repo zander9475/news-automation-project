@@ -88,7 +88,7 @@ class MainController:
         self.view.search_results_widget.display_results(articles)
         
         # Switch to the search results page
-        self._show_search_results()
+        self.view.switch_page("search_results")
 
     def _load_cached_results(self):
         try:
