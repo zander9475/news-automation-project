@@ -2,6 +2,7 @@ from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QPushButton, QSplit
                                 QHBoxLayout, QLineEdit, QListWidget, QListWidgetItem, QAbstractItemView)
 from PySide6.QtCore import Qt, Signal, Slot
 from .article_preview_widget import ArticlePreviewWidget
+from app.models.article import Article
 
 class ArticleManagementWidget(QWidget):
     # Custom signals
@@ -9,6 +10,7 @@ class ArticleManagementWidget(QWidget):
     manual_input_requested = Signal() # Connects to ArticleController
     main_menu_requested = Signal()
     article_preview_requested = Signal(int)
+    edit_article_requested = Signal(Article)
 
     def __init__(self):
         super().__init__()
@@ -83,6 +85,9 @@ class ArticleManagementWidget(QWidget):
         # Set layout
         self.setLayout(self.main_layout)
 
+        # Connect to the child's signal
+        self.preview_pane.edit_article_requested.connect(self._on_child_edit_request)
+
     def _on_url_btn_clicked(self):
         """
         Passes the URL to the controller for scraping.
@@ -131,3 +136,6 @@ class ArticleManagementWidget(QWidget):
     def update_preview(self, article):
         """Public method to update preview content"""
         self.preview_pane.display_article(article)
+
+    def _on_child_edit_request(self, article):
+        self.edit_article_requested.emit(article)

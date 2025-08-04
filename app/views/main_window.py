@@ -11,7 +11,6 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("News Automation Tool")
-        self.setGeometry(300, 100, 800, 600)
         self.initUI()
 
     def initUI(self):

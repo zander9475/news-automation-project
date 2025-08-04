@@ -42,3 +42,15 @@ class MainMenuWidget(QWidget):
 
         # Set layout for this widget
         self.setLayout(self.main_layout)
+
+        # Set style sheet
+        self.setStyleSheet("""
+            QPushButton{
+                font-size: 20px;
+                font-family: Arial;
+                padding: 25px;
+                margin: 5px;
+                border: 3px solid;
+                border-radius: 15px;
+            }
+        """)

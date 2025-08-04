@@ -80,6 +80,19 @@ class ArticleManager(QObject):
         self.seen_session_urls.add(url)
         self.articles_changed.emit()
         return True
+    
+    def edit_article(self, index, article):
+        """
+        Edits an existing article at the given index.
+        @param index (int): The list position of the article to be edited.
+        """
+        if 0 <= index < len(self.articles):
+            self.articles[index] = article
+            self.articles_changed.emit()
+            return True
+        else:
+            print("Error: Invalid article index for editing.")
+            return None
 
     def remove_article(self, index):
         """

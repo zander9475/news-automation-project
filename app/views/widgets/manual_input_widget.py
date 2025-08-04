@@ -135,3 +135,15 @@ class ManualInputWidget(QWidget):
         self.author_input.clear()
         self.source_input.clear()
         self.content_input.clear()
+
+    def set_article_data(self, article: Article):
+        """
+        Populates the form with data from an Article object for editing.
+        
+        @param article: Article object to populate the form with.
+        """
+        self.title_input.setText(article.title)
+        self.lead_input.setText(article.lead if article.lead else "")
+        self.author_input.setText(", ".join(article.author) if article.author else "")
+        self.source_input.setText(article.source)
+        self.content_input.setHtml(article.content)

@@ -27,6 +27,7 @@ class ArticleController(QObject):
         # Article management page signals
         self.view.article_management_widget.url_scrape_requested.connect(self._handle_manual_url_add)
         self.view.article_management_widget.article_preview_requested.connect(self._show_article_preview)
+        self.view.article_management_widget.edit_article_requested.connect(self._handle_article_edit)
 
         # Manual input page signals
         self.view.manual_input_widget.article_submitted.connect(self._handle_manual_input_add)
@@ -159,3 +160,23 @@ class ArticleController(QObject):
         # Pass article to preview pane and show it
         if article:
             self.view.article_management_widget.update_preview(article)
+
+    def _handle_article_edit(self, article: Article):
+        """
+        Opens a pane to edit an existing article and updates the model if changes are saved.
+        """
+        if not article:
+            return
+        
+        # Open the manual input widget with the article data
+        self.view.manual_input_widget.set_article_data(article)
+        self.view.Stack.setCurrentWidget(self.view.manual_input_widget)
+
+        # Connect the submission signal to the ArticleManager's edit method
+        self.view.manual_input_widget.article_submitted.connect(
+            lambda edited_article: self.model.edit_article(
+                self.model.get_all_articles().index(article), edited_article
+            )
+        )
+
+
