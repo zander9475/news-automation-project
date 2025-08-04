@@ -9,7 +9,7 @@ class ArticleManagementWidget(QWidget):
     url_scrape_requested = Signal(str)
     manual_input_requested = Signal()
     main_menu_requested = Signal() # Connect to MainController
-    article_preview_requested = Signal(int)
+    article_preview_requested = Signal(Article)
     edit_article_requested = Signal(Article)
     delete_article_requested = Signal(Article)
 
@@ -107,10 +107,11 @@ class ArticleManagementWidget(QWidget):
         selected_item = self.listbox.currentItem()
 
         if selected_item:
-            # Get its index
-            index = self.listbox.row(selected_item)
-            # Pass that index to the controller
-            self.article_preview_requested.emit(index)
+            # Get the Article object
+            article = selected_item.data(Qt.UserRole)
+
+            # Pass that article to the controller
+            self.article_preview_requested.emit(article)
 
     def populate_list(self, articles):
         """

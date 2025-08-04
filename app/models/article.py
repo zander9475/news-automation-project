@@ -16,7 +16,7 @@ class Article:
     lead: Optional[str] = None
     id: Optional[str] = None
 
-    def __post__init__(self):
+    def __post_init__(self):
         """
         Generates unique ID for Article objects
         """
