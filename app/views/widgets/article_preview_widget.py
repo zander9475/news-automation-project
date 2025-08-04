@@ -18,14 +18,16 @@ class ArticlePreviewWidget(QWidget):
         self.main_layout = QVBoxLayout()
 
         # Header
-        self.main_layout.addWidget(QLabel("<h2>Article Details</h2>"))
+        self.header = QLabel()
+        self.header.setAlignment(Qt.AlignCenter)
+        self.main_layout.addWidget(self.header_label)
 
         # Declare widgets where text will go
         self.title_label = QLabel()
         self.lead_label = QLabel()
         self.author_label = QLabel()
         self.source_label = QLabel()
-        self.content_label = QLabel("<b>Content:</b>")
+        self.content_label = QLabel()
         self.content_text = QTextBrowser()
         self.content_text.setReadOnly(True)
         self.content_text.setOpenExternalLinks(True)
@@ -55,6 +57,8 @@ class ArticlePreviewWidget(QWidget):
 
         self.setLayout(self.main_layout)
 
+        self.clear_display()
+
     def display_article(self, article: 'Article'):
         """
         Populates the preview pane with article details
@@ -64,7 +68,17 @@ class ArticlePreviewWidget(QWidget):
         # Set the text for required fields
         self.title_label.setText(f"<b>Title:</b> {self.article.title}")
         self.source_label.setText(f"<b>Source:</b> {self.article.source}")
+        self.content_label.setText("<b>Content:</b>")
         self.content_text.setHtml(self.article.content)
+
+        # Set visibility for widgets
+        self.title_label.setVisible(True)
+        self.source_label.setVisible(True)
+        self.content_label.setVisible(True)
+        self.content_text.setVisible(True)
+        self.action_btns.setContentsMargins(0, 5, 0, 0) # Adjust margin for aesthetics
+        self.action_btns.setSpacing(5) # Add spacing between buttons
+        self.action_btns.setVisible(True)
 
         # Enable optional fields if they exist
         self.lead_label.setVisible(bool(self.article.lead))
@@ -84,15 +98,24 @@ class ArticlePreviewWidget(QWidget):
     def clear_display(self):
         """Clears all fields and disables buttons in the preview pane."""
         self.article = None
+
+        # Set the header to the placeholder text
+        self.header_label.setText("<h2>Select an article from the list to view its details.</h2>")
+
+        # Clear and hide content widgets
         self.title_label.setText("")
+        self.title_label.setVisible(False)
         self.lead_label.setText("")
-        self.author_label.setText("")
-        self.source_label.setText("")
-        self.content_text.setHtml("")
-        
-        # Hide optional fields
         self.lead_label.setVisible(False)
+        self.author_label.setText("")
         self.author_label.setVisible(False)
+        self.source_label.setText("")
+        self.source_label.setVisible(False)
+        self.content_label.setText("")
+        self.content_label.setVisible(False)
+        self.content_text.setHtml("")
+        self.content_text.setVisible(False)
+        self.action_btns.setVisible(False)
         
         # Disable action buttons
         self.edit_btn.setEnabled(False)
