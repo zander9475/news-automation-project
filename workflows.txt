@@ -20,3 +20,10 @@ Deleting article workflow:
 3. -> delete_article_requested(Signal, to parent) -> 
 4. _handle_article_delete_request(Slot, controller): Takes article, calls function on model to delete it
 5. Model emits articles changed signal, controller catches it and updates article management view
+
+
+Saving articles and building email workflow:
+
+1. Save btn emits signal to main controller
+2. Main controller does two things:
+	1. Calls method on ArticleManager to save articles to csv

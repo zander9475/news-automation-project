@@ -1,7 +1,7 @@
 from ..models.article import Article
 from ..services.web_scraper import scrape_url
 from PySide6.QtWidgets import QMessageBox
-from PySide6.QtCore import Signal, Slot, QObject
+from PySide6.QtCore import Slot, QObject
 from typing import Optional
 
 class ArticleController(QObject):
@@ -32,11 +32,20 @@ class ArticleController(QObject):
 
         # Article manager model signals
         self.model.articles_changed.connect(self._refresh_articles_view)
+        self.model.article_updated.connect(self._update_single_article_view)
 
     @Slot()
     def _refresh_articles_view(self):
         articles = self.model.get_all_articles()
         self.view.article_management_widget.populate_list(articles)
+
+    @Slot(Article)
+    def _update_single_article_view(self, article):
+        """
+        Updates the display text of edited article in the preview pane
+        @param article: edited Article object
+        """
+        self.view.article_management_widget.update_preview(article)
 
     @Slot(dict)
     def handle_search_result_add(self, result_data: dict):
@@ -177,7 +186,7 @@ class ArticleController(QObject):
             self.view.article_management_widget.update_preview(article)
         else:
             # Handle the case where the article is None (e.g., when the list is cleared)
-            self.view.article_management_widget.clear_preview()
+            self.view.article_management_widget.toggle_preview(False)
 
     @Slot(Article)
     def _handle_article_edit_request(self, article: Article):

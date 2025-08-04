@@ -10,6 +10,7 @@ class ArticleManager(QObject):
     """
     # Custom signals
     articles_changed = Signal()
+    article_updated = Signal(Article)
 
     def __init__(self, filepath="data/full_articles.csv"):
         """
@@ -112,7 +113,7 @@ class ArticleManager(QObject):
             if existing_article.id == article.id:
                 # Found the article by ID, now replace it with the updated version
                 self.articles[i] = article
-                self.articles_changed.emit()
+                self.article_updated.emit(article)
                 return True
                 
         print(f"Error: Article with ID '{article.id}' not found for editing.")

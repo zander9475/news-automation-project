@@ -12,6 +12,7 @@ class ArticleManagementWidget(QWidget):
     article_preview_requested = Signal(Article)
     edit_article_requested = Signal(Article)
     delete_article_requested = Signal(Article)
+    save_articles_requested = Signal(Article)
 
     def __init__(self):
         super().__init__()
@@ -70,6 +71,7 @@ class ArticleManagementWidget(QWidget):
 
         # Detail view: preview pane
         self.preview_pane = ArticlePreviewWidget()
+        self.preview_pane.setVisible(False)
         self.splitter.addWidget(self.preview_pane)
 
         self.main_layout.addWidget(self.splitter)
@@ -77,6 +79,7 @@ class ArticleManagementWidget(QWidget):
         # Final component: QHBox for save/cancel buttons
         self.action_btns = QHBoxLayout()
         self.save_order_btn = QPushButton("Save Order")
+        self.save_order_btn.clicked.connect(self.save_articles_requested.emit)
         self.main_menu_btn = QPushButton("Back to Main Menu")
         self.main_menu_btn.clicked.connect(self.main_menu_requested.emit)
         self.action_btns.addWidget(self.save_order_btn)
@@ -119,6 +122,10 @@ class ArticleManagementWidget(QWidget):
         
         @param articles: list of Article objects.
         """
+        # Clear preview pane
+        self.preview_pane.clear_display()
+        self.preview_pane.setVisible(False)
+
         # Clear listbox
         self.listbox.clear()
 

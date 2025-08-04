@@ -81,6 +81,23 @@ class ArticlePreviewWidget(QWidget):
         self.edit_btn.setEnabled(True)
         self.delete_btn.setEnabled(True)
 
+    def clear_display(self):
+        """Clears all fields and disables buttons in the preview pane."""
+        self.article = None
+        self.title_label.setText("")
+        self.lead_label.setText("")
+        self.author_label.setText("")
+        self.source_label.setText("")
+        self.content_text.setHtml("")
+        
+        # Hide optional fields
+        self.lead_label.setVisible(False)
+        self.author_label.setVisible(False)
+        
+        # Disable action buttons
+        self.edit_btn.setEnabled(False)
+        self.delete_btn.setEnabled(False)
+
     @Slot()
     def _on_edit_clicked(self):
         """Passes article to controller through parent widget"""

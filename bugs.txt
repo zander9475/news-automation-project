@@ -1,15 +1,17 @@
-"contributed to this report" appearing at the bottom of articles
+Get articles to save properly
 
-Articles appearing as list
+Authors appearing as list
 
-Aptos font instead of times new roman
-
-Pulling keywords from website content post-article body
-    example: https://www.politico.com/newsletters/digital-future-daily/2025/07/23/trumps-ai-order-steers-straight-into-one-of-dcs-biggest-arguments-00471331
-
-Multiple different urls leading to the same url when clicked (check out 7/24 raw results)
-
-Preview pane showing immediately
+Preview pane showing immediately upon switching to management page
 
 Preview pane does not go away upon article delete
     Buttons stay enabled
+
+Article content does not paste as times new roman to preview box
+
+Aptos font instead of times new roman on email
+
+Multiple different urls leading to the same url when clicked (check out 7/24 raw results)
+
+Pulling keywords from website content post-article body
+    example: https://www.politico.com/newsletters/digital-future-daily/2025/07/23/trumps-ai-order-steers-straight-into-one-of-dcs-biggest-arguments-00471331
