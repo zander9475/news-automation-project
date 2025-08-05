@@ -1,6 +1,8 @@
-Authors appear as a list sometimes in preview pane and editing (reason why unknown)
-
 Article content does not paste as times new roman to preview box
+
+Title does not titlecase, neither does source
+
+Title edits do not appear in listbox
 
 Email font unregulated
 
