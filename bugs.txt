@@ -1,5 +1,3 @@
-Authors appear as a list sometimes in preview pane and editing (reason why unknown)
-
 Article content does not paste as times new roman to preview box
 
 Email font unregulated

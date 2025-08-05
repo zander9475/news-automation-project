@@ -7,6 +7,7 @@ def search_articles(api_key, cse_id, keywords, days_back):
     """
     articles = []
     seen_urls = set()
+    seen_titles = set()
     for keyword in keywords:
         print(f"Searching for new articles for keyword: '{keyword}'...")
         try:
@@ -34,7 +35,7 @@ def search_articles(api_key, cse_id, keywords, days_back):
                     continue
 
                 # Add article if not a duplicate
-                if normalized_url not in seen_urls:
+                if normalized_url not in seen_urls and title.strip().lower() not in seen_titles:
                     articles.append({
                         "title": item["title"],
                         "url": item["link"],
@@ -42,6 +43,7 @@ def search_articles(api_key, cse_id, keywords, days_back):
                         "keyword": keyword,
                     })
                     seen_urls.add(normalized_url)
+                    seen_titles.add(title.strip().lower())
 
         except requests.exceptions.RequestException as e:
             # This single block now catches all network/HTTP errors gracefully

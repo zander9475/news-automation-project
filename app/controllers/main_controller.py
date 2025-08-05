@@ -45,6 +45,7 @@ class MainController:
         # Search results page signals
         self.view.search_results_widget.rerun_search_requested.connect(self._show_search_dialog)
         self.view.search_results_widget.main_menu_requested.connect(lambda: self.view.switch_page("main_menu"))
+        self.view.search_results_widget.articles_page_requested.connect(lambda: self.view.switch_page("article_management"))
 
         # Article management page signals
         self.view.article_management_widget.main_menu_requested.connect(self._handle_main_menu_request_from_articles)
