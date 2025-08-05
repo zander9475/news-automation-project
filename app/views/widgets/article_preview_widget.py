@@ -81,7 +81,7 @@ class ArticlePreviewWidget(QWidget):
                 if key in ("href", "src", "alt", "title")
             }
 
-        # Optionally wrap the sanitized content in a styled div
+        # Wrap the sanitized content in a styled div
         return f"""
         <div style="font-family: 'Times New Roman', Times, serif; font-size: 12pt;">
             {str(soup)}

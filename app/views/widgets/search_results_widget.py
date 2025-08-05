@@ -1,6 +1,6 @@
 import webbrowser
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtWidgets import (QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, 
+from PySide6.QtWidgets import (QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QHeaderView, 
                                QHBoxLayout, QPushButton, QAbstractItemView, QLabel, QSizePolicy)
 
 class SearchResultsWidget(QWidget):
@@ -28,6 +28,7 @@ class SearchResultsWidget(QWidget):
         self.header.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.header.setWordWrap(True)
         self.header.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
+        self.main_layout.addWidget(self.header)
 
         # Rerun search button at the top
         self.rerun_search_btn = QPushButton("Rerun Search")
@@ -37,13 +38,27 @@ class SearchResultsWidget(QWidget):
         # Create search results table
         self.table = QTableWidget()
         
-        # Configure the columns
+        # Create columns
         self.table.setColumnCount(4)
         self.table.setHorizontalHeaderLabels(["Title", "Source", "Keyword", ""])
 
-        # Set the table to stretch the columns to fit the content
-        self.table.horizontalHeader().setStretchLastSection(True)
-        
+        # Add initial widths
+        self.table.setColumnWidth(1, 120)  # Source
+        self.table.setColumnWidth(2, 120)  # Keyword
+        self.table.setColumnWidth(3, 80)   # Button
+
+        # Configure column resizing behavior
+        header = self.table.horizontalHeader()
+        header.setStretchLastSection(False)
+
+        # Configure title column to take up all extra space
+        header.setSectionResizeMode(0, QHeaderView.Stretch)
+
+        # Allow user to resize column as needed
+        header.setSectionResizeMode(1, QHeaderView.Interactive)
+        header.setSectionResizeMode(2, QHeaderView.Interactive) 
+        header.setSectionResizeMode(3, QHeaderView.Interactive)
+                
         # Disable editing
         self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.main_layout.addWidget(self.table)
