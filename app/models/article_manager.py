@@ -5,6 +5,7 @@ from PySide6.QtCore import Signal, QObject
 from typing import Optional
 import ast
 from titlecase import titlecase
+from pandas.errors import EmptyDataError
 
 class ArticleManager(QObject):
     """
@@ -57,9 +58,12 @@ class ArticleManager(QObject):
                     self.seen_urls.add(normalize_url(article.url)) 
                 # Populate the set of seen titles
                 if article.title:
-                    self.seen_titles.add(article.title.lower().strip())           
+                    self.seen_titles.add(article.title.lower().strip())                 
         except FileNotFoundError:
             print(f"{self.filepath} not found. Starting with empty article list.")
+            self.articles = []
+        except EmptyDataError:
+            print(f"{self.filepath} is empty. Starting with empty article list.")
             self.articles = []
 
     def get_all_articles(self):
