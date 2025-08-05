@@ -1,5 +1,4 @@
 from PySide6.QtWidgets import QTableWidget, QHeaderView
-from PySide6.QtCore import Qt
 
 class SearchTableWidget(QTableWidget):
     def __init__(self, parent=None):
@@ -13,10 +12,10 @@ class SearchTableWidget(QTableWidget):
         total_width = self.width()
         if total_width == 0:
             total_width = 800  # Default width if not yet set
-        self.setColumnWidth(0, int(0.6 * total_width))  # Title: 60%
-        self.setColumnWidth(1, int(0.15 * total_width))  # Source: 15%
-        self.setColumnWidth(2, int(0.15 * total_width))  # Keyword: 15%
-        self.setColumnWidth(3, int(0.10 * total_width))  # Button: 10%
+        self.setColumnWidth(0, int(0.45 * total_width))  # Title: 60%
+        self.setColumnWidth(1, int(0.20 * total_width))  # Source: 15%
+        self.setColumnWidth(2, int(0.20 * total_width))  # Keyword: 15%
+        self.setColumnWidth(3, int(0.13 * total_width))  # Button: 10%
         
         # Make all columns interactive (user-resizable)
         header = self.horizontalHeader()
