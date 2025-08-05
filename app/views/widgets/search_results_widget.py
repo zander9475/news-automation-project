@@ -1,7 +1,7 @@
 import webbrowser
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, 
-                               QHBoxLayout, QPushButton, QAbstractItemView)
+                               QHBoxLayout, QPushButton, QAbstractItemView, QLabel, QSizePolicy)
 
 class SearchResultsWidget(QWidget):
     """
@@ -11,6 +11,7 @@ class SearchResultsWidget(QWidget):
     rerun_search_requested = Signal()
     main_menu_requested = Signal()
     article_addition_requested = Signal(dict)
+    articles_page_requested = Signal()
 
     def __init__(self):
         super().__init__()
@@ -21,6 +22,17 @@ class SearchResultsWidget(QWidget):
         Initializes UI components. Will show search results by displaying title (as clickable url), source, and keyword
         """
         self.main_layout = QVBoxLayout()
+
+        # Header
+        self.header = QLabel("<h2>View Search Results Here.<\h2>")
+        self.header.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.header.setWordWrap(True)
+        self.header.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
+
+        # Rerun search button at the top
+        self.rerun_search_btn = QPushButton("Rerun Search")
+        self.rerun_search_btn.clicked.connect(self.rerun_search_requested.emit)
+        self.main_layout.addWidget(self.rerun_search_btn)
     
         # Create search results table
         self.table = QTableWidget()
@@ -38,12 +50,12 @@ class SearchResultsWidget(QWidget):
 
         # Action buttons
         self.action_btns = QHBoxLayout()
-        self.rerun_search_btn= QPushButton("Rerun Search")
-        self.rerun_search_btn.clicked.connect(self.rerun_search_requested.emit)
         self.main_menu_btn = QPushButton("Back to Main Menu")
         self.main_menu_btn.clicked.connect(self.main_menu_requested.emit)
-        self.action_btns.addWidget(self.rerun_search_btn)
+        self.articles_page_btn= QPushButton("Proceed to Manage Articles")
+        self.articles_page_btn.clicked.connect(self.articles_page_requested.emit)
         self.action_btns.addWidget(self.main_menu_btn)
+        self.action_btns.addWidget(self.articles_page_btn)
         self.main_layout.addLayout(self.action_btns)
 
         # Connect the item clicked signal to a method that opens the URL

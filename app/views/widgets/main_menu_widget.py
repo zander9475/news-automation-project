@@ -21,9 +21,10 @@ class MainMenuWidget(QWidget):
 
         # Define layout components
         # Connect button clicks to custom signals
-        self.page_header = QLabel("Welcome to the News Clipper tool. " \
-                            "Select \"Search Google\" to begin, or choose another option")
+        self.page_header = QLabel("<h1>Welcome to the News Clipper tool.<\h1>")
         self.page_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.page_subheader = QLabel("<h2>Select \"Search Google\" to begin, or choose another option.</h2>")
+        self.page_subheader.setAlignment(Qt.AlignmentFlag.AlignCenter)
         
         self.search_button = QPushButton("Search Google", self)
         self.search_button.clicked.connect(self.search_requested.emit)
@@ -36,6 +37,7 @@ class MainMenuWidget(QWidget):
 
         # Add components to main layout
         self.main_layout.addWidget(self.page_header)
+        self.main_layout.addWidget(self.page_subheader)
         self.main_layout.addWidget(self.search_button)
         self.main_layout.addWidget(self.search_results_button)
         self.main_layout.addWidget(self.articles_button)
@@ -46,11 +48,11 @@ class MainMenuWidget(QWidget):
         # Set style sheet
         self.setStyleSheet("""
             QPushButton{
-                font-size: 20px;
+                font-size: 18px;
                 font-family: Arial;
-                padding: 25px;
+                padding: 20px;
                 margin: 5px;
                 border: 3px solid;
-                border-radius: 15px;
+                border-radius: 10px;
             }
         """)
