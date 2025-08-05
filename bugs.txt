@@ -6,6 +6,7 @@ Email font unregulated
 
 Spacing issues in email
 
+Lead setting to nan
 
 Multiple different urls leading to the same url when clicked (check out 7/24 raw results)
 

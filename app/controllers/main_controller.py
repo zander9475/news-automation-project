@@ -47,7 +47,7 @@ class MainController:
         self.view.search_results_widget.main_menu_requested.connect(lambda: self.view.switch_page("main_menu"))
 
         # Article management page signals
-        self.view.article_management_widget.main_menu_requested.connect(lambda: self.view.switch_page("main_menu"))
+        self.view.article_management_widget.main_menu_requested.connect(self._handle_main_menu_request_from_articles)
         self.view.article_management_widget.manual_input_requested.connect(lambda: self.view.switch_page("manual_input"))
         self.view.article_management_widget.save_articles_requested.connect(self._save_articles)
 
@@ -132,3 +132,14 @@ class MainController:
                     "Build Failed",
                     "The attempt to build the email failed."
                 )
+
+    @Slot()
+    def _handle_main_menu_request_from_articles(self):
+        """
+        Resets the article management view and switches to the main menu page.
+        """
+        # Call the reset method on the view
+        self.view.article_management_widget.reset_view()
+
+        # Then, switch the page
+        self.view.switch_page("main_menu")

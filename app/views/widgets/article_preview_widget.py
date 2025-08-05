@@ -29,6 +29,7 @@ class ArticlePreviewWidget(QWidget):
         self.source_label = QLabel()
         self.content_label = QLabel()
         self.content_text = QTextBrowser()
+        self.content_text.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.content_text.setReadOnly(True)
         self.content_text.setOpenExternalLinks(True)
 
@@ -52,10 +53,11 @@ class ArticlePreviewWidget(QWidget):
         self.main_layout.addWidget(self.content_text)
         self.main_layout.addLayout(self.action_btns)
         
-        self.main_layout.addStretch()
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        # Set stretch so content_text grows vertically
+        self.main_layout.setStretch(self.main_layout.indexOf(self.content_text), 1)
 
         self.setLayout(self.main_layout)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         self.clear_display()
 
@@ -90,10 +92,15 @@ class ArticlePreviewWidget(QWidget):
             self.lead_label.setText(f"<b>Lead:</b> {self.article.lead}")
 
         self.author_label.setVisible(bool(self.article.author))
-        if self.article.author:
+        if self.article.author and len(self.article.author) > 0:
+            print("Author list contents:", self.article.author)
             # Split the author list into a string
+            print("Before setting author label:", self.author_label.text())
             authors = ', '.join(self.article.author)
+            print("Authors joined:", authors)
             self.author_label.setText(f"<b>Author(s):</b> {authors}")
+            print("After setting author label:", self.author_label.text())
+
 
         # Enable action buttons
         self.edit_btn.setEnabled(True)

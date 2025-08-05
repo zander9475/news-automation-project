@@ -3,6 +3,7 @@ from .article import Article
 from ..utils import normalize_url
 from PySide6.QtCore import Signal, QObject
 from typing import Optional
+import ast
 
 class ArticleManager(QObject):
     """
@@ -32,7 +33,7 @@ class ArticleManager(QObject):
         try:
             df = pd.read_csv(self.filepath)
 
-            # Replace NaN values with None for optional fields
+            df['author'] = df['author'].apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
             df = df.where(pd.notna(df), None)
 
             # Create an Article object for each row in the dataframe

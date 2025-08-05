@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QPushButton, QSplitter, 
+from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QPushButton, QSplitter, QSizePolicy,
                                 QHBoxLayout, QLineEdit, QListWidget, QListWidgetItem, QAbstractItemView)
 from PySide6.QtCore import Qt, Signal, Slot
 from .article_preview_widget import ArticlePreviewWidget
@@ -21,10 +21,14 @@ class ArticleManagementWidget(QWidget):
     def initUI(self):
         """Initializes UI components"""
         self.main_layout = QVBoxLayout()
+        self.main_layout.setSpacing(10)
+        self.main_layout.setContentsMargins(20, 20, 20, 20)
 
         # First component: QLabel for header
         self.header = QLabel("Welcome to the article collection screen. Add article by URL, or add manually.")
         self.header.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.header.setWordWrap(True)
+        self.header.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
         self.main_layout.addWidget(self.header)
 
         # Second component: QHBox layout for submitting article by URL
@@ -39,43 +43,49 @@ class ArticleManagementWidget(QWidget):
         self.url_input_layout.addWidget(self.submit_url_btn)
         self.main_layout.addLayout(self.url_input_layout)
 
-        # Third component: QHBox layout containing QLabel and QPushButton for adding article manually
+        # Third component: QHBox layout for manual input
         self.manual_input_layout = QHBoxLayout()
         self.manual_header = QLabel("Enter article details manually: ")
         self.submit_manual_btn = QPushButton("Add Manually")
         self.submit_manual_btn.clicked.connect(self.manual_input_requested.emit)
         self.manual_input_layout.addWidget(self.manual_header)
         self.manual_input_layout.addWidget(self.submit_manual_btn)
+        self.manual_input_layout.addStretch(1)
         self.main_layout.addLayout(self.manual_input_layout)
 
         # Fourth component: QLabel for reordering articles
         self.listbox_header = QLabel("Reorder articles by selecting an article and dragging it to your desired location." \
                                         "\nClick on any article title to preview its contents.")
         self.listbox_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.listbox_header.setWordWrap(True)
+        self.listbox_header.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
         self.main_layout.addWidget(self.listbox_header)
 
         # Fifth component: QSplitter for master-detail view
-        self.splitter = QSplitter()
+        self.splitter = QSplitter(Qt.Orientation.Horizontal)
+        self.splitter.setSizes([300, 500]) # Initial width ratio
 
         # Master view: listbox
         self.listbox = QListWidget()
 
-        # Enable drag-and-drop
+        # Enable drag-and-drop and previewing
         self.listbox.setDragDropMode(QAbstractItemView.DragDropMode.InternalMove)
         self.listbox.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
         self.listbox.setDefaultDropAction(Qt.DropAction.MoveAction)
-        self.splitter.addWidget(self.listbox)
-
-        # Enable previewing by selecting article title
         self.listbox.currentItemChanged.connect(self._on_item_changed)
+        self.splitter.addWidget(self.listbox)
 
         # Detail view: preview pane
         self.preview_pane = ArticlePreviewWidget()
         self.splitter.addWidget(self.preview_pane)
 
-        self.main_layout.addWidget(self.splitter)
+        # Set stretch factors for the splitter
+        self.splitter.setStretchFactor(0, 1)
+        self.splitter.setStretchFactor(1, 2)
 
-        # Final component: QHBox for save/cancel buttons
+        self.main_layout.addWidget(self.splitter, stretch=1)
+
+        # Final component: Action buttons
         self.action_btns = QHBoxLayout()
         self.save_order_btn = QPushButton("Save Order")
         self.save_order_btn.clicked.connect(self.save_articles_requested.emit)
@@ -83,6 +93,7 @@ class ArticleManagementWidget(QWidget):
         self.main_menu_btn.clicked.connect(self.main_menu_requested.emit)
         self.action_btns.addWidget(self.save_order_btn)
         self.action_btns.addWidget(self.main_menu_btn)
+        self.action_btns.addStretch(1)
         self.main_layout.addLayout(self.action_btns)
 
         # Set layout
@@ -140,3 +151,11 @@ class ArticleManagementWidget(QWidget):
     def update_preview(self, article):
         """Public method to update preview content"""
         self.preview_pane.display_article(article)
+
+    def reset_view(self):
+        """Resets the state of the article management widget."""
+        # Clear the preview pane
+        self.preview_pane.clear_display()
+
+        # Clear listbox selection
+        self.listbox.clearSelection()

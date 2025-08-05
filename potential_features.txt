@@ -1,4 +1,7 @@
 SETTINGS PAGE:
     Allow user to change keywords from the application
     Allow user to add entries to the source map from the application
+
 Add option to include placeholders for morning tech/morning trade
+
+Automatically clear articles upon email creation
