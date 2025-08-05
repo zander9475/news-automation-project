@@ -2,6 +2,7 @@ from PySide6.QtWidgets import (QWidget, QVBoxLayout,  QLabel, QTextBrowser,
                                QSizePolicy, QHBoxLayout, QPushButton, QMessageBox)
 from PySide6.QtCore import Signal, Slot, Qt
 from app.models.article import Article
+from bs4 import BeautifulSoup
 
 class ArticlePreviewWidget(QWidget):
     # Custom signals
@@ -36,11 +37,8 @@ class ArticlePreviewWidget(QWidget):
             QTextBrowser {
                 font-family: 'Times New Roman', Times, serif;
                 font-size: 12pt;
-                background: white;
-                color: black;
             }
         """)
-
 
         # Action btns
         self.action_btns = QHBoxLayout()
@@ -69,6 +67,26 @@ class ArticlePreviewWidget(QWidget):
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         self.clear_display()
+    
+    @staticmethod
+    def clean_html(raw_html: str) -> str:
+        soup = BeautifulSoup(raw_html, "html.parser")
+
+        # Remove inline styles that conflict with your styling
+        for tag in soup.find_all(True):
+            # Keep hrefs (for <a> tags) but remove style/font/size/etc
+            tag.attrs = {
+                key: value
+                for key, value in tag.attrs.items()
+                if key in ("href", "src", "alt", "title")
+            }
+
+        # Optionally wrap the sanitized content in a styled div
+        return f"""
+        <div style="font-family: 'Times New Roman', Times, serif; font-size: 12pt;">
+            {str(soup)}
+        </div>
+        """
 
     def display_article(self, article: 'Article'):
         """
@@ -82,14 +100,9 @@ class ArticlePreviewWidget(QWidget):
         # Set the text for required fields
         self.title_label.setText(f"<b>Title:</b> {self.article.title}")
         self.source_label.setText(f"<b>Source:</b> {self.article.source}")
-        self.content_label.setText("<b>Content:</b>")
-        # Wrap content in a styled div to enforce font and background
-        content_html = f"""
-        <div style="font-family: 'Times New Roman', Times, serif; font-size: 12pt; background: white; color: black;">
-            {self.article.content}
-        </div>
-        """
-        self.content_text.setHtml(content_html)
+        sanitized_html = ArticlePreviewWidget.clean_html(self.article.content)
+        self.content_text.setHtml(sanitized_html)
+        self.content_text.setHtml(sanitized_html)
 
         # Set visibility for widgets
         self.title_label.setVisible(True)

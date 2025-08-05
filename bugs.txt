@@ -1,14 +1,6 @@
-Article content does not paste as times new roman to preview box
-
-Title does not titlecase, neither does source
-
-Title edits do not appear in listbox
-
 Email font unregulated
 
 Spacing issues in email
-
-Lead setting to nan
 
 Multiple different urls leading to the same url when clicked (check out 7/24 raw results)
 
