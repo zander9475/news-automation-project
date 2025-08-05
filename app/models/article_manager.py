@@ -33,8 +33,11 @@ class ArticleManager(QObject):
         try:
             df = pd.read_csv(self.filepath)
 
+            # Replace 'NaN values with None for optional fields
             df['author'] = df['author'].apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
             df = df.where(pd.notna(df), None)
+            # Ensure 'lead' nan values are replaced with None
+            df['lead'] = df['lead'].where(pd.notna(df['lead']), None)
 
             # Create an Article object for each row in the dataframe
             for _, row in df.iterrows():
