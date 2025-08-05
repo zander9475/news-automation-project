@@ -24,7 +24,7 @@ class SearchResultsWidget(QWidget):
         self.main_layout = QVBoxLayout()
 
         # Header
-        self.header = QLabel("<h2>View Search Results Here.<\h2>")
+        self.header = QLabel("<h2>View Search Results Here.</h2>")
         self.header.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.header.setWordWrap(True)
         self.header.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
@@ -42,22 +42,14 @@ class SearchResultsWidget(QWidget):
         self.table.setColumnCount(4)
         self.table.setHorizontalHeaderLabels(["Title", "Source", "Keyword", ""])
 
-        # Add initial widths
-        self.table.setColumnWidth(1, 140)  # Source
-        self.table.setColumnWidth(2, 140)  # Keyword
-        self.table.setColumnWidth(3, 80)   # Button
-
-        # Configure column resizing behavior
+        # Configure all columns as interactive (user-resizable)
         header = self.table.horizontalHeader()
         header.setStretchLastSection(False)
+        header.setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
 
-        # Configure title column to take up all extra space
-        header.setSectionResizeMode(0, QHeaderView.Stretch)
-
-        # Allow user to resize column as needed
-        header.setSectionResizeMode(1, QHeaderView.Interactive)
-        header.setSectionResizeMode(2, QHeaderView.Interactive) 
-        header.setSectionResizeMode(3, QHeaderView.Interactive)
+        # Setup resize handling
+        self.table.resizeEvent = self._on_table_resize
+        self._column_resize_tracking()
                 
         # Disable editing
         self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
@@ -78,6 +70,40 @@ class SearchResultsWidget(QWidget):
 
         # Set layout
         self.setLayout(self.main_layout)
+
+    def _set_proportional_column_widths(self):
+        """Set column widths proportionally, maintaining title as the flexible column"""
+        total_width = self.table.width()
+        if total_width < 100:
+            total_width = 800
+        
+        # Only reset these 3 columns if user hasn't manually resized
+        if not hasattr(self, '_user_resized_columns') or not self._user_resized_columns:
+            source_width = max(80, int(total_width * 0.15))
+            keyword_width = max(80, int(total_width * 0.15))
+            button_width = max(60, int(total_width * 0.10))
+            
+            self.table.setColumnWidth(1, source_width)
+            self.table.setColumnWidth(2, keyword_width)
+            self.table.setColumnWidth(3, button_width)
+        
+        # ALWAYS adjust title column to fill remaining space
+        used_width = (self.table.columnWidth(1) + 
+                    self.table.columnWidth(2) + 
+                    self.table.columnWidth(3))
+        title_width = max(100, total_width - used_width)
+        self.table.setColumnWidth(0, title_width)
+
+    def _on_table_resize(self, event):
+        super(type(self.table), self.table).resizeEvent(event)
+        self._set_proportional_column_widths()
+
+    def _column_resize_tracking(self):
+        header = self.table.horizontalHeader()
+        header.sectionResized.connect(self._on_column_resized)
+
+    def _on_column_resized(self, logicalIndex, oldSize, newSize):
+        self._user_resized_columns = True
 
     def display_results(self, results):
         """
