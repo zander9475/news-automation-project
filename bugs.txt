@@ -1,3 +1,5 @@
+Column resizing in search results
+
 Email font unregulated
 
 Spacing issues in email

@@ -16,6 +16,7 @@ def search_articles(api_key, cse_id, keywords, days_back):
                 "key": api_key,
                 "cx": cse_id,
                 "q": keyword,
+                "num": 5,
                 "dateRestrict": f"d{days_back}"
             }
             # Query the API

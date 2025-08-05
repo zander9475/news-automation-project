@@ -43,8 +43,8 @@ class SearchResultsWidget(QWidget):
         self.table.setHorizontalHeaderLabels(["Title", "Source", "Keyword", ""])
 
         # Add initial widths
-        self.table.setColumnWidth(1, 120)  # Source
-        self.table.setColumnWidth(2, 120)  # Keyword
+        self.table.setColumnWidth(1, 140)  # Source
+        self.table.setColumnWidth(2, 140)  # Keyword
         self.table.setColumnWidth(3, 80)   # Button
 
         # Configure column resizing behavior
