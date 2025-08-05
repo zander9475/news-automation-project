@@ -4,6 +4,7 @@ from ..utils import normalize_url
 from PySide6.QtCore import Signal, QObject
 from typing import Optional
 import ast
+from titlecase import titlecase
 
 class ArticleManager(QObject):
     """
@@ -36,8 +37,8 @@ class ArticleManager(QObject):
             # Replace 'NaN values with None for optional fields
             df['author'] = df['author'].apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
             df = df.where(pd.notna(df), None)
-            # Ensure 'lead' nan values are replaced with None
-            df['lead'] = df['lead'].where(pd.notna(df['lead']), None)
+            # Ensure 'lead' nan values are replaced with empty string
+            df['lead'] = df['lead'].apply(lambda x: "" if x is None or pd.isna(x) else x)
 
             # Create an Article object for each row in the dataframe
             for _, row in df.iterrows():
@@ -48,7 +49,7 @@ class ArticleManager(QObject):
                     url=row.get('url', ''),
                     keyword=row.get('keyword', ''),
                     author=row.get('author', []),
-                    lead=row.get("lead")
+                    lead=row.get("lead", '')
                     )
                 self.articles.append(article)
                 # Populate the set of seen URLs
@@ -82,6 +83,10 @@ class ArticleManager(QObject):
         Takes a new Article object and adds it to the list of Articles.
         Performs a duplicate check before adding.
         """
+        # Enforce titlecase for title and source
+        new_article.title = titlecase(new_article.title.strip())
+        new_article.source = titlecase(new_article.source.strip())
+
         # First priority duplicate check: URL
         if new_article.url:
             url = normalize_url(new_article.url)
@@ -113,6 +118,10 @@ class ArticleManager(QObject):
         Edits an existing article by finding it with its unique ID.
         @param article (Article): The updated Article object. It MUST have a valid ID.
         """
+        # Enforce titlecase for title and source
+        article.title = titlecase(article.title.strip())
+        article.source = titlecase(article.source.strip())
+
         for i, existing_article in enumerate(self.articles):
             if existing_article.id == article.id:
                 # Found the article by ID, now replace it with the updated version

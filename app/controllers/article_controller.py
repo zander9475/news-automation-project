@@ -45,7 +45,11 @@ class ArticleController(QObject):
         Updates the display text of edited article in the preview pane
         @param article: edited Article object
         """
+        # Refresh display
         self.view.article_management_widget.update_preview(article)
+
+        # Refresh listbox
+        self._refresh_articles_view()
 
     @Slot(dict)
     def handle_search_result_add(self, result_data: dict):

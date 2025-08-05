@@ -32,6 +32,15 @@ class ArticlePreviewWidget(QWidget):
         self.content_text.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.content_text.setReadOnly(True)
         self.content_text.setOpenExternalLinks(True)
+        self.content_text.setStyleSheet("""
+            QTextBrowser {
+                font-family: 'Times New Roman', Times, serif;
+                font-size: 12pt;
+                background: white;
+                color: black;
+            }
+        """)
+
 
         # Action btns
         self.action_btns = QHBoxLayout()
@@ -74,7 +83,13 @@ class ArticlePreviewWidget(QWidget):
         self.title_label.setText(f"<b>Title:</b> {self.article.title}")
         self.source_label.setText(f"<b>Source:</b> {self.article.source}")
         self.content_label.setText("<b>Content:</b>")
-        self.content_text.setHtml(self.article.content)
+        # Wrap content in a styled div to enforce font and background
+        content_html = f"""
+        <div style="font-family: 'Times New Roman', Times, serif; font-size: 12pt; background: white; color: black;">
+            {self.article.content}
+        </div>
+        """
+        self.content_text.setHtml(content_html)
 
         # Set visibility for widgets
         self.title_label.setVisible(True)
