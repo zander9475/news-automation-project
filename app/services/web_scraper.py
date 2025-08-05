@@ -3,6 +3,7 @@ import trafilatura
 from urllib.parse import urlparse
 from titlecase import titlecase
 from bs4 import BeautifulSoup
+import tldextract
 
 def clean_author_string(authors_raw):
     """
@@ -69,7 +70,10 @@ def scrape_url(url):
             "cnbc": "CNBC",
             "scmp": "South China Morning Post",
             "foxnews": "Fox News",
-            "washingtonpost": "Washington Post"
+            "washingtonpost": "Washington Post",
+            "cnn": "CNN",
+            "bloomberglaw": "Bloomberg"
+
         }
 
         article = Article(url)
@@ -86,7 +90,7 @@ def scrape_url(url):
         cleaned_authors = clean_author_string(article.authors)
 
         # Extract the base domain name from the URL
-        source_domain = urlparse(url).netloc.replace("www.", "").split('.')[0].lower()
+        source_domain = tldextract.extract(url).domain
 
         # Look up source domain in the map. If not found, use capitalized domain name.
         formatted_source = SOURCE_MAP.get(source_domain, source_domain.title())

@@ -3,6 +3,7 @@ from .article import Article
 from ..utils import normalize_url
 from PySide6.QtCore import Signal, QObject
 from typing import Optional
+import ast
 
 class ArticleManager(QObject):
     """
@@ -32,7 +33,7 @@ class ArticleManager(QObject):
         try:
             df = pd.read_csv(self.filepath)
 
-            # Replace NaN values with None for optional fields
+            df['author'] = df['author'].apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
             df = df.where(pd.notna(df), None)
 
             # Create an Article object for each row in the dataframe
@@ -147,19 +148,36 @@ class ArticleManager(QObject):
         self.articles = reordered_articles
         self.articles_changed.emit()
 
+
     def save_articles(self):
         """
-        Saves the Article list as a CSV file, overwriting the old file
+        Saves the Article list as a CSV file, overwriting the old file.
+        Returns True on success, False on failure.
         """
         if not self.articles:
             print("No articles to save.")
-            return
+            return False
         
-        # Convert each Article object in the list to a dictionary
-        articles_as_dicts = [article.to_dict() for article in self.articles]
+        try:
+            # Convert each Article object in the list to a dictionary
+            articles_as_dicts = [article.to_dict() for article in self.articles]
 
-        # Create a DataFrame from the list of dictionaries
-        df = pd.DataFrame(articles_as_dicts)
+            # Create a DataFrame from the list of dictionaries
+            df = pd.DataFrame(articles_as_dicts)
 
-        # Save the DataFrame to the CSV file
-        df.to_csv(self.filepath, index=False)
+            # Save the DataFrame to the CSV file
+            df.to_csv(self.filepath, index=False)
+
+            print(f"Articles saved successfully to {self.filepath}")
+            return True
+
+        except FileNotFoundError:
+            print(f"Error: The directory for '{self.filepath}' does not exist.")
+            return False
+        except PermissionError:
+            print(f"Error: You do not have permission to write to '{self.filepath}'.")
+            return False
+        except Exception as e:
+            # Catch any other unexpected errors
+            print(f"An unexpected error occurred while saving: {e}")
+            return False

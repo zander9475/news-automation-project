@@ -13,7 +13,6 @@ def get_house_schedule():
     try:
         # Get today's date to verify against the House schedule
         today_str = datetime.now().strftime('%A, %B %d').upper().replace(' 0', ' ')
-        print(today_str)
 
         # Get the main House Majority Leader page and scrape it using BeautifulSoup
         url = "https://www.majorityleader.gov/schedule/default.aspx"

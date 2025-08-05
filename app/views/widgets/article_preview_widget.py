@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import (QWidget, QVBoxLayout,  QLabel, QTextBrowser, 
                                QSizePolicy, QHBoxLayout, QPushButton, QMessageBox)
-from PySide6.QtCore import Signal, Slot
+from PySide6.QtCore import Signal, Slot, Qt
 from app.models.article import Article
 
 class ArticlePreviewWidget(QWidget):
@@ -19,8 +19,8 @@ class ArticlePreviewWidget(QWidget):
 
         # Header
         self.header = QLabel()
-        self.header.setAlignment(Qt.AlignCenter)
-        self.main_layout.addWidget(self.header_label)
+        self.header.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.main_layout.addWidget(self.header)
 
         # Declare widgets where text will go
         self.title_label = QLabel()
@@ -29,6 +29,7 @@ class ArticlePreviewWidget(QWidget):
         self.source_label = QLabel()
         self.content_label = QLabel()
         self.content_text = QTextBrowser()
+        self.content_text.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.content_text.setReadOnly(True)
         self.content_text.setOpenExternalLinks(True)
 
@@ -52,10 +53,11 @@ class ArticlePreviewWidget(QWidget):
         self.main_layout.addWidget(self.content_text)
         self.main_layout.addLayout(self.action_btns)
         
-        self.main_layout.addStretch()
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        # Set stretch so content_text grows vertically
+        self.main_layout.setStretch(self.main_layout.indexOf(self.content_text), 1)
 
         self.setLayout(self.main_layout)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         self.clear_display()
 
@@ -64,6 +66,9 @@ class ArticlePreviewWidget(QWidget):
         Populates the preview pane with article details
         """
         self.article = article
+
+        # Set the header text
+        self.header.setText("Selected article details:")
 
         # Set the text for required fields
         self.title_label.setText(f"<b>Title:</b> {self.article.title}")
@@ -78,7 +83,8 @@ class ArticlePreviewWidget(QWidget):
         self.content_text.setVisible(True)
         self.action_btns.setContentsMargins(0, 5, 0, 0) # Adjust margin for aesthetics
         self.action_btns.setSpacing(5) # Add spacing between buttons
-        self.action_btns.setVisible(True)
+        self.edit_btn.setVisible(True)
+        self.delete_btn.setVisible(True)
 
         # Enable optional fields if they exist
         self.lead_label.setVisible(bool(self.article.lead))
@@ -86,10 +92,15 @@ class ArticlePreviewWidget(QWidget):
             self.lead_label.setText(f"<b>Lead:</b> {self.article.lead}")
 
         self.author_label.setVisible(bool(self.article.author))
-        if self.article.author:
+        if self.article.author and len(self.article.author) > 0:
+            print("Author list contents:", self.article.author)
             # Split the author list into a string
+            print("Before setting author label:", self.author_label.text())
             authors = ', '.join(self.article.author)
+            print("Authors joined:", authors)
             self.author_label.setText(f"<b>Author(s):</b> {authors}")
+            print("After setting author label:", self.author_label.text())
+
 
         # Enable action buttons
         self.edit_btn.setEnabled(True)
@@ -100,7 +111,7 @@ class ArticlePreviewWidget(QWidget):
         self.article = None
 
         # Set the header to the placeholder text
-        self.header_label.setText("<h2>Select an article from the list to view its details.</h2>")
+        self.header.setText("Select an article from the list to view its details.")
 
         # Clear and hide content widgets
         self.title_label.setText("")
@@ -114,8 +125,8 @@ class ArticlePreviewWidget(QWidget):
         self.content_label.setText("")
         self.content_label.setVisible(False)
         self.content_text.setHtml("")
-        self.content_text.setVisible(False)
-        self.action_btns.setVisible(False)
+        self.edit_btn.setVisible(False)
+        self.delete_btn.setVisible(False)
         
         # Disable action buttons
         self.edit_btn.setEnabled(False)

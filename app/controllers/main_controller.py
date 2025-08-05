@@ -47,7 +47,7 @@ class MainController:
         self.view.search_results_widget.main_menu_requested.connect(lambda: self.view.switch_page("main_menu"))
 
         # Article management page signals
-        self.view.article_management_widget.main_menu_requested.connect(lambda: self.view.switch_page("main_menu"))
+        self.view.article_management_widget.main_menu_requested.connect(self._handle_main_menu_request_from_articles)
         self.view.article_management_widget.manual_input_requested.connect(lambda: self.view.switch_page("manual_input"))
         self.view.article_management_widget.save_articles_requested.connect(self._save_articles)
 
@@ -110,18 +110,20 @@ class MainController:
         Calls model to save articles to csv file.
         Calls email formatter service to build email.
         """
+        print("Saving articles...")
         # Save articles to .csv file
         save_success = self.model.save_articles()
+        print(save_success)
         if save_success:
             # Build the email
             email_build_success = build_email()
+            print(email_build_success)
             if email_build_success:
                 # Success dialog
                 QMessageBox.information(
                     self.view,
                     "Success",
-                    "The email has been generated as 'final_email.html' in the 'output' folder." \
-                    "\nDouble click on this file and then copy and paste into Outlook."
+                    "Outlook will now open with a draft of your email."
                 )
             else:
                 # Fail dialog
@@ -130,3 +132,14 @@ class MainController:
                     "Build Failed",
                     "The attempt to build the email failed."
                 )
+
+    @Slot()
+    def _handle_main_menu_request_from_articles(self):
+        """
+        Resets the article management view and switches to the main menu page.
+        """
+        # Call the reset method on the view
+        self.view.article_management_widget.reset_view()
+
+        # Then, switch the page
+        self.view.switch_page("main_menu")
