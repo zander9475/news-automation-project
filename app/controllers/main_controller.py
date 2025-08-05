@@ -110,18 +110,20 @@ class MainController:
         Calls model to save articles to csv file.
         Calls email formatter service to build email.
         """
+        print("Saving articles...")
         # Save articles to .csv file
         save_success = self.model.save_articles()
+        print(save_success)
         if save_success:
             # Build the email
             email_build_success = build_email()
+            print(email_build_success)
             if email_build_success:
                 # Success dialog
                 QMessageBox.information(
                     self.view,
                     "Success",
-                    "The email has been generated as 'final_email.html' in the 'output' folder." \
-                    "\nDouble click on this file and then copy and paste into Outlook."
+                    "Outlook will now open with a draft of your email."
                 )
             else:
                 # Fail dialog

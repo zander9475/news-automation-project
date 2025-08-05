@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import (QWidget, QVBoxLayout,  QLabel, QTextBrowser, 
                                QSizePolicy, QHBoxLayout, QPushButton, QMessageBox)
-from PySide6.QtCore import Signal, Slot
+from PySide6.QtCore import Signal, Slot, Qt
 from app.models.article import Article
 
 class ArticlePreviewWidget(QWidget):
@@ -19,8 +19,8 @@ class ArticlePreviewWidget(QWidget):
 
         # Header
         self.header = QLabel()
-        self.header.setAlignment(Qt.AlignCenter)
-        self.main_layout.addWidget(self.header_label)
+        self.header.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.main_layout.addWidget(self.header)
 
         # Declare widgets where text will go
         self.title_label = QLabel()
@@ -65,6 +65,9 @@ class ArticlePreviewWidget(QWidget):
         """
         self.article = article
 
+        # Set the header text
+        self.header.setText("Selected article details:")
+
         # Set the text for required fields
         self.title_label.setText(f"<b>Title:</b> {self.article.title}")
         self.source_label.setText(f"<b>Source:</b> {self.article.source}")
@@ -78,7 +81,8 @@ class ArticlePreviewWidget(QWidget):
         self.content_text.setVisible(True)
         self.action_btns.setContentsMargins(0, 5, 0, 0) # Adjust margin for aesthetics
         self.action_btns.setSpacing(5) # Add spacing between buttons
-        self.action_btns.setVisible(True)
+        self.edit_btn.setVisible(True)
+        self.delete_btn.setVisible(True)
 
         # Enable optional fields if they exist
         self.lead_label.setVisible(bool(self.article.lead))
@@ -100,7 +104,7 @@ class ArticlePreviewWidget(QWidget):
         self.article = None
 
         # Set the header to the placeholder text
-        self.header_label.setText("<h2>Select an article from the list to view its details.</h2>")
+        self.header.setText("Select an article from the list to view its details.")
 
         # Clear and hide content widgets
         self.title_label.setText("")
@@ -114,8 +118,8 @@ class ArticlePreviewWidget(QWidget):
         self.content_label.setText("")
         self.content_label.setVisible(False)
         self.content_text.setHtml("")
-        self.content_text.setVisible(False)
-        self.action_btns.setVisible(False)
+        self.edit_btn.setVisible(False)
+        self.delete_btn.setVisible(False)
         
         # Disable action buttons
         self.edit_btn.setEnabled(False)

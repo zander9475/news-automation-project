@@ -11,8 +11,8 @@ class ManualInputWidget(QWidget):
 
     def __init__(self):
         super().__init__()
-        self._is_editing_mode = False
-        self._article_being_edited: Optional[Article]
+        self.is_editing_mode = False
+        self.article_being_edited: Optional[Article]
         self.initUI()
 
     def initUI(self):
@@ -109,9 +109,9 @@ class ManualInputWidget(QWidget):
             authors = [author.strip() for author in author_text.split(',') if author.strip()]
 
         # Check if adding or editing article
-        if self._is_editing_mode:
+        if self.is_editing_mode:
             # Update the properties of the existing article object
-            edited_article = self._article_being_edited
+            edited_article = self.article_being_edited
             edited_article.title = title
             edited_article.lead = lead
             edited_article.author = authors if authors else [""]
@@ -153,8 +153,8 @@ class ManualInputWidget(QWidget):
         self.content_input.clear()
 
         # Reset flags
-        self._is_editing_mode = False
-        self._article_being_edited = None
+        self.is_editing_mode = False
+        self.article_being_edited = None
 
         # Reset UI elements
         self.submit_btn.setText("Add Article")
@@ -166,8 +166,8 @@ class ManualInputWidget(QWidget):
         @param article: Article object to populate the form with.
         """
         # Set flags
-        self._is_editing_mode = True
-        self._article_being_edited = article
+        self.is_editing_mode = True
+        self.article_being_edited = article
 
         # Update UI elements for editing
         self.submit_btn.setText("Save Changes")
@@ -177,5 +177,6 @@ class ManualInputWidget(QWidget):
         self.title_input.setText(article.title)
         self.lead_input.setText(article.lead if article.lead else "")
         self.author_input.setText(", ".join(article.author) if article.author else "")
+        
         self.source_input.setText(article.source)
         self.content_input.setHtml(article.content)

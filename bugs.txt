@@ -1,15 +1,11 @@
-Get articles to save properly
-
-Authors appearing as list
-
-Preview pane showing immediately upon switching to management page
-
-Preview pane does not go away upon article delete
-    Buttons stay enabled
+Authors appear as a list sometimes in preview pane and editing (reason why unknown)
 
 Article content does not paste as times new roman to preview box
 
-Aptos font instead of times new roman on email
+Email font unregulated
+
+Spacing issues in email
+
 
 Multiple different urls leading to the same url when clicked (check out 7/24 raw results)
 

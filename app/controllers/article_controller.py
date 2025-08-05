@@ -180,13 +180,10 @@ class ArticleController(QObject):
     def _show_article_preview(self, article):
         """
         Retrieves article from view. Updates preview pane with that article.
-        @param index (int): The article's index in the articles order.
+        @param article (Article): The article to be displayed.
         """
         if article:
             self.view.article_management_widget.update_preview(article)
-        else:
-            # Handle the case where the article is None (e.g., when the list is cleared)
-            self.view.article_management_widget.toggle_preview(False)
 
     @Slot(Article)
     def _handle_article_edit_request(self, article: Article):

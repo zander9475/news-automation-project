@@ -12,7 +12,7 @@ class ArticleManagementWidget(QWidget):
     article_preview_requested = Signal(Article)
     edit_article_requested = Signal(Article)
     delete_article_requested = Signal(Article)
-    save_articles_requested = Signal(Article)
+    save_articles_requested = Signal()
 
     def __init__(self):
         super().__init__()
@@ -71,7 +71,6 @@ class ArticleManagementWidget(QWidget):
 
         # Detail view: preview pane
         self.preview_pane = ArticlePreviewWidget()
-        self.preview_pane.setVisible(False)
         self.splitter.addWidget(self.preview_pane)
 
         self.main_layout.addWidget(self.splitter)
@@ -111,7 +110,7 @@ class ArticleManagementWidget(QWidget):
 
         if selected_item:
             # Get the Article object
-            article = selected_item.data(Qt.UserRole)
+            article = selected_item.data(Qt.ItemDataRole.UserRole)
 
             # Pass that article to the controller
             self.article_preview_requested.emit(article)
@@ -124,7 +123,6 @@ class ArticleManagementWidget(QWidget):
         """
         # Clear preview pane
         self.preview_pane.clear_display()
-        self.preview_pane.setVisible(False)
 
         # Clear listbox
         self.listbox.clear()
@@ -138,10 +136,6 @@ class ArticleManagementWidget(QWidget):
 
             # Add the item to the list widget
             self.listbox.addItem(title_item)
-
-    def toggle_preview(self, visible: bool):
-        """Public method to control preview visibility"""
-        self.preview_pane.setVisible(visible)
 
     def update_preview(self, article):
         """Public method to update preview content"""
