@@ -1,5 +1,35 @@
 [
     {
+        "title": "Trump's AI Plan Goes All in on Export Controls and Enforcement",
+        "url": "https://news.bloomberglaw.com/us-law-week/trumps-ai-plan-goes-all-in-on-export-controls-and-enforcement",
+        "source": "news.bloomberglaw.com",
+        "keyword": "\"Bureau of Industry and Security\""
+    },
+    {
+        "title": "US Charges Chinese Nationals With Nvidia Chips Export Breach ...",
+        "url": "https://www.bloomberg.com/news/articles/2025-08-05/us-charges-chinese-nationals-with-nvidia-chips-export-breach",
+        "source": "www.bloomberg.com",
+        "keyword": "\"Bureau of Industry and Security\""
+    },
+    {
+        "title": "Hong Kong customs in talks with e-commerce firms such as ...",
+        "url": "https://amp.scmp.com/news/hong-kong/society/article/3320611/hong-kong-customs-talks-e-commerce-firms-such-pinduoduo-control-sales",
+        "source": "amp.scmp.com",
+        "keyword": "\"export control\""
+    },
+    {
+        "title": "Chinese nationals, including illegal alien, busted shipping $10M in ...",
+        "url": "https://www.foxnews.com/politics/illegal-immigrant-chinese-national-tried-stealing-sensitive-ai-microchips-doj-says",
+        "source": "www.foxnews.com",
+        "keyword": "\"export control\""
+    },
+    {
+        "title": "From Arizona to Indiana, copper tariffs will spark a U.S. industrial ...",
+        "url": "https://www.foxnews.com/opinion/trump-taking-decisive-action-bring-critical-industry-back-american-soil",
+        "source": "www.foxnews.com",
+        "keyword": "\"Section 232\" commerce department"
+    },
+    {
         "title": "Covington Adds Ex-Commerce Official to DC Trade Practice",
         "url": "https://news.bloomberglaw.com/business-and-practice/covington-adds-ex-commerce-official-to-dc-trade-practice",
         "source": "news.bloomberglaw.com",
@@ -13,8 +43,14 @@
     },
     {
         "title": "Trump Says Chip, Pharma Tariffs Are Coming Within Next Week",
-        "url": "https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-08-05-2025/card/NPDzPKMhV0MZr4sXK3oF?gaa_at=eafs&gaa_n=ASWzDAiUgMQxpIDJH8EPdqZHUYKFWLF6z7tppYVWZWm8mvmniWOTv7ZyWAXc&gaa_ts=68924eec&gaa_sig=5FGsRsktHhM3uw5DQN0s1ahDA1nBc70GMxO4Eake8QogArbhcG_kMxpBTvWSPgbPpyOHLDqmWeuhnoy8qtsYLA%3D%3D",
+        "url": "https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-08-05-2025/card/NPDzPKMhV0MZr4sXK3oF?gaa_at=eafs&gaa_n=ASWzDAjQGkcFKzQs3OkVJV5eROXqX3aevNlT5OaYM0yXYcM0wJzSmcMp8VtD&gaa_ts=68926bf8&gaa_sig=GCkH5wA4S0Qs7CBqTO7qPAr5bJDT1lAQ26PNocEiXZQBNERnJdpOOfzNNCbtKZXDuL6HjKmM7Sv0pugoD1Bllw%3D%3D",
         "source": "www.wsj.com",
+        "keyword": "\"Section 232\" commerce department"
+    },
+    {
+        "title": "Canada's Carney Pledges $870M for Lumber Sector Targeted by ...",
+        "url": "https://www.bloomberg.com/news/articles/2025-08-05/carney-pledges-870-million-for-lumber-sector-targeted-by-trump",
+        "source": "www.bloomberg.com",
         "keyword": "\"Section 232\" commerce department"
     },
     {
@@ -33,12 +69,6 @@
         "title": "US Looks to Track Chips to Keep Cutting-Edge AI Tech Out of ...",
         "url": "https://www.bloomberg.com/news/newsletters/2025-08-05/us-looks-to-track-chips-to-keep-cutting-edge-ai-tech-out-of-china-s-hands",
         "source": "www.bloomberg.com",
-        "keyword": "chip location tracking"
-    },
-    {
-        "title": "US Explores Better Location Trackers for AI Chips, Official Says",
-        "url": "https://news.bloomberglaw.com/international-trade/us-explores-better-location-trackers-for-ai-chips-official-says",
-        "source": "news.bloomberglaw.com",
         "keyword": "chip location tracking"
     }
 ]

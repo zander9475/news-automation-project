@@ -73,7 +73,7 @@ def scrape_url(url):
 
         }
 
-        article = Article(url)
+        article = Article(url, browser_user_agent = 'Mozilla/5.0')
         article.download()
         article.parse()
         

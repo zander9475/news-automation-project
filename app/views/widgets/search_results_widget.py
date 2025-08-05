@@ -2,7 +2,7 @@ import webbrowser
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QTableWidgetItem, QHBoxLayout, 
                                QPushButton, QAbstractItemView, QLabel, QSizePolicy)
-from search_table_widget import SearchTableWidget
+from .search_table_widget import SearchTableWidget
 
 class SearchResultsWidget(QWidget):
     """
@@ -75,6 +75,12 @@ class SearchResultsWidget(QWidget):
 
             # Create "Add to Email" button for each article
             add_btn = QPushButton("Add to Email")
+            add_btn.setStyleSheet("""
+                QPushButton {
+                    padding: 2px 4px;
+                    margin: 0px
+                }
+            """)
             # Use a lambda function to to pass specific article from the loop when clicked
             add_btn.clicked.connect(
                 lambda _=False, # Catch boolean value from click

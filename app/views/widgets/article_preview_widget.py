@@ -1,8 +1,7 @@
-from PySide6.QtWidgets import (QWidget, QVBoxLayout,  QLabel, QTextBrowser, 
+from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QTextBrowser,
                                QSizePolicy, QHBoxLayout, QPushButton, QMessageBox)
 from PySide6.QtCore import Signal, Slot, Qt
 from app.models.article import Article
-from bs4 import BeautifulSoup
 
 class ArticlePreviewWidget(QWidget):
     # Custom signals
@@ -33,12 +32,6 @@ class ArticlePreviewWidget(QWidget):
         self.content_text.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.content_text.setReadOnly(True)
         self.content_text.setOpenExternalLinks(True)
-        self.content_text.setStyleSheet("""
-            QTextBrowser {
-                font-family: 'Times New Roman', Times, serif;
-                font-size: 12pt;
-            }
-        """)
 
         # Action btns
         self.action_btns = QHBoxLayout()
@@ -67,26 +60,6 @@ class ArticlePreviewWidget(QWidget):
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         self.clear_display()
-    
-    @staticmethod
-    def clean_html(raw_html: str) -> str:
-        soup = BeautifulSoup(raw_html, "html.parser")
-
-        # Remove inline styles that conflict with your styling
-        for tag in soup.find_all(True):
-            # Keep hrefs (for <a> tags) but remove style/font/size/etc
-            tag.attrs = {
-                key: value
-                for key, value in tag.attrs.items()
-                if key in ("href", "src", "alt", "title")
-            }
-
-        # Wrap the sanitized content in a styled div
-        return f"""
-        <div style="font-family: 'Times New Roman', Times, serif; font-size: 12pt;">
-            {str(soup)}
-        </div>
-        """
 
     def display_article(self, article: 'Article'):
         """
@@ -100,9 +73,8 @@ class ArticlePreviewWidget(QWidget):
         # Set the text for required fields
         self.title_label.setText(f"<b>Title:</b> {self.article.title}")
         self.source_label.setText(f"<b>Source:</b> {self.article.source}")
-        sanitized_html = ArticlePreviewWidget.clean_html(self.article.content)
-        self.content_text.setHtml(sanitized_html)
-        self.content_text.setHtml(sanitized_html)
+        # Show plain text content
+        self.content_text.setPlainText(self.article.content)
 
         # Set visibility for widgets
         self.title_label.setVisible(True)
@@ -121,14 +93,9 @@ class ArticlePreviewWidget(QWidget):
 
         self.author_label.setVisible(bool(self.article.author))
         if self.article.author and len(self.article.author) > 0:
-            print("Author list contents:", self.article.author)
             # Split the author list into a string
-            print("Before setting author label:", self.author_label.text())
             authors = ', '.join(self.article.author)
-            print("Authors joined:", authors)
             self.author_label.setText(f"<b>Author(s):</b> {authors}")
-            print("After setting author label:", self.author_label.text())
-
 
         # Enable action buttons
         self.edit_btn.setEnabled(True)
@@ -152,7 +119,7 @@ class ArticlePreviewWidget(QWidget):
         self.source_label.setVisible(False)
         self.content_label.setText("")
         self.content_label.setVisible(False)
-        self.content_text.setHtml("")
+        self.content_text.setPlainText("")
         self.edit_btn.setVisible(False)
         self.delete_btn.setVisible(False)
         
