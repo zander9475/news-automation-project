@@ -25,7 +25,7 @@ class SearchResultsWidget(QWidget):
 
         # Header
         self.header = QLabel("<h2>View Search Results Here.<\h2>")
-        self.page_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.header.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.header.setWordWrap(True)
         self.header.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
 
