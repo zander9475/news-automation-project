@@ -1,6 +1,4 @@
-Email font unregulated
-
-Spacing issues in email
+Extra space between congress activity header and list
 
 Multiple different urls leading to the same url when clicked (check out 7/24 raw results)
 

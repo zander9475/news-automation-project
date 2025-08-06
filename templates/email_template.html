@@ -15,10 +15,6 @@
             font-weight: bold;
             margin-bottom: 12pt;
         }
-        .article-list {
-            margin: 0;
-            padding-left: 20px;
-        }
         .article-list li {
             font-size: 12pt;
             font-family: "Times New Roman", serif;
@@ -72,21 +68,20 @@
         BIS NEWS CLIPS | {{ today_date }}
     </div>
 
-    <ol class="article-list">
+    <ol style = "margin-left: 15px ! important; padding-left: 0px ! important; font-weight: bold;">
         {% for article in articles %}
-        <li>
+        <li style = "font-weight: bold;">
             <a href="#C{{ loop.index }}">{{ article.source }}: {{ article.title }}</a>
         </li>
         {% endfor %}
-        <li>
+        <li style = "font-weight: bold;">
             <a href="#C{{ articles | length + 1 }}">POLITICO: Morning Trade</a>
         </li>
     </ol>
-    <br>
 
     {% if congress_activity %}
-    <div class="section-title">Congressional Activity</div>
-    <ul class="congress-activity">
+    <div class="section-title" style = "margin-bottom: 0 ! important; padding-bottom: Opt ! important;">Congressional Activity</div>
+    <ul class="congress-activity" style = "margin-top: 0 ! important; padding-top: 0pt ! important;">
         <li><b>Senate:</b> {{ congress_activity.senate }}</li>
         <li><b>House:</b> {{ congress_activity.house }}</li>
     </ul>
@@ -95,6 +90,7 @@
 
     {% for article in articles %}
     <div class="article-content">
+        <a name="C{{ loop.index }}"></a>
         <div class="article-title" id="C{{ loop.index }}">{{ article.source }}: {{ article.title }}</div>
         <br>
 
