@@ -24,8 +24,7 @@
             font-size: 12pt;
             font-family: "Times New Roman", serif;
             font-weight: bold;
-            margin-bottom: 0pt;
-            margin-left: 0;
+            margin: 0;
             padding-left: 0;
             text-indent: 0;
         }
@@ -51,9 +50,7 @@
             margin-bottom: 0pt;
         }
         .article-content {
-            margin-top: 12pt;
-            margin-bottom: 12pt;
-            line-height: 18pt;
+            margin-bottom: 0;
         }
         .article-content p {
             font-family: "Times New Roman", serif;
@@ -65,12 +62,11 @@
             font-family: "Times New Roman", serif;
             font-weight: bold;
             text-decoration: underline;
-            margin-bottom: 12pt;
+            margin-bottom: 0;
         }
         .article-author {
             font-size: 12pt;
             font-family: "Times New Roman", serif;
-            margin-bottom: 12pt;
         }
     </style>
 </head>
@@ -102,12 +98,15 @@
     {% for article in articles %}
     <div class="article-content">
         <div class="article-title" id="C{{ loop.index }}">{{ article.source }}: {{ article.title }}</div>
+        <br>
 
         {% if article.author %}
         <div class="article-author">By {{ article.author | join(', ') }}</div>
+        <br>
         {% endif %}
 
         {{ article.content }}
+        <br><br>
     </div>
     {% endfor %}
 
