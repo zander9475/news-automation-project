@@ -87,7 +87,7 @@ class ManualInputWidget(QWidget):
         lead = self.lead_input.text().strip() if self.lead_input.text().strip() else None
         author_text = self.author_input.text().strip()
         source = self.source_input.text().strip()
-        content = self.content_input.toPlainText().strip() 
+        content = self.content_input.toHtml().strip() 
 
         # Validate required fields
         if not title:
