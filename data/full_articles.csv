@@ -1,34 +1,41 @@
 title,lead,content,source,url,author,keyword
-"Illegal Immigrant Chinese National Tried Stealing Sensitive AI Microchips, DOJ Says",,"NEW You can now listen to Fox News articles!
+U.S. Charges Two Chinese Nationals for Illegally Shipping Nvidia AI Chips to China,,"Two Chinese nationals in California have been arrested and charged with the illegal shipment of tens of millions of dollars' worth of AI chips, including those made by Nvidia , the Department of Justice said Tuesday.
 
-Two Chinese nationals — one of them an illegal immigrant — were arrested for allegedly shipping tens of millions of dollars’ worth of sensitive microchips used in artificial intelligence (AI) applications to China, the Justice Department announced Tuesday.
+Chuan Geng, 28, and Shiwei Yang, 28, exported the sensitive chips and other technology to China from October 2022 through July 2025 without obtaining the required licenses, the DOJ said.
 
-The federal criminal complaint charges Chuan Geng, 28, of Pasadena, California, and Shiwei Yang, 28, of El Monte, California, with violating the Export Control Reform Act.
+The illicit shipments included Nvidia's H100 general processing units, according to a criminal complaint provided to CNBC. The H100 is among the U.S. chipmaker's most cutting-edge chips used in artificial intelligence applications.
 
-Prosecutors said the felony offense carries a statutory maximum penalty of 20 years in prison. Yang — an illegal immigrant who overstayed her visa — was arrested on Saturday. Geng surrendered to federal authorities later that day, the DOJ said.
+The Department of Commerce has placed such chips under export controls since 2022 as part of broader efforts by the U.S. to restrict China's access to the most advanced semiconductor technology.
 
-PATEL SOUNDS ALARM AS CHINESE NATIONALS CHARGED WITH SMUGGLING 'AGROTERRORISM AGENT' INTO US: 'DIRECT THREAT'
+This case demonstrates that smuggling is a ""nonstarter,"" Nvidia told CNBC. ""We primarily sell our products to well-known partners, including OEMs, who help us ensure that all sales comply with U.S. export control rules.""
 
-They made their initial appearance in U.S. District Court in Los Angeles on Monday but no pleas were taken. At that time, a federal magistrate judge ordered Geng — a lawful permanent resident — released on $250,000 bond.
+""Even relatively small exporters and shipments are subject to thorough review and scrutiny, and any diverted products would have no service, support, or updates,"" the chipmaker added.
 
-The judge also scheduled an Aug. 12 detention hearing for Yang. Their arraignment is scheduled for Sept. 11.
+Geng and Yang's California-based company, ALX Solutions, had been founded shortly after the U.S. chip controls first came into place.
 
-Through their El Monte-based company, ALX Solutions Inc., Geng and Yang allegedly ""knowingly and willfully"" exported from the United States to China sensitive technology, including graphic processing units (GPUs) — specialized computer parts used for modern computing — without first obtaining the required license or authorization from the U.S. Department of Commerce, according to affidavit filed with the complaint. The activity allegedly began in October 2022 and continued until July 2025.
+According to the DOJ, law enforcement searched ALX Solutions' office and seized phones belonging to Geng and Yang, which revealed incriminating communications between the defendants, including those about evading U.S. export laws by shipping sensitive chips to China through Malaysia.
 
-According to the complaint, ALX Solutions Inc. was founded shortly after the Department of Commerce began requiring licenses for the advanced microchips that Yang and Geng are alleged to have illegally exported.
+The review also showed that in December 2024, ALX Solutions made over 20 shipments from the U.S. to shipping and freight-forwarding companies in Singapore and Malaysia, which the DOJ said are commonly used as transshipment points to conceal illicit shipments to China.
 
-The Justice Department said that a review of export records, business records and company websites indicates that a December 2024 shipment and at least 20 previous shipments by ALX Solutions involved exports from the U.S. to shipping and freight-forwarding companies in Singapore and Malaysia — commonly used as transshipment points to conceal illegal shipments to China. According to the complaint, ALX Solutions has not received payments from the entities to which they purportedly exported goods. Instead, prosecutors say, ALX Solutions received numerous payments from companies based in Hong Kong and China, including a $1 million payment from a China-based company in January 2024.
+Meanwhile, the department said that ALX Solutions was not paid by entities they purportedly exported goods to, instead receiving numerous payments from companies based in Hong Kong and China.
 
-CHINESE CITIZEN ADMITS STEALING US TRADE SECRETS FOR NEXT-GENERATION NATIONAL SECURITY TECH
+The U.S. Department of Commerce's Bureau of Industry and Security and the FBI are continuing to investigate the matter.
 
-Prosecutors allege that ALX Solutions sent a shipment in December 2024 that falsely labeled that it was sending GPUs subject to federal laws and regulations. The complaint says the shipment actually contained GPUs that required a license for export to China. Neither Geng nor Yang (nor their company) applied for or obtained a license from the Department of Commerce.
+Geng and Yang have been charged with violating the Export Control Reform Act, a felony that carries a maximum penalty of 20 years in federal prison. Yang was also found to be residing in the U.S. illegally after overstaying her visa.
 
-The Justice Department said the chip was ""made by a manufacturer of high-performance AI chips"" and is considered the ""most powerful GPU chip on the market."" According to the complaint, the chip is ""designed specifically for AI applications,"" such as ""to develop self-driving cars, medical diagnosis systems, and other AI-powered applications.""
+The smuggling of advanced microchips has become a growing concern in Washington. According to a report from the Financial Times last month, at least $1 billion worth of Nvidia's chips entered China after Donald Trump tightened chip export controls earlier this year.
 
-Law enforcement searched ALX Solutions’ office last week and seized phones belonging to Geng and Yang. The DOJ said the phones ""revealed incriminating communications between the defendants, including communications about shipping export-controlled chips to China through Malaysia to evade U.S. export laws.""
+In response to the report, Nvidia had said that data centers built with smuggled chips were a ""losing proposition"" and that it does not support unauthorized products.
 
-CLICK HERE TO GET THE FOX NEWS APP
+In response to pressure from the U.S., Malaysia said last month that it would begin requiring trade permits for advanced AI chips sourced from the U.S.",CNBC,https://www.cnbc.com/2025/08/06/two-chinese-nationals-charged-for-illegally-shipping-nvidia-ai-chips-to-china.html,['Dylan Butts'],"""Bureau of Industry and Security"""
+"Nvidia Reiterates Its Chips Have No Backdoors, Urges US Against Location Verification",,"Nvidia has published a blog post reiterating that its chips did not have backdoors or kill switches and appealed to U.S. policymakers to forgo such ideas saying it would be a ""gift"" to hackers and hostile actors.
 
-The Trump administration has sounded the alarm over Chinese nationals infiltrating U.S. institutions — including American tech companies and universities — for potential sabotage or to gain access to proprietary information worth millions.
+The blog post, which was published on Tuesday in both English and Chinese, comes a week after the Chinese government summoned the U.S. artificial intelligence (AI) chip giant to a meeting saying it was concerned by a U.S. proposal for advanced chips sold abroad to be equipped with tracking and positioning functions.
 
-Last month, President Donald Trump delivered an AI summit speech asserting that the United States must ""win the global race with China"" regarding the rapidly evolving technology. The president emphasized the need to remove barriers to maintain U.S. leadership in A.I. and signed three executive orders to expedite federal permitting for AI data centers and infrastructure, expand U.S. AI exports to allied nations and prohibit AI tools in government that are considered ideologically biased or ""woke.""",Fox News,https://www.foxnews.com/politics/illegal-immigrant-chinese-national-tried-stealing-sensitive-ai-microchips-doj-says,['Danielle Wallace Jake Gibson'],"""export control"""
+The White House and both houses of U.S. Congress have proposed the idea of requiring U.S. chip firms to include location verification technology with their chips to prevent them from being diverted to countries where U.S. export laws ban sales. The separate bills and White House recommendation have not become a formal rule, and no technical requirements have been established.
+
+""Embedding backdoors and kill switches into chips would be a gift to hackers and hostile actors. It would undermine global digital infrastructure and fracture trust in U.S. technology,"" Nvidia said. It had said last week its products have no backdoors that would allow remote access or control.
+
+A backdoor refers to a hidden method of bypassing normal authentication or security controls.
+
+Nvidia emphasized that ""there is no such thing as a 'good' secret backdoor - only dangerous vulnerabilities that need to be eliminated.""",Reuters,https://tech.yahoo.com/ai/articles/nvidia-reiterates-chips-no-backdoors-025056445.html,[''],Manual

@@ -17,13 +17,17 @@
         }
         .article-list {
             margin: 0;
-            padding-left: 0;
+            padding-left: 20px;
             list-style-position: inside;
+            margin-top: 0;
         }
         .article-list li {
             font-size: 12pt;
             font-family: "Times New Roman", serif;
-            margin-bottom: 8pt;
+            font-weight: bold;
+            margin-bottom: 0pt;
+            margin-left: 0;
+            padding-left: 0;
             text-indent: 0;
         }
         .article-list li a {
@@ -35,7 +39,7 @@
             font-family: "Times New Roman", serif;
             font-weight: bold;
             margin-top: 12pt;
-            margin-bottom: 8pt;
+            margin-bottom: 0pt;
         }
         .congress-activity {
             margin: 0;
@@ -45,7 +49,7 @@
         .congress-activity li {
             font-size: 12pt;
             font-family: "Times New Roman", serif;
-            margin-bottom: 8pt;
+            margin-bottom: 0pt;
         }
         .article-content {
             margin-top: 12pt;
@@ -53,21 +57,21 @@
             line-height: 18pt;
         }
         .article-content p {
-            font-family: "Georgia", serif;
+            font-family: "Times New Roman", serif;
             font-size: 12pt;
-            margin: 0 0 8pt 0;
+            margin: 0 0 4pt 0;
         }
         .article-title {
             font-size: 12pt;
             font-family: "Times New Roman", serif;
             font-weight: bold;
             text-decoration: underline;
-            margin-bottom: 8pt;
+            margin-bottom: 12pt;
         }
         .article-author {
             font-size: 12pt;
-            font-family: "Georgia", serif;
-            margin-bottom: 8pt;
+            font-family: "Times New Roman", serif;
+            margin-bottom: 12pt;
         }
     </style>
 </head>
@@ -104,7 +108,7 @@
         <div class="article-author">By {{ article.author | join(', ') }}</div>
         {% endif %}
 
-        {{ article.content | safe }}
+        {{ article.content }}
     </div>
     {% endfor %}
 

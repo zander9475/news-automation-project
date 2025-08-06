@@ -1,50 +1,32 @@
 [
     {
-        "title": "Trump's AI Plan Goes All in on Export Controls and Enforcement",
-        "url": "https://news.bloomberglaw.com/us-law-week/trumps-ai-plan-goes-all-in-on-export-controls-and-enforcement",
-        "source": "news.bloomberglaw.com",
+        "title": "U.S. charges two Chinese nationals for illegally shipping Nvidia AI ...",
+        "url": "https://www.cnbc.com/2025/08/06/two-chinese-nationals-charged-for-illegally-shipping-nvidia-ai-chips-to-china.html",
+        "source": "www.cnbc.com",
+        "keyword": "\"Bureau of Industry and Security\""
+    },
+    {
+        "title": "US charges 2 Chinese nationals for sending Nvidia AI chips to China",
+        "url": "https://amp.scmp.com/news/world/united-states-canada/article/3320877/us-charges-2-chinese-nationals-sending-nvidia-ai-chips-china",
+        "source": "amp.scmp.com",
         "keyword": "\"Bureau of Industry and Security\""
     },
     {
         "title": "US Charges Chinese Nationals With Nvidia Chips Export Breach ...",
-        "url": "https://www.bloomberg.com/news/articles/2025-08-05/us-charges-chinese-nationals-with-nvidia-chips-export-breach",
+        "url": "https://www.bloomberg.com/news/articles/2025-08-05/us-charges-chinese-nationals-with-nvidia-chips-export-breach?srnd=phx-economics-v2",
         "source": "www.bloomberg.com",
         "keyword": "\"Bureau of Industry and Security\""
     },
     {
-        "title": "Hong Kong customs in talks with e-commerce firms such as ...",
-        "url": "https://amp.scmp.com/news/hong-kong/society/article/3320611/hong-kong-customs-talks-e-commerce-firms-such-pinduoduo-control-sales",
-        "source": "amp.scmp.com",
+        "title": "Two Chinese nationals in California accused of illegally shipping ...",
+        "url": "https://www.reuters.com/business/autos-transportation/two-chinese-nationals-california-accused-illegally-shipping-nvidia-ai-chips-2025-08-05/",
+        "source": "www.reuters.com",
         "keyword": "\"export control\""
-    },
-    {
-        "title": "Chinese nationals, including illegal alien, busted shipping $10M in ...",
-        "url": "https://www.foxnews.com/politics/illegal-immigrant-chinese-national-tried-stealing-sensitive-ai-microchips-doj-says",
-        "source": "www.foxnews.com",
-        "keyword": "\"export control\""
-    },
-    {
-        "title": "From Arizona to Indiana, copper tariffs will spark a U.S. industrial ...",
-        "url": "https://www.foxnews.com/opinion/trump-taking-decisive-action-bring-critical-industry-back-american-soil",
-        "source": "www.foxnews.com",
-        "keyword": "\"Section 232\" commerce department"
-    },
-    {
-        "title": "Covington Adds Ex-Commerce Official to DC Trade Practice",
-        "url": "https://news.bloomberglaw.com/business-and-practice/covington-adds-ex-commerce-official-to-dc-trade-practice",
-        "source": "news.bloomberglaw.com",
-        "keyword": "\"Section 232\" commerce department"
     },
     {
         "title": "Trump Says Pharma, Chips Tariffs Coming in 'Next Week or So ...",
         "url": "https://www.bloomberg.com/news/articles/2025-08-05/trump-says-pharma-chips-tariffs-coming-in-next-week-or-so",
         "source": "www.bloomberg.com",
-        "keyword": "\"Section 232\" commerce department"
-    },
-    {
-        "title": "Trump Says Chip, Pharma Tariffs Are Coming Within Next Week",
-        "url": "https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-08-05-2025/card/NPDzPKMhV0MZr4sXK3oF?gaa_at=eafs&gaa_n=ASWzDAjQGkcFKzQs3OkVJV5eROXqX3aevNlT5OaYM0yXYcM0wJzSmcMp8VtD&gaa_ts=68926bf8&gaa_sig=GCkH5wA4S0Qs7CBqTO7qPAr5bJDT1lAQ26PNocEiXZQBNERnJdpOOfzNNCbtKZXDuL6HjKmM7Sv0pugoD1Bllw%3D%3D",
-        "source": "www.wsj.com",
         "keyword": "\"Section 232\" commerce department"
     },
     {
@@ -60,15 +42,27 @@
         "keyword": "chip location tracking"
     },
     {
-        "title": "US Explores Better Location Trackers for AI Chips - Bloomberg",
-        "url": "https://www.bloomberg.com/news/newsletters/2025-08-05/us-explores-better-location-trackers-for-ai-chips",
+        "title": "Nvidia says its AI chips do not have 'kill switches' after China claim",
+        "url": "https://www.cnbc.com/2025/08/05/nvidia-ai-chips-no-kill-switch-h20.html",
+        "source": "www.cnbc.com",
+        "keyword": "chip location tracking"
+    },
+    {
+        "title": "China Draws Red Lines on US Chip Tracking With Nvidia Meeting ...",
+        "url": "https://www.bloomberg.com/news/articles/2025-08-06/china-draws-red-lines-on-us-chip-tracking-with-nvidia-meeting",
         "source": "www.bloomberg.com",
         "keyword": "chip location tracking"
     },
     {
-        "title": "US Looks to Track Chips to Keep Cutting-Edge AI Tech Out of ...",
-        "url": "https://www.bloomberg.com/news/newsletters/2025-08-05/us-looks-to-track-chips-to-keep-cutting-edge-ai-tech-out-of-china-s-hands",
-        "source": "www.bloomberg.com",
+        "title": "Nvidia reiterates its chips have no backdoors, urges US against ...",
+        "url": "https://www.reuters.com/world/china/nvidia-reiterates-its-chips-have-no-backdoors-urges-us-against-location-2025-08-06/",
+        "source": "www.reuters.com",
+        "keyword": "chip location tracking"
+    },
+    {
+        "title": "US Explores Location Trackers for AI Chips, Official Says (2)",
+        "url": "https://news.bloomberglaw.com/international-trade/us-explores-better-location-trackers-for-ai-chips-official-says",
+        "source": "news.bloomberglaw.com",
         "keyword": "chip location tracking"
     }
 ]
