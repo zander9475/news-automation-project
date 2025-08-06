@@ -1,67 +1,116 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>BIS News Clips</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style>
+        body {
+            font-family: "Aptos", sans-serif;
+            color: black;
+            word-wrap: break-word;
+        }
+        .header {
+            text-align: center;
+            font-size: 12pt;
+            font-family: "Times New Roman", serif;
+            font-weight: bold;
+            margin-bottom: 12pt;
+        }
+        .article-list {
+            margin: 0;
+            padding-left: 0;
+            list-style-position: inside;
+        }
+        .article-list li {
+            font-size: 12pt;
+            font-family: "Times New Roman", serif;
+            margin-bottom: 8pt;
+            text-indent: 0;
+        }
+        .article-list li a {
+            color: #467886;
+            text-decoration: underline;
+        }
+        .section-title {
+            font-size: 12pt;
+            font-family: "Times New Roman", serif;
+            font-weight: bold;
+            margin-top: 12pt;
+            margin-bottom: 8pt;
+        }
+        .congress-activity {
+            margin: 0;
+            padding-left: 20pt;
+            list-style-type: disc;
+        }
+        .congress-activity li {
+            font-size: 12pt;
+            font-family: "Times New Roman", serif;
+            margin-bottom: 8pt;
+        }
+        .article-content {
+            margin-top: 12pt;
+            margin-bottom: 12pt;
+            line-height: 18pt;
+        }
+        .article-content p {
+            font-family: "Georgia", serif;
+            font-size: 12pt;
+            margin: 0 0 8pt 0;
+        }
+        .article-title {
+            font-size: 12pt;
+            font-family: "Times New Roman", serif;
+            font-weight: bold;
+            text-decoration: underline;
+            margin-bottom: 8pt;
+        }
+        .article-author {
+            font-size: 12pt;
+            font-family: "Georgia", serif;
+            margin-bottom: 8pt;
+        }
+    </style>
 </head>
-<body style="font-family: 'Times New Roman', Times, serif; font-size: 12pt;">
+<body>
 
-    <p style="font-weight: bold; text-align: center;">
-        BIS NEWS CLIPS | {{today_date}}
-    </p>
+    <div class="header">
+        BIS NEWS CLIPS | {{ today_date }}
+    </div>
 
-    <ol style="font-weight: bold;">
+    <ol class="article-list">
         {% for article in articles %}
-            <li>
-                <a href="#C{{ loop.index }}" style="font-weight: bold;">
-                    {{ article.source }}: {{ article.title }}
-                </a>
-            </li>
+        <li>
+            <a href="#C{{ loop.index }}">{{ article.source }}: {{ article.title }}</a>
+        </li>
         {% endfor %}
         <li>
-            <a href="#C{{ articles | length + 1 }}" style="font-weight: bold;">
-                POLITICO: Morning Trade
-            </a>
+            <a href="#C{{ articles | length + 1 }}">POLITICO: Morning Trade</a>
         </li>
     </ol>
-    <br>
 
     {% if congress_activity %}
-        <div style="margin-bottom:0;">
-            <p style="font-weight: bold; margin-bottom: 0;">Congressional Activity</p>
-            <ul>
-                <li><b>Senate:</b> {{ congress_activity.senate }}</li>
-                <li><b>House:</b> {{ congress_activity.house }}</li>
-            </ul>
-        </div>
-        <br>
+    <div class="section-title">Congressional Activity</div>
+    <ul class="congress-activity">
+        <li><b>Senate:</b> {{ congress_activity.senate }}</li>
+        <li><b>House:</b> {{ congress_activity.house }}</li>
+    </ul>
     {% endif %}
 
     {% for article in articles %}
-        <div style="margin-bottom: 0;">
+    <div class="article-content">
+        <div class="article-title" id="C{{ loop.index }}">{{ article.source }}: {{ article.title }}</div>
 
-            <a name="C{{ loop.index }}"></a>
+        {% if article.author %}
+        <div class="article-author">By {{ article.author | join(', ') }}</div>
+        {% endif %}
 
-            <h3 id="C{{ loop.index }}" style="font-weight: bold; text-decoration: underline; margin-bottom: 0;">
-                {{ article.source }}: {{ article.title }}
-            </h3>
-            <br>
-
-            {% if article.author %}
-                <p style="margin-top: 0; margin-bottom: 0;">
-                    By {{ article.author | join(', ') }}
-                </p>
-                <br>
-            {% endif %}
-
-            <div style="margin-top: 0; margin-bottom:0;">{{ article.content | safe}}</div>
-            <br><br>
-        </div>
+        {{ article.content | safe }}
+    </div>
     {% endfor %}
 
-    <a name="C{{ articles | length + 1 }}"></a>
-    <h3 id="C{{ articles | length + 1 }}" style="font-weight: bold; text-decoration: underline; margin-bottom: 0;">
-        POLITICO: Morning Trade
-    </h3>
-    
+    <div class="article-content">
+        <div class="article-title" id="C{{ articles|length + 1 }}">POLITICO: Morning Trade</div>
+        <!-- Add Morning Trade content here if available -->
+    </div>
 </body>
 </html>
