@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <style>
         body {
-            font-family: "Aptos", sans-serif;
+            font-family: "Times New Roman", sans-serif;
             color: black;
             word-wrap: break-word;
         }
@@ -18,15 +18,12 @@
         .article-list {
             margin: 0;
             padding: 0;
-            list-style-position: inside;
         }
         .article-list li {
             font-size: 12pt;
             font-family: "Times New Roman", serif;
             font-weight: bold;
-            margin: 0;
-            padding-left: 0;
-            text-indent: 0;
+            margin-left: .5in;
         }
         .article-list li a {
             color: #467886;
@@ -36,8 +33,7 @@
             font-size: 12pt;
             font-family: "Times New Roman", serif;
             font-weight: bold;
-            margin-top: 12pt;
-            margin-bottom: 0pt;
+            margin: 0;
             padding-bottom: 0pt
         }
         .congress-activity {
@@ -86,6 +82,7 @@
             <a href="#C{{ articles | length + 1 }}">POLITICO: Morning Trade</a>
         </li>
     </ol>
+    <br>
 
     {% if congress_activity %}
     <div class="section-title">Congressional Activity</div>
@@ -93,6 +90,7 @@
         <li><b>Senate:</b> {{ congress_activity.senate }}</li>
         <li><b>House:</b> {{ congress_activity.house }}</li>
     </ul>
+    <br>
     {% endif %}
 
     {% for article in articles %}
@@ -105,8 +103,8 @@
         <br>
         {% endif %}
 
-        {{ article.content }}
-        <br><br>
+        {{ article.content | safe }}
+        <br><br><br>
     </div>
     {% endfor %}
 
