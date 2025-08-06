@@ -7,7 +7,7 @@ def clean_author_string(authors_raw):
     Cleans the raw author list from newspaper3k to remove duplicates and junk text.
     """
     if not authors_raw:
-        return ""
+        return []
 
     cleaned_names = []
     junk_phrases = ["Updated On", "By"]

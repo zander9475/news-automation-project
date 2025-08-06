@@ -1,7 +1,3 @@
-Email font unregulated
-
-Spacing issues in email
-
 Multiple different urls leading to the same url when clicked (check out 7/24 raw results)
 
 Pulling keywords from website content post-article body

@@ -3,6 +3,7 @@ from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QLineEdit,
                                QTextEdit, QHBoxLayout, QPushButton, QMessageBox)
 from app.models.article import Article
 from typing import Optional
+import re
 
 class ManualInputWidget(QWidget):
     # Custom signals
@@ -87,7 +88,13 @@ class ManualInputWidget(QWidget):
         lead = self.lead_input.text().strip() if self.lead_input.text().strip() else None
         author_text = self.author_input.text().strip()
         source = self.source_input.text().strip()
-        content = self.content_input.toHtml().strip() 
+
+        # Only convert to html if adding manually
+        if self.is_editing_mode:
+            content = self.content_input.toPlainText()
+        else:
+            raw_html = self.content_input.toHtml()
+            content = self._clean_manual_html(raw_html)
 
         # Validate required fields
         if not title:
@@ -180,3 +187,27 @@ class ManualInputWidget(QWidget):
         
         self.source_input.setText(article.source)
         self.content_input.setPlainText(article.content)
+
+    def _clean_manual_html(self, html_content: str) -> str:
+        """
+        Cleans HTML from a QTextEdit widget to be suitable for the email template.
+        - Removes all inline style attributes to prevent font overrides.
+        - Converts <p> tags to <br><br> for consistent paragraph spacing.
+        - Keeps other HTML tags like <a> for hyperlinks.
+        """
+        print("Cleaning")
+        if not isinstance(html_content, str):
+            return html_content
+
+        # 1. Remove all inline style="..." attributes from any tag
+        # This gets rid of the unwanted font (e.g., 'Aptos')
+        cleaned_html = re.sub(r'\s*style=".*?"', '', html_content, flags=re.IGNORECASE)
+
+        # 2. Convert <p> tags to <br><br> for consistent paragraph spacing
+        # This makes manual entries format like scraped plain text entries.
+        # It removes the opening <p> tag (and any attributes it might have)
+        cleaned_html = re.sub(r'<p.*?>', '', cleaned_html, flags=re.IGNORECASE)
+        # It replaces the closing </p> tag with the desired line breaks
+        cleaned_html = re.sub(r'</p>', '<br><br>', cleaned_html, flags=re.IGNORECASE)
+
+        return cleaned_html.strip()

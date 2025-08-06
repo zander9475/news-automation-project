@@ -70,8 +70,16 @@ def build_email():
         env = Environment(loader=FileSystemLoader("templates"))
         template = env.get_template("email_template.html")
 
-        # Get today's date and format it as Month dd, yyyy (ex: July 21, 2025)
-        current_date = datetime.now().strftime('%B %d, %Y')
+        # Get the current datetime object
+        now = datetime.now()
+
+        # Format as "Month Day, Year" without a leading zero on the day
+        # E.g., "August 6, 2025"
+        current_date = f"{now.strftime('%B')} {now.day}, {now.year}"
+
+        # Format as "mm.dd.yyyy" 
+        # E.g., "08.06.2025"
+        subject_date = now.strftime('%m.%d.%Y')
 
         # Render HTML email content
         html = template.render(
@@ -89,7 +97,7 @@ def build_email():
             f.write(html)
 
         # Create Outlook draft email
-        create_outlook_draft(subject=f"BIS News Clips | {current_date}", html_body=html)
+        create_outlook_draft(subject=f"BIS News Clips | {subject_date}", html_body=html)
         
         return True
     

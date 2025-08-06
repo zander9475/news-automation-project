@@ -115,14 +115,7 @@ class ArticleController(QObject):
         # Check if passed in article has id AND if an article with that id already exists
         if article.id and self.model.get_single_article(article.id):
             was_updated = self.model.edit_article(article)
-            if was_updated:
-                # Success dialog
-                QMessageBox.information(
-                    self.view,
-                    "Success",
-                    f"'{article.title}' was successfully updated."
-                )
-            else:
+            if not was_updated:
                 # Fail dialog
                 QMessageBox.warning(
                     self.view,
@@ -132,14 +125,7 @@ class ArticleController(QObject):
         
         else:
             successful_add = self.model.add_article(article)
-            if successful_add:
-                # Success dialog
-                QMessageBox.information(
-                    self.view, 
-                    "Success", 
-                    f"'{article.title}' was successfully added."
-                )
-            else:
+            if not successful_add:
                 # Duplicate error dialog
                 QMessageBox.warning(
                     self.view, 

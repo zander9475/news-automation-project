@@ -114,19 +114,10 @@ class MainController:
         print("Saving articles...")
         # Save articles to .csv file
         save_success = self.model.save_articles()
-        print(save_success)
         if save_success:
             # Build the email
             email_build_success = build_email()
-            print(email_build_success)
-            if email_build_success:
-                # Success dialog
-                QMessageBox.information(
-                    self.view,
-                    "Success",
-                    "Outlook will now open with a draft of your email."
-                )
-            else:
+            if not email_build_success:
                 # Fail dialog
                 QMessageBox.warning(
                     self.view,

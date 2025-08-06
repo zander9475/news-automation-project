@@ -74,7 +74,7 @@ class ArticlePreviewWidget(QWidget):
         self.title_label.setText(f"<b>Title:</b> {self.article.title}")
         self.source_label.setText(f"<b>Source:</b> {self.article.source}")
         # Show plain text content
-        self.content_text.setPlainText(self.article.content)
+        self.content_text.setHtml(self.article.content)
 
         # Set visibility for widgets
         self.title_label.setVisible(True)
@@ -119,7 +119,7 @@ class ArticlePreviewWidget(QWidget):
         self.source_label.setVisible(False)
         self.content_label.setText("")
         self.content_label.setVisible(False)
-        self.content_text.setPlainText("")
+        self.content_text.setHtml("")
         self.edit_btn.setVisible(False)
         self.delete_btn.setVisible(False)
         
