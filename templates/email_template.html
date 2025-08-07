@@ -100,11 +100,12 @@
         <a name="C{{ loop.index }}"></a>
         <div class="article-title" id="C{{ loop.index }}">{{ article.source }}: {{ article.title }}</div>
         <br>
-
+        
+        <!-- Article Lead (Currently buggy)
         {% if article.lead %}
             <div class="article-lead" style = "font-style: italic ! important;">{{ article.lead | safe }}</div>
             <br>
-        {% endif %}
+        {% endif %} -->
 
         {% if article.author %}
         <div class="article-author">By {{ article.author | join(', ') }}</div>

@@ -72,7 +72,7 @@ class ArticleManagementWidget(QWidget):
         self.listbox.setDragDropMode(QAbstractItemView.DragDropMode.InternalMove)
         self.listbox.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
         self.listbox.setDefaultDropAction(Qt.DropAction.MoveAction)
-        self.listbox.currentItemChanged.connect(self._on_item_changed)
+        self.listbox.itemClicked.connect(self._on_item_changed)
         self.splitter.addWidget(self.listbox)
 
         # Detail view: preview pane
