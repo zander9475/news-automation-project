@@ -87,11 +87,11 @@ class ArticleManagementWidget(QWidget):
 
         # Final component: Action buttons
         self.action_btns = QHBoxLayout()
-        self.save_order_btn = QPushButton("Save Order")
-        self.save_order_btn.clicked.connect(self.save_articles_requested.emit)
+        self.build_email_btn = QPushButton("Build Email")
+        self.build_email_btn.clicked.connect(self.save_articles_requested.emit)
         self.main_menu_btn = QPushButton("Back to Main Menu")
         self.main_menu_btn.clicked.connect(self.main_menu_requested.emit)
-        self.action_btns.addWidget(self.save_order_btn)
+        self.action_btns.addWidget(self.build_email_btn)
         self.action_btns.addWidget(self.main_menu_btn)
         self.action_btns.addStretch(1)
         self.main_layout.addLayout(self.action_btns)

@@ -41,12 +41,17 @@
             font-family: "Times New Roman", serif;
             margin-bottom: 0pt;
         }
+        .article_lead {
+            font-size: 12pt;
+            font-family: "Times New Roman", serif;
+            font-style: italic;
+        }
         .article-content, .article-content * {
         font-family: inherit !important;
         font-size: inherit !important;
         margin: 0;
         padding: 0;
-    }
+        }
         .article-content p {
             font-family: "Times New Roman", serif;
             font-size: 12pt;
@@ -95,6 +100,11 @@
         <a name="C{{ loop.index }}"></a>
         <div class="article-title" id="C{{ loop.index }}">{{ article.source }}: {{ article.title }}</div>
         <br>
+
+        {% if article.lead %}
+            <div class="article-lead" style = "font-style: italic ! important;">{{ article.lead | safe }}</div>
+            <br>
+        {% endif %}
 
         {% if article.author %}
         <div class="article-author">By {{ article.author | join(', ') }}</div>

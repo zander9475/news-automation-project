@@ -24,9 +24,13 @@ class ArticlePreviewWidget(QWidget):
 
         # Declare widgets where text will go
         self.title_label = QLabel()
+        self.title_label.setWordWrap(True)
         self.lead_label = QLabel()
+        self.lead_label.setWordWrap(True)
         self.author_label = QLabel()
+        self.author_label.setWordWrap(True)
         self.source_label = QLabel()
+        self.source_label.setWordWrap(True)
         self.content_label = QLabel()
         self.content_text = QTextBrowser()
         self.content_text.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
