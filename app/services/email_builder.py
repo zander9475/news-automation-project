@@ -63,6 +63,10 @@ def build_email():
             lambda x: ast.literal_eval(x) if isinstance(x, str) and x.startswith('[') else []
         )
 
+        # Ensure lead doesn't show as "nan"
+        if 'lead' in df.columns:
+            df['lead'] = df['lead'].apply(lambda x: x if isinstance(x, str) and x.strip() else None)
+
         # Clean up and normalize content paragraphs for Outlook
         df['content'] = df['content'].apply(convert_paragraphs_to_html)
 
