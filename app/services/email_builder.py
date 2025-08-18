@@ -55,10 +55,13 @@ def build_email():
         
         df = pd.read_csv(filepath)
 
-        # Convert the string representation of the list back to a Python list
-        df['author'] = df['author'].apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
-        # Replace 'nan' in empty author column with empty string
-        df['author'] =df['author'].fillna('')
+        # Replace NaN with None
+        df = df.where(pd.notnull(df), None)
+
+        # Ensure author is always a list (or empty list if missing)
+        df['author'] = df['author'].apply(
+            lambda x: ast.literal_eval(x) if isinstance(x, str) and x.startswith('[') else []
+        )
 
         # Clean up and normalize content paragraphs for Outlook
         df['content'] = df['content'].apply(convert_paragraphs_to_html)
