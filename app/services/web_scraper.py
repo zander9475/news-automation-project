@@ -1,6 +1,7 @@
 from newspaper import Article, ArticleException
 from titlecase import titlecase
 import tldextract
+import requests
 
 def clean_author_string(authors_raw):
     """
@@ -49,14 +50,11 @@ def clean_author_string(authors_raw):
     
     return unique_names
 
-
 def scrape_url(url):
-    """
-    Tries to scrape a single URL.
-    Returns a dictionary of article data on success.
-    Raises an ArticleException on failure.
-    """
-    try:
+        """
+        Tries live fetch first; if blocked or error, falls back to Google Cache.
+        Returns article data dict on success, raises ArticleException on failure.
+        """
         # Map domain names to source titles
         SOURCE_MAP = {
             "apnews": "Associated Press",
@@ -70,18 +68,63 @@ def scrape_url(url):
             "washingtonpost": "Washington Post",
             "cnn": "CNN",
             "bloomberglaw": "Bloomberg"
-
         }
 
-        article = Article(url, browser_user_agent = 'Mozilla/5.0')
-        article.download()
+        # Set user agent (to avoid website blocks)
+        user_agent = (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/122.0.0.0 Safari/537.36"
+        )
+
+        # Common request headers for both tools
+        headers = {
+            "User-Agent": user_agent,
+            "Accept-Language": "en-US,en;q=0.9",
+        }
+
+        def fetch(url_to_fetch):
+            """
+            Fetches the URL and returns the HTML content.
+            """
+            try:
+                response = requests.get(url_to_fetch, headers=headers)
+                response.raise_for_status()
+                html = response.text
+                if not html.strip():
+                    raise ArticleException("Empty HTML returned")
+                return html
+            except requests.RequestException as e:
+                raise ArticleException(f"Could not fetch page: {e}")
+        
+        # Try live URL first
+        try:
+            html = fetch(url)
+        except ArticleException as e_live:
+            # On certain errors ('401', etc), try Google Cache fallback
+            if isinstance(e_live.args[0], str) and any(code in e_live.args[0] for code in ['401', '403', '404']):
+                cache_url = f"https://webcache.googleusercontent.com/search?q=cache:{url}"
+                try:
+                    html = fetch(cache_url)
+                except ArticleException as e_cache:
+                    # Both failed
+                    raise ArticleException(
+                        f"Failed live URL ({e_live}) and Google Cache ({e_cache})"
+                    )
+            else:
+                # Some other error: re-raise
+                raise
+
+        # Extract content with Newspaper3k
+        article = Article(url)
+        article.set_html(html)
         article.parse()
         
         if not article.text:
             raise ArticleException("Scrape resulted in no content")
         
         # Capitalize article title
-        capitalized_title = titlecase(article.title) if article.title else "Untitled"
+        capitalized_title = titlecase(article.title) if article.title else None
 
         # Clean author list
         cleaned_authors = clean_author_string(article.authors)
@@ -93,20 +136,9 @@ def scrape_url(url):
         formatted_source = SOURCE_MAP.get(source_domain, source_domain.title())
 
         return {
-            "title": capitalized_title or "Untitled",
+            "title": capitalized_title,
             "author": cleaned_authors,
             "source": formatted_source,
             "content": article.text,
             "url": url
         }
-    except Exception as e:
-        if '404' in str(e):
-            raise ArticleException("This url either does not exist, or the website blocks web scraping by bots." \
-                                    "\nClick title to verify if article exists.")
-        elif '403' in str(e):
-            raise ArticleException("This website does not allow web scraping by bots.")
-        elif '401' in str(e):
-            raise ArticleException("This article is paywalled or requires a login\n(Usually a Google sign-in).")
-        else:
-            # For all other errors, re-raise the original exception
-            raise ArticleException(e)
