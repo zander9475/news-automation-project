@@ -2,6 +2,7 @@ from newspaper import Article, ArticleException
 from titlecase import titlecase
 import tldextract
 import requests
+from fake_useragent import UserAgent
 
 def clean_author_string(authors_raw):
     """
@@ -71,74 +72,57 @@ def scrape_url(url):
         }
 
         # Set user agent (to avoid website blocks)
-        user_agent = (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/122.0.0.0 Safari/537.36"
-        )
+        user_agent = UserAgent()
 
         # Common request headers for both tools
         headers = {
-            "User-Agent": user_agent,
+            "User-Agent": user_agent.random,
             "Accept-Language": "en-US,en;q=0.9",
         }
 
-        def fetch(url_to_fetch):
-            """
-            Fetches the URL and returns the HTML content.
-            """
-            try:
-                response = requests.get(url_to_fetch, headers=headers)
-                response.raise_for_status()
-                html = response.text
-                if not html.strip():
-                    raise ArticleException("Empty HTML returned")
-                return html
-            except requests.RequestException as e:
-                raise ArticleException(f"Could not fetch page: {e}")
-        
-        # Try live URL first
         try:
-            html = fetch(url)
-        except ArticleException as e_live:
-            # On certain errors ('401', etc), try Google Cache fallback
-            if isinstance(e_live.args[0], str) and any(code in e_live.args[0] for code in ['401', '403', '404']):
-                cache_url = f"https://webcache.googleusercontent.com/search?q=cache:{url}"
-                try:
-                    html = fetch(cache_url)
-                except ArticleException as e_cache:
-                    # Both failed
-                    raise ArticleException(
-                        f"Failed live URL ({e_live}) and Google Cache ({e_cache})"
-                    )
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+            html = response.text
+            if not html.strip():
+                raise ArticleException("Empty HTML returned")
+
+            # Extract content with Newspaper3k
+            article = Article(url)
+            article.set_html(html)
+            article.parse()
+            
+            if not article.text:
+                raise ArticleException("Scrape resulted in no content")
+            
+            # Capitalize article title
+            capitalized_title = titlecase(article.title) if article.title else None
+
+            # Clean author list
+            cleaned_authors = clean_author_string(article.authors)
+
+            # Extract the base domain name from the URL
+            source_domain = tldextract.extract(url).domain
+
+            # Look up source domain in the map. If not found, use capitalized domain name.
+            formatted_source = SOURCE_MAP.get(source_domain, source_domain.title())
+
+            return {
+                "title": capitalized_title,
+                "author": cleaned_authors,
+                "source": formatted_source,
+                "content": article.text,
+                "url": url
+            }
+        
+        except Exception as e:
+            if '404' in str(e):
+                raise ArticleException("This url either does not exist, or the website blocks web scraping by bots." \
+                                        "\nClick title to verify if article exists.")
+            elif '403' in str(e):
+                raise ArticleException("This website does not allow web scraping by bots.")
+            elif '401' in str(e):
+                raise ArticleException("This article is paywalled or requires a login\n(Usually a Google sign-in).")
             else:
-                # Some other error: re-raise
-                raise
-
-        # Extract content with Newspaper3k
-        article = Article(url)
-        article.set_html(html)
-        article.parse()
-        
-        if not article.text:
-            raise ArticleException("Scrape resulted in no content")
-        
-        # Capitalize article title
-        capitalized_title = titlecase(article.title) if article.title else None
-
-        # Clean author list
-        cleaned_authors = clean_author_string(article.authors)
-
-        # Extract the base domain name from the URL
-        source_domain = tldextract.extract(url).domain
-
-        # Look up source domain in the map. If not found, use capitalized domain name.
-        formatted_source = SOURCE_MAP.get(source_domain, source_domain.title())
-
-        return {
-            "title": capitalized_title,
-            "author": cleaned_authors,
-            "source": formatted_source,
-            "content": article.text,
-            "url": url
-        }
+                # For all other errors, re-raise the original exception
+                raise ArticleException(e)
