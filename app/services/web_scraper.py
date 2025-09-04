@@ -3,6 +3,7 @@ from titlecase import titlecase
 import tldextract
 import requests
 from fake_useragent import UserAgent
+from utils import text_to_html_paragraphs
 
 def clean_author_string(authors_raw):
     """
@@ -107,11 +108,15 @@ def scrape_url(url):
             # Look up source domain in the map. If not found, use capitalized domain name.
             formatted_source = SOURCE_MAP.get(source_domain, source_domain.title())
 
+            # Get content and convert to html
+            content = article.text
+            content_as_html = text_to_html_paragraphs(content)
+
             return {
                 "title": capitalized_title,
                 "author": cleaned_authors,
                 "source": formatted_source,
-                "content": article.text,
+                "content": content_as_html,
                 "url": url
             }
         

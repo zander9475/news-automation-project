@@ -2,6 +2,7 @@ from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QTextBrowser,
                                QSizePolicy, QHBoxLayout, QPushButton, QMessageBox)
 from PySide6.QtCore import Signal, Slot, Qt
 from app.models.article import Article
+from utils import text_to_html_paragraphs
 
 class ArticlePreviewWidget(QWidget):
     # Custom signals
@@ -74,10 +75,11 @@ class ArticlePreviewWidget(QWidget):
         # Set the header text
         self.header.setText("Selected article details:")
 
-        # Set the text for required fields
+        # Set metadata
         self.title_label.setText(f"<b>Title:</b> {self.article.title}")
         self.source_label.setText(f"<b>Source:</b> {self.article.source}")
-        # Show plain text content
+
+        # Set content
         self.content_text.setHtml(self.article.content)
 
         # Set visibility for widgets

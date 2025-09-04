@@ -2,29 +2,11 @@ import pandas as pd
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 from app.services.congress_scraper import get_congressional_activity
+from utils import text_to_html_paragraphs
 import ast
 import os
 import re
 import win32com.client
-
-def convert_paragraphs_to_html(text):
-    """
-    Converts text paragraphs (separated by newlines) to <br><br> for Outlook.
-    Ensures consistent spacing between paragraphs.
-    """
-    if not isinstance(text, str):
-        return text
-
-    # Normalize all newline styles
-    text = text.replace('\r\n', '\n')
-
-    # Replace double newlines or more with <br><br>
-    text = re.sub(r'\n\s*\n', '<br><br>', text)
-
-    # Replace remaining single newlines with space (or another <br> if needed)
-    text = re.sub(r'(?<!<br>)\n(?!<br>)', ' ', text)
-
-    return text.strip()
 
 
 def create_outlook_draft(subject, html_body):
@@ -66,9 +48,6 @@ def build_email():
         # Ensure lead doesn't show as "nan"
         if 'lead' in df.columns:
             df['lead'] = df['lead'].apply(lambda x: x if isinstance(x, str) and x.strip() else None)
-
-        # Clean up and normalize content paragraphs for Outlook
-        df['content'] = df['content'].apply(convert_paragraphs_to_html)
 
         # Get the congressional activity
         congress_activity = get_congressional_activity()

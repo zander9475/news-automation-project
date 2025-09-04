@@ -1,4 +1,82 @@
 from urllib.parse import urlparse
+import re
+from bs4 import BeautifulSoup
+
+def text_to_html_paragraphs(text: str) -> str:
+    """
+    Converts a plain text string into an HTML string with <br><br> tags.
+
+    - Splits text into paragraphs based on one or more empty lines.
+    - Preserves single line breaks within a paragraph using <br>.
+    """
+    if not isinstance(text, str) or not text.strip():
+        return ""
+
+    # Normalize different newline characters to \n
+    text = text.replace('\r\n', '\n')
+
+    # Split the text into paragraphs based on one or more blank lines
+    paragraphs = re.split(r'\n\s*\n', text)
+
+    html_paragraphs = []
+    for p in paragraphs:
+        # For each paragraph, replace internal newlines with <br>
+        content = p.strip().replace('\n', '<br>')
+        if content:
+            html_paragraphs.append(content)
+
+    # Join paragraphs with <br><br> tags for consistent paragraph spacing
+    return "<br><br>".join(html_paragraphs)
+
+
+def clean_and_format_html(dirty_html: str) -> str:
+    """
+    Cleans dirty HTML from a QTextEdit widget to a standardized format.
+
+    - Keeps only <b>, <strong>, <i>, <em>, and <a> tags.
+    - On <a> tags, it keeps ONLY the 'href' attribute.
+    - Strips all other tags, attributes (like style, class), and document structure.
+    - Converts paragraph structures into <br><br> for consistent paragraph spacing.
+    """
+    print("Cleaning")
+    if not isinstance(dirty_html, str) or not dirty_html.strip():
+        return ""
+
+    soup = BeautifulSoup(dirty_html, 'html.parser')
+
+    # Define the tags and attributes that are allowed
+    allowed_tags = {'b', 'strong', 'i', 'em', 'a', 'p'}
+    allowed_attributes = {'a': ['href']}
+
+    # Find all HTML tags in the document
+    for tag in soup.find_all(True):
+        # If the tag is not allowed, remove the tag but keep its content
+        if tag.name not in allowed_tags:
+            tag.unwrap()
+        else:
+            # If tag is allowed, keep only allowed attributes
+            attrs = dict(tag.attrs)
+            for attr_name, _ in attrs.items():
+                if tag.name in allowed_attributes and attr_name in allowed_attributes[tag.name]:
+                    continue  # Keep this attribute
+                # Remove unallowed attributes
+                del tag[attr_name]
+
+    # Get the HTML content from the body, as soup may have added <html>/<body> tags
+    if soup.body:
+        body_content = ''.join(str(c) for c in soup.body.contents)
+    else:
+        body_content = str(soup)
+
+    # Convert <p> tags to <br><br> for consistent paragraph spacing.
+    cleaned_html = re.sub(r'<p.*?>', '', body_content, flags=re.IGNORECASE)
+    cleaned_html = re.sub(r'</p>', '<br><br>', cleaned_html, flags=re.IGNORECASE)
+
+    # Remove any leading/trailing <br> tags that might result from cleaning
+    cleaned_html = re.sub(r'^(<br\s*/?>\s*)+|(<br\s*/?>\s*)+$', '', cleaned_html)
+
+    return cleaned_html.strip()
+
 
 def normalize_url(url):
     """Strips a URL down to just domain and path for duplicate checking.
@@ -13,6 +91,7 @@ def normalize_url(url):
     domain = parsed.netloc.replace("www.", "")
     path = parsed.path.rstrip('/') # remove trailing slash
     return f"{domain}{path}"
+
 
 def is_article(url, title):
     """

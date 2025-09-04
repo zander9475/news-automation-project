@@ -2,6 +2,7 @@ from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QLineEdit, 
                                QTextEdit, QHBoxLayout, QPushButton, QMessageBox)
 from app.models.article import Article
+from utils import text_to_html_paragraphs, clean_and_format_html
 from typing import Optional
 import re
 
@@ -89,12 +90,9 @@ class ManualInputWidget(QWidget):
         author_text = self.author_input.text().strip()
         source = self.source_input.text().strip()
 
-        # Only convert to html if adding manually
-        if self.is_editing_mode:
-            content = self.content_input.toPlainText()
-        else:
-            raw_html = self.content_input.toHtml()
-            content = self._clean_manual_html(raw_html)
+        # Clean HTML content
+        dirty_html = self.content_input.toHtml()
+        content = clean_and_format_html(dirty_html)
 
         # Validate required fields
         if not title:
@@ -125,7 +123,7 @@ class ManualInputWidget(QWidget):
             edited_article.source = source
             edited_article.content = content
 
-            # Emit signal
+            # Emit submission signal
             self.submission_completed.emit(edited_article)
         else:
             # Create Article object
@@ -184,30 +182,5 @@ class ManualInputWidget(QWidget):
         self.title_input.setText(article.title)
         self.lead_input.setText(article.lead if article.lead else "")
         self.author_input.setText(", ".join(article.author) if article.author else "")
-        
         self.source_input.setText(article.source)
-        self.content_input.setPlainText(article.content)
-
-    def _clean_manual_html(self, html_content: str) -> str:
-        """
-        Cleans HTML from a QTextEdit widget to be suitable for the email template.
-        - Removes all inline style attributes to prevent font overrides.
-        - Converts <p> tags to <br><br> for consistent paragraph spacing.
-        - Keeps other HTML tags like <a> for hyperlinks.
-        """
-        print("Cleaning")
-        if not isinstance(html_content, str):
-            return html_content
-
-        # 1. Remove all inline style="..." attributes from any tag
-        # This gets rid of the unwanted font (e.g., 'Aptos')
-        cleaned_html = re.sub(r'\s*style=".*?"', '', html_content, flags=re.IGNORECASE)
-
-        # 2. Convert <p> tags to <br><br> for consistent paragraph spacing
-        # This makes manual entries format like scraped plain text entries.
-        # It removes the opening <p> tag (and any attributes it might have)
-        cleaned_html = re.sub(r'<p.*?>', '', cleaned_html, flags=re.IGNORECASE)
-        # It replaces the closing </p> tag with the desired line breaks
-        cleaned_html = re.sub(r'</p>', '<br><br>', cleaned_html, flags=re.IGNORECASE)
-
-        return cleaned_html.strip()
+        self.content_input.setHtml(article.content)
