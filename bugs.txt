@@ -4,8 +4,12 @@ Cancelling on an edit stays on editing when clicking add manually
 
 Deleting an article does not remove it from memory (Still flags as duplicate when attempting to re-add)
 
+Senate info not loading (switch to senate.gov)
+
 
 *lower priority bugs*
+
+Congressional activity spacing issue
 
 scraped article content losing spacing
 
