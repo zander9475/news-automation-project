@@ -1,10 +1,13 @@
-ToC still slightly too right
-
-scraped article content losing spacing
-
 Editing on pasted content shows full html, but preview doesnt
 
 Cancelling on an edit stays on editing when clicking add manually
+
+Deleting an article does not remove it from memory (Still flags as duplicate when attempting to re-add)
+
+
+*lower priority bugs*
+
+scraped article content losing spacing
 
 Extra space between title and author, or title and content
 

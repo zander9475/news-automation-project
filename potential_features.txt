@@ -4,4 +4,4 @@ SETTINGS PAGE:
 
 Add option to include placeholders for morning tech/morning trade
 
-Automatically clear articles upon email creation, or with a button
+Add button to clear all articles

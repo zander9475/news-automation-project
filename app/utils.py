@@ -4,7 +4,7 @@ def normalize_url(url):
     """Strips a URL down to just domain and path for duplicate checking.
     Example: nytimes.com/2025/07/31/us/politics/white-house-ballroom-trump.html
     """
-    if not url:
+    if not url or not isinstance(url, str):
         return ""
     # Use urlparse to handle complex URLs safely
     parsed = urlparse(url)
@@ -28,7 +28,7 @@ def is_article(url, title):
     high_priority_path_exclusions = [
         "/print-edition", "/digital-print-edition", "/subscribe",
         "/archive", "/home", "/index", "/category", "/podcast", 
-        "/video", "/sport", "/athletic"
+        "/video", "/sport", "/athletic", "/sitemap"
     ]
     for p in high_priority_path_exclusions:
         if p in path:
