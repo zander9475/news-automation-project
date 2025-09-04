@@ -44,8 +44,16 @@ def clean_and_format_html(dirty_html: str) -> str:
 
     soup = BeautifulSoup(dirty_html, 'html.parser')
 
+    # Completely remove unwanted tags whose content is also unwanted
+    tags_to_discard = [
+        'script', 'style', 'head', 'meta', 'link', 'svg', 'canvas', 'math', 'table',
+        'form', 'input', 'textarea', 'select', 'option', 'button', 'iframe'
+    ]
+    for tag in soup.find_all(tags_to_discard):
+        tag.decompose()
+
     # Define the tags and attributes that are allowed
-    allowed_tags = {'b', 'strong', 'i', 'em', 'a', 'p'}
+    allowed_tags = {'b', 'strong', 'i', 'em', 'a', 'p', 'br'}
     allowed_attributes = {'a': ['href']}
 
     # Find all HTML tags in the document

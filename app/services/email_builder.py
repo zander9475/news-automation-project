@@ -2,10 +2,8 @@ import pandas as pd
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 from app.services.congress_scraper import get_congressional_activity
-from utils import text_to_html_paragraphs
 import ast
 import os
-import re
 import win32com.client
 
 
