@@ -2,9 +2,8 @@ from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QLineEdit, 
                                QTextEdit, QHBoxLayout, QPushButton, QMessageBox)
 from app.models.article import Article
-from utils import text_to_html_paragraphs, clean_and_format_html
+from app.utils import clean_and_format_html
 from typing import Optional
-import re
 
 class ManualInputWidget(QWidget):
     # Custom signals

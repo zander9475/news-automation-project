@@ -2,7 +2,6 @@ from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QTextBrowser,
                                QSizePolicy, QHBoxLayout, QPushButton, QMessageBox)
 from PySide6.QtCore import Signal, Slot, Qt
 from app.models.article import Article
-from utils import text_to_html_paragraphs
 
 class ArticlePreviewWidget(QWidget):
     # Custom signals
