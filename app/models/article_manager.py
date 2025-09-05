@@ -143,6 +143,8 @@ class ArticleManager(QObject):
         """
         for i, existing_article in enumerate(self.articles):
             if existing_article.id == article.id:
+                self.seen_titles.discard(article.title)
+                self.seen_urls.discard(article.url)
                 del self.articles[i]
                 self.articles_changed.emit()
                 return True
