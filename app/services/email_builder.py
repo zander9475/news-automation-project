@@ -5,6 +5,7 @@ from app.services.congress_scraper import get_congressional_activity
 import ast
 import os
 import win32com.client
+from app.config import DATA_FILE
 
 
 def create_outlook_draft(subject, html_body):
@@ -28,7 +29,7 @@ def build_email():
     """
     try:
         # Load email template and article data
-        filepath = "data/full_articles.csv"
+        filepath = DATA_FILE
         if not os.path.exists(filepath):
             print(f"Error: CSV file not found at {filepath}")
             return False

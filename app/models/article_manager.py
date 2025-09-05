@@ -4,8 +4,10 @@ from ..utils import normalize_url
 from PySide6.QtCore import Signal, QObject
 from typing import Optional
 import ast
+import os
 from titlecase import titlecase
 from pandas.errors import EmptyDataError
+from app.config import DATA_FILE
 
 class ArticleManager(QObject):
     """
@@ -15,7 +17,7 @@ class ArticleManager(QObject):
     articles_changed = Signal()
     article_updated = Signal(Article)
 
-    def __init__(self, filepath="data/full_articles.csv"):
+    def __init__(self, filepath=DATA_FILE):
         """
         Initializes the ArticleModel.
         
@@ -160,6 +162,10 @@ class ArticleManager(QObject):
     
     def delete_all_articles(self):
         self.articles = []
+
+        if os.path.exists(DATA_FILE):
+            os.remove(DATA_FILE)
+
         self.articles_changed.emit()
 
     def reorder_articles(self, new_title_order):
