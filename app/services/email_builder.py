@@ -43,6 +43,11 @@ def build_email():
             lambda x: ast.literal_eval(x) if isinstance(x, str) and x.startswith('[') else []
         )
 
+        # Clean out lists with empty strings or "nan"
+        df['author'] = df['author'].apply(
+            lambda authors: [a for a in authors if a and a != "nan"]
+        )
+
         # Ensure lead doesn't show as "nan"
         if 'lead' in df.columns:
             df['lead'] = df['lead'].apply(lambda x: x if isinstance(x, str) and x.strip() else None)
