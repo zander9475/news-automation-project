@@ -112,7 +112,7 @@ class ArticleManager(QObject):
         if new_article.url:
             self.seen_urls.add(url)
         # Add title to seen titles
-        self.seen_titles.add(new_article.title)
+        self.seen_titles.add(new_article.title.lower().strip())
         
         self.articles_changed.emit()
         return True
@@ -143,8 +143,14 @@ class ArticleManager(QObject):
         """
         for i, existing_article in enumerate(self.articles):
             if existing_article.id == article.id:
-                self.seen_titles.discard(article.title)
-                self.seen_urls.discard(article.url)
+                # Normalize the title and the url
+                normalized_title, normalized_url = article.title.lower().strip(), normalize_url(article.url)
+
+                # Remove title and url from session lists
+                self.seen_titles.discard(normalized_title)
+                self.seen_urls.discard(normalized_url)
+
+                # Delete the article from current session, and notify controller of changes
                 del self.articles[i]
                 self.articles_changed.emit()
                 return True
