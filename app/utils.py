@@ -38,7 +38,6 @@ def clean_and_format_html(dirty_html: str) -> str:
     - Strips all other tags, attributes (like style, class), and document structure.
     - Converts paragraph structures into <br><br> for consistent paragraph spacing.
     """
-    print("Cleaning")
     if not isinstance(dirty_html, str) or not dirty_html.strip():
         return ""
 

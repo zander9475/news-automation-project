@@ -27,6 +27,7 @@ class ArticleController(QObject):
         self.view.article_management_page.reorder_articles_requested.connect(self._handle_article_reorder_request)
         self.view.article_management_page.edit_article_requested.connect(self._handle_article_edit_request)
         self.view.article_management_page.delete_article_requested.connect(self._handle_article_delete_request)
+        self.view.article_management_page.delete_all_requested.connect(self._handle_delete_all_request)
 
         # Manual input page signals
         self.view.manual_input_page.submission_completed.connect(self._handle_manual_submission)
@@ -203,6 +204,6 @@ class ArticleController(QObject):
         self.model.delete_article(article)
 
     @Slot()
-    def _handle_all_delete_request(self):
+    def _handle_delete_all_request(self):
         """Calls function on model to delete all articles"""
         self.model.delete_all_articles()

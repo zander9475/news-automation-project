@@ -15,7 +15,7 @@ class ArticleManagementWidget(QWidget):
     delete_article_requested = Signal(Article)
     save_articles_requested = Signal()
     reorder_articles_requested = Signal(list)
-    delete_all_articles_requested = Signal()
+    delete_all_requested = Signal()
 
     def __init__(self):
         super().__init__()
@@ -64,9 +64,12 @@ class ArticleManagementWidget(QWidget):
         self.main_layout.addWidget(self.listbox_header)
 
         # Fifth component: Button to clear all articles
+        self.delete_all_btn_layout = QHBoxLayout()
         self.delete_all_btn = QPushButton("Delete All Articles")
         self.delete_all_btn.clicked.connect(self._on_delete_all_clicked)
-        self.main_layout.addWidget(self.delete_all_btn)
+        self.delete_all_btn_layout.addWidget(self.delete_all_btn)
+        self.delete_all_btn_layout.addStretch(1)
+        self.main_layout.addLayout(self.delete_all_btn_layout)
 
         # Sixth component: QSplitter for master-detail view
         self.splitter = QSplitter(Qt.Orientation.Horizontal)
@@ -152,7 +155,7 @@ class ArticleManagementWidget(QWidget):
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         )
         if confirmation == QMessageBox.StandardButton.Yes:
-            self.delete_all_articles_requested.emit()
+            self.delete_all_requested.emit()
 
     def populate_list(self, articles):
         """
