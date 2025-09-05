@@ -1,5 +1,3 @@
-Editing on pasted content shows full html, but preview doesnt
-
 Cancelling on an edit stays on editing when clicking add manually
 
 Deleting an article does not remove it from memory (Still flags as duplicate when attempting to re-add)

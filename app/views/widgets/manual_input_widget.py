@@ -71,13 +71,17 @@ class ManualInputWidget(QWidget):
         self.submit_btn = QPushButton("Add Article")
         self.submit_btn.clicked.connect(self._on_article_submission)
         self.cancel_btn = QPushButton("Cancel")
-        self.cancel_btn.clicked.connect(self.submission_cancelled)
+        self.cancel_btn.clicked.connect(self._on_submission_cancelled)
         self.action_btns.addWidget(self.submit_btn)
         self.action_btns.addWidget(self.cancel_btn)
         self.main_layout.addLayout(self.action_btns)
 
         # Set layout
         self.setLayout(self.main_layout)
+
+    def _on_submission_cancelled(self):
+        self._clear_form()
+        self.submission_cancelled.emit()
 
     def _on_article_submission(self):
         """
