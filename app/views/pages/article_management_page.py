@@ -14,7 +14,7 @@ class ArticleManagementWidget(QWidget):
     edit_article_requested = Signal(Article)
     delete_article_requested = Signal(Article)
     save_articles_requested = Signal()
-    reorder_articles_reqeusted = Signal(list)
+    reorder_articles_requested = Signal(list)
 
     def __init__(self):
         super().__init__()
@@ -136,7 +136,7 @@ class ArticleManagementWidget(QWidget):
         Handles reordering of article listbox
         """
         titles = [self.listbox.item(i).text() for i in range(self.listbox.count())]
-        self.reorder_articles_reqeusted.emit(titles)
+        self.reorder_articles_requested.emit(titles)
 
     def populate_list(self, articles):
         """
