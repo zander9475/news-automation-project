@@ -1,8 +1,9 @@
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QPushButton, QSplitter, QSizePolicy,
                                 QHBoxLayout, QLineEdit, QListWidget, QListWidgetItem, QAbstractItemView)
 from PySide6.QtCore import Qt, Signal, Slot
-from .article_preview_widget import ArticlePreviewWidget
+from ..widgets.article_preview_widget import ArticlePreviewWidget
 from app.models.article import Article
+from ..widgets.reorderable_list_widget import ReorderableListWidget
 
 class ArticleManagementWidget(QWidget):
     # Custom signals, connect to ArticleController
@@ -13,6 +14,7 @@ class ArticleManagementWidget(QWidget):
     edit_article_requested = Signal(Article)
     delete_article_requested = Signal(Article)
     save_articles_requested = Signal()
+    reorder_articles_reqeusted = Signal(list)
 
     def __init__(self):
         super().__init__()
@@ -66,13 +68,14 @@ class ArticleManagementWidget(QWidget):
         self.splitter.setSizes([300, 500]) # Initial width ratio
 
         # Master view: listbox
-        self.listbox = QListWidget()
+        self.listbox = ReorderableListWidget()
 
         # Enable drag-and-drop and previewing
         self.listbox.setDragDropMode(QAbstractItemView.DragDropMode.InternalMove)
         self.listbox.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
         self.listbox.setDefaultDropAction(Qt.DropAction.MoveAction)
         self.listbox.itemClicked.connect(self._on_item_changed)
+        self.listbox.orderChanged.connect(self._on_order_changed)
         self.splitter.addWidget(self.listbox)
 
         # Detail view: preview pane
@@ -103,6 +106,7 @@ class ArticleManagementWidget(QWidget):
         self.preview_pane.edit_article_requested.connect(self.edit_article_requested.emit)
         self.preview_pane.delete_article_requested.connect(self.delete_article_requested.emit)
 
+    @Slot()
     def _on_url_btn_clicked(self):
         """
         Passes the URL to the controller for scraping.
@@ -125,6 +129,14 @@ class ArticleManagementWidget(QWidget):
 
             # Pass that article to the controller
             self.article_preview_requested.emit(article)
+
+    @Slot()
+    def _on_order_changed(self):
+        """
+        Handles reordering of article listbox
+        """
+        titles = [self.listbox.item(i).text() for i in range(self.listbox.count())]
+        self.reorder_articles_reqeusted.emit(titles)
 
     def populate_list(self, articles):
         """

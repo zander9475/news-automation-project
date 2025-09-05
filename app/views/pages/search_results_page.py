@@ -2,7 +2,7 @@ import webbrowser
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QTableWidgetItem, QHBoxLayout, 
                                QPushButton, QAbstractItemView, QLabel, QSizePolicy)
-from .search_table_widget import SearchTableWidget
+from ..widgets.search_table_widget import SearchTableWidget
 
 class SearchResultsWidget(QWidget):
     """

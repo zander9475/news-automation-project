@@ -1,8 +1,8 @@
 from PySide6.QtWidgets import QMainWindow, QStackedWidget
-from .widgets.main_menu_widget import MainMenuWidget
-from .widgets.article_management_widget import ArticleManagementWidget
-from .widgets.search_results_widget import SearchResultsWidget
-from .widgets.manual_input_widget import ManualInputWidget
+from .pages.main_menu_page import MainMenuWidget
+from .pages.article_management_page import ArticleManagementWidget
+from .pages.search_results_page import SearchResultsWidget
+from .pages.manual_input_page import ManualInputWidget
 
 class MainWindow(QMainWindow):
     """
@@ -22,19 +22,19 @@ class MainWindow(QMainWindow):
         self.Stack = QStackedWidget(self)
 
         # Create an instance of each view widget
-        self.main_menu_widget = MainMenuWidget()
-        self.article_management_widget = ArticleManagementWidget()
-        self.search_results_widget = SearchResultsWidget()
-        self.manual_input_widget = ManualInputWidget()
+        self.main_menu_page = MainMenuWidget()
+        self.article_management_page = ArticleManagementWidget()
+        self.search_results_page = SearchResultsWidget()
+        self.manual_input_page = ManualInputWidget()
 
         # Add the widgets to the stacked widget
-        self.Stack.addWidget(self.main_menu_widget)
-        self.Stack.addWidget(self.article_management_widget)
-        self.Stack.addWidget(self.search_results_widget)
-        self.Stack.addWidget(self.manual_input_widget)
+        self.Stack.addWidget(self.main_menu_page)
+        self.Stack.addWidget(self.article_management_page)
+        self.Stack.addWidget(self.search_results_page)
+        self.Stack.addWidget(self.manual_input_page)
 
         # Set initial page to main menu
-        self.Stack.setCurrentWidget(self.main_menu_widget)
+        self.Stack.setCurrentWidget(self.main_menu_page)
 
         # Set the stacked widget as the central widget of the main window
         self.setCentralWidget(self.Stack)
@@ -45,12 +45,12 @@ class MainWindow(QMainWindow):
         @param page (str): The name of the page to switch to.
         """
         if page == "main_menu":
-            self.Stack.setCurrentWidget(self.main_menu_widget)
+            self.Stack.setCurrentWidget(self.main_menu_page)
         elif page == "article_management":
-            self.Stack.setCurrentWidget(self.article_management_widget)
+            self.Stack.setCurrentWidget(self.article_management_page)
         elif page == "search_results":
-            self.Stack.setCurrentWidget(self.search_results_widget)
+            self.Stack.setCurrentWidget(self.search_results_page)
         elif page == "manual_input":
-            self.Stack.setCurrentWidget(self.manual_input_widget)
+            self.Stack.setCurrentWidget(self.manual_input_page)
         else:
             raise ValueError(f"Unknown page: {page}")

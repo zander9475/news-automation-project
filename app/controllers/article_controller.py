@@ -19,16 +19,17 @@ class ArticleController(QObject):
 
     def _connect_signals(self):
         # Search results page signals
-        self.view.search_results_widget.article_addition_requested.connect(self.handle_search_result_add)
+        self.view.search_results_page.article_addition_requested.connect(self.handle_search_result_add)
 
         # Article management page signals
-        self.view.article_management_widget.url_scrape_requested.connect(self._handle_manual_url_add)
-        self.view.article_management_widget.article_preview_requested.connect(self._show_article_preview)
-        self.view.article_management_widget.edit_article_requested.connect(self._handle_article_edit_request)
-        self.view.article_management_widget.delete_article_requested.connect(self._handle_article_delete_request)
+        self.view.article_management_page.url_scrape_requested.connect(self._handle_manual_url_add)
+        self.view.article_management_page.article_preview_requested.connect(self._show_article_preview)
+        self.view.article_management_page.reorder_articles_requested.connect(self._handle_article_reorder_request)
+        self.view.article_management_page.edit_article_requested.connect(self._handle_article_edit_request)
+        self.view.article_management_page.delete_article_requested.connect(self._handle_article_delete_request)
 
         # Manual input page signals
-        self.view.manual_input_widget.submission_completed.connect(self._handle_manual_submission)
+        self.view.manual_input_page.submission_completed.connect(self._handle_manual_submission)
 
         # Article manager model signals
         self.model.articles_changed.connect(self._refresh_articles_view)
@@ -37,7 +38,7 @@ class ArticleController(QObject):
     @Slot()
     def _refresh_articles_view(self):
         articles = self.model.get_all_articles()
-        self.view.article_management_widget.populate_list(articles)
+        self.view.article_management_page.populate_list(articles)
 
     @Slot(Article)
     def _update_single_article_view(self, article):
@@ -46,7 +47,7 @@ class ArticleController(QObject):
         @param article: edited Article object
         """
         # Refresh display
-        self.view.article_management_widget.update_preview(article)
+        self.view.article_management_page.update_preview(article)
 
         # Refresh listbox
         self._refresh_articles_view()
@@ -170,10 +171,17 @@ class ArticleController(QObject):
     def _show_article_preview(self, article):
         """
         Retrieves article from view. Updates preview pane with that article.
-        @param article (Article): The article to be displayed.
         """
         if article:
-            self.view.article_management_widget.update_preview(article)
+            self.view.article_management_page.update_preview(article)
+
+    def _handle_article_reorder_request(self, titles):
+        """
+        Retrieves title list representing the new title order from view.
+        Passes new title list to model for model state updating.
+        """
+        if titles:
+            self.model.reorder_articles(titles)
 
     @Slot(Article)
     def _handle_article_edit_request(self, article: Article):
@@ -184,7 +192,7 @@ class ArticleController(QObject):
             return
         
         # Prepare the manual input widget for editing
-        self.view.manual_input_widget.set_article_data(article)
+        self.view.manual_input_page.set_article_data(article)
         
         # Switch to the manual input page
         self.view.switch_page("manual_input")

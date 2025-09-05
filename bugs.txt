@@ -1,4 +1,4 @@
-Deleting an article does not remove it from memory (Still flags as duplicate when attempting to re-add)
+Article reordering does not actually switch the order
 
 Senate info not loading (switch to senate.gov)
 
