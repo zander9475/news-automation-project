@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style>
+        body {
+            font-family: "Times New Roman", sans-serif;
+            color: black;
+            word-wrap: break-word;
+        }
+        .header {
+            text-align: center;
+            font-size: 12pt;
+            font-family: "Times New Roman", serif;
+            font-weight: bold;
+            margin-bottom: 12pt;
+        }
+        .article-list li {
+            font-size: 12pt;
+            font-family: "Times New Roman", serif;
+            font-weight: bold;
+            margin-left: .5in;
+        }
+        .article-list li a {
+            color: #467886;
+            text-decoration: underline;
+        }
+        .section-title {
+            font-size: 12pt;
+            font-family: "Times New Roman", serif;
+            font-weight: bold;
+            margin: 0;
+            padding-bottom: 0pt
+        }
+        .congress-activity {
+            margin: 0;
+            padding-left: 20pt;
+        }
+        .congress-activity li {
+            font-size: 12pt;
+            font-family: "Times New Roman", serif;
+            margin-bottom: 0pt;
+        }
+        .article_lead {
+            font-size: 12pt;
+            font-family: "Times New Roman", serif;
+            font-style: italic;
+        }
+        .article-content, .article-content * {
+        font-family: inherit !important;
+        font-size: inherit !important;
+        margin: 0;
+        padding: 0;
+        }
+        .article-content p {
+            font-family: "Times New Roman", serif;
+            font-size: 12pt;
+        }
+        .article-title {
+            font-size: 12pt;
+            font-family: "Times New Roman", serif;
+            font-weight: bold;
+            text-decoration: underline;
+            margin-bottom: 0;
+        }
+        .article-author {
+            font-size: 12pt;
+            font-family: "Times New Roman", serif;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        BIS NEWS CLIPS | {{ today_date }}
+    </div>
+
+    <ol style = "margin-left: 15px ! important; padding-left: 0px ! important; font-weight: bold;">
+        {% for article in articles %}
+        <li style = "font-weight: bold;">
+            <a href="#C{{ loop.index }}">{{ article.source }}: {{ article.title }}</a>
+        </li>
+        {% endfor %}
+        <li style = "font-weight: bold;">
+            <a href="#C{{ articles | length + 1 }}">POLITICO: Morning Trade</a>
+        </li>
+    </ol>
+
+    {% if congress_activity %}
+    <div class="section-title" style = "margin-bottom: 0 ! important; padding-bottom: Opt ! important;">Congressional Activity</div>
+    <ul class="congress-activity" style = "margin-top: 0 ! important; padding-top: 0pt ! important;">
+        <li><b>Senate:</b> {{ congress_activity.senate }}</li>
+        <li><b>House:</b> {{ congress_activity.house }}</li>
+    </ul>
+    <br>
+    {% endif %}
+
+    {% for article in articles %}
+    <div class="article-content">
+        <a name="C{{ loop.index }}"></a>
+        <div class="article-title" id="C{{ loop.index }}">{{ article.source }}: {{ article.title }}</div>
+        <br>
+        
+        {% if article.lead %}
+            <div class="article-lead" style = "font-style: italic ! important;">{{ article.lead | safe }}</div>
+            <br>
+        {% endif %}
+
+        {% if article.author %}
+        <div class="article-author">By {{ article.author | join(', ') }}</div>
+        <br>
+        {% endif %}
+
+        <div style = "font-size: 12pt ! important; font-family: 'Times New Roman', Times, serif ! important;"> {{ article.content | safe }} </div>
+        <br><br>
+    </div>
+    {% endfor %}
+
+    <div class="article-content">
+        <a name="C{{ articles|length + 1 }}"></a>
+        <div class="article-title" id="C{{ articles|length + 1 }}">POLITICO: Morning Trade</div>
+        <!-- Add Morning Trade content here if available -->
+    </div>
+</body>
+</html>
