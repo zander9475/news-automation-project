@@ -38,22 +38,22 @@ class MainController:
         Connects signals from the view to controller methods.
         """
         # Main menu page signals
-        self.view.main_menu_widget.search_requested.connect(self._show_search_dialog)
-        self.view.main_menu_widget.search_results_page_requested.connect(lambda: self.view.switch_page("search_results"))
-        self.view.main_menu_widget.articles_page_requested.connect(lambda: self.view.switch_page("article_management"))
+        self.view.main_menu_page.search_requested.connect(self._show_search_dialog)
+        self.view.main_menu_page.search_results_page_requested.connect(lambda: self.view.switch_page("search_results"))
+        self.view.main_menu_page.articles_page_requested.connect(lambda: self.view.switch_page("article_management"))
 
         # Search results page signals
-        self.view.search_results_widget.rerun_search_requested.connect(self._show_search_dialog)
-        self.view.search_results_widget.main_menu_requested.connect(lambda: self.view.switch_page("main_menu"))
-        self.view.search_results_widget.articles_page_requested.connect(lambda: self.view.switch_page("article_management"))
+        self.view.search_results_page.rerun_search_requested.connect(self._show_search_dialog)
+        self.view.search_results_page.main_menu_requested.connect(lambda: self.view.switch_page("main_menu"))
+        self.view.search_results_page.articles_page_requested.connect(lambda: self.view.switch_page("article_management"))
 
         # Article management page signals
-        self.view.article_management_widget.main_menu_requested.connect(self._handle_main_menu_request_from_articles)
-        self.view.article_management_widget.manual_input_requested.connect(lambda: self.view.switch_page("manual_input"))
-        self.view.article_management_widget.save_articles_requested.connect(self._save_articles)
+        self.view.article_management_page.main_menu_requested.connect(self._handle_main_menu_request_from_articles)
+        self.view.article_management_page.manual_input_requested.connect(lambda: self.view.switch_page("manual_input"))
+        self.view.article_management_page.save_articles_requested.connect(self._save_articles)
 
         # Manual input page signals
-        self.view.manual_input_widget.submission_cancelled.connect(lambda: self.view.switch_page("article_management"))
+        self.view.manual_input_page.submission_cancelled.connect(lambda: self.view.switch_page("article_management"))
 
     def _show_search_dialog(self):
         """Displays the search dialog for Google search."""
@@ -90,7 +90,7 @@ class MainController:
             json.dump(articles, f, indent=4)
 
         # Update the search results widget with the new articles
-        self.view.search_results_widget.display_results(articles)
+        self.view.search_results_page.display_results(articles)
         
         # Switch to the search results page
         self.view.switch_page("search_results")
@@ -100,7 +100,7 @@ class MainController:
             with open("data/last_search_cache.json", "r") as f:
                 articles = json.load(f)
                 if articles:
-                    self.view.search_results_widget.display_results(articles)
+                    self.view.search_results_page.display_results(articles)
         except (FileNotFoundError, json.JSONDecodeError):
             # If file doesn't exist or is empty, do nothing
             pass
@@ -131,7 +131,7 @@ class MainController:
         Resets the article management view and switches to the main menu page.
         """
         # Call the reset method on the view
-        self.view.article_management_widget.reset_view()
+        self.view.article_management_page.reset_view()
 
         # Then, switch the page
         self.view.switch_page("main_menu")
