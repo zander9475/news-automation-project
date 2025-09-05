@@ -1,5 +1,4 @@
 # pyright: reportAttributeAccessIssue=false
-# congress_scraper.py
 
 import requests
 from bs4 import BeautifulSoup

@@ -201,3 +201,8 @@ class ArticleController(QObject):
     def _handle_article_delete_request(self, article: Article):
         """Calls function on model to delete article"""
         self.model.delete_article(article)
+
+    @Slot()
+    def _handle_all_delete_request(self):
+        """Calls function on model to delete all articles"""
+        self.model.delete_all_articles()

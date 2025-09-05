@@ -157,6 +157,10 @@ class ArticleManager(QObject):
 
         print(f"Error: Article with ID '{article.id}' not found for deletion.")
         return False
+    
+    def delete_all_articles(self):
+        self.articles = []
+        self.articles_changed.emit()
 
     def reorder_articles(self, new_title_order):
         """

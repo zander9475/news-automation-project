@@ -1,6 +1,4 @@
-By still appearing for blank authors
-
-Senate info not loading (switch to senate.gov)
+Senate info not loading
 
 
 *lower priority bugs*

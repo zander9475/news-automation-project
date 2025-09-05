@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QPushButton, QSplitter, QSizePolicy,
-                                QHBoxLayout, QLineEdit, QListWidget, QListWidgetItem, QAbstractItemView)
+                                QHBoxLayout, QLineEdit, QListWidgetItem, QAbstractItemView, QMessageBox)
 from PySide6.QtCore import Qt, Signal, Slot
 from ..widgets.article_preview_widget import ArticlePreviewWidget
 from app.models.article import Article
@@ -15,6 +15,7 @@ class ArticleManagementWidget(QWidget):
     delete_article_requested = Signal(Article)
     save_articles_requested = Signal()
     reorder_articles_requested = Signal(list)
+    delete_all_articles_requested = Signal()
 
     def __init__(self):
         super().__init__()
@@ -56,14 +57,17 @@ class ArticleManagementWidget(QWidget):
         self.main_layout.addLayout(self.manual_input_layout)
 
         # Fourth component: QLabel for reordering articles
-        self.listbox_header = QLabel("Reorder articles by selecting an article and dragging it to your desired location." \
-                                        "\nClick on any article title to preview its contents.")
+        self.listbox_header = QLabel("Reorder articles by selecting an article and dragging it to your desired location.")
         self.listbox_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.listbox_header.setWordWrap(True)
         self.listbox_header.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
         self.main_layout.addWidget(self.listbox_header)
 
-        # Fifth component: QSplitter for master-detail view
+        # Fifth component: Button to clear all articles
+        self.delete_all_btn = QPushButton("Delete All Articles")
+        self.delete_all_btn.clicked.connect(self._on_delete_all_clicked)
+
+        # Sixth component: QSplitter for master-detail view
         self.splitter = QSplitter(Qt.Orientation.Horizontal)
         self.splitter.setSizes([300, 500]) # Initial width ratio
 
@@ -137,6 +141,17 @@ class ArticleManagementWidget(QWidget):
         """
         titles = [self.listbox.item(i).text() for i in range(self.listbox.count())]
         self.reorder_articles_requested.emit(titles)
+
+    @Slot()
+    def _on_delete_all_clicked(self):
+        # QMessageBox question to confirm delete
+        confirmation = QMessageBox.question(
+            self, "Confirm Delete", 
+            f"Are you sure you want to delete all articles",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        if confirmation == QMessageBox.StandardButton.Yes:
+            self.delete_all_articles_requested.emit()
 
     def populate_list(self, articles):
         """
