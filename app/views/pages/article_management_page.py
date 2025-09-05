@@ -66,6 +66,7 @@ class ArticleManagementWidget(QWidget):
         # Fifth component: Button to clear all articles
         self.delete_all_btn = QPushButton("Delete All Articles")
         self.delete_all_btn.clicked.connect(self._on_delete_all_clicked)
+        self.main_layout.addWidget(self.delete_all_btn)
 
         # Sixth component: QSplitter for master-detail view
         self.splitter = QSplitter(Qt.Orientation.Horizontal)
