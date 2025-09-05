@@ -1,9 +1,0 @@
-SETTINGS PAGE:
-    Allow user to change keywords from the application
-    Allow user to add entries to the source map from the application
-
-Add option to include placeholders for morning tech/morning trade
-
-Add button to clear all articles
-
-Add dialog to save articles when exiting app
